@@ -1,0 +1,435 @@
+.log_container {
+	background-color: #9B59B6;
+	height: 82px;
+	min-width: 980px;
+}
+
+.header {
+	background-color: #9B59B6;
+	height: 50px;
+	min-width: 980px;
+}
+
+.inline {
+	display: inline-block;
+}
+
+.cfix {
+	zoom: 1;
+}
+
+.log_bar {
+	margin: 0 auto;
+	padding-top: 6px;
+	width: 980px;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.menu_log table tr {
+	vertical-align: top
+}
+
+.menu_log table tr td {
+	padding: 0 0 0 12px
+}
+
+.menu_log .html_pad {
+	padding-bottom: 4px
+}
+
+.menu_log .inputtext,.menu_log .inputpassword {
+	border-color: #1d2a5b;
+	margin: 0;
+	width: 142px
+}
+
+.menu_log .login_lfield label,.menu_log .login_lfield a {
+	color: #4C0B5F;
+	font-weight: normal;
+	font-size: 14px;
+}
+
+.menu_log .login_lfield {
+	padding-top: 1px
+}
+
+.menu_log .html_pad label {
+	font-size: 11px;
+	color: #fff;
+	font-weight: normal;
+	padding-left: 1px
+}
+
+.menu_log #email {
+	direction: ltr
+}
+
+.contenedorGlobal {
+	margin: 0 auto;
+	position: relative;
+	background-color: #EFF8FB;
+	zoom: 1;
+	display: block;
+	min-height: 550px;
+}
+
+.contenido {
+	margin: 0;
+	outline: none;
+	padding: 0;
+	width: auto;
+}
+
+.centerDiv {
+	min-width: 980px;
+}
+
+.panel1 {
+	margin-right: 15px;
+	width: 565px;
+}
+
+.panel3 {
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: white;
+	display: block;
+	width: 250px;
+}
+
+.panel4 {
+	margin-right: 20px;
+	margin-top: 20px;
+	margin-left: 15px;
+	margin-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 695px;
+	background-color: #E6E6E6;
+	display: block;
+}
+
+.panel2 {
+	max-width: 470px;
+	min-width: 470px;
+}
+
+.div1 {
+	margin: 0 auto 0 auto;
+	padding-bottom: 30px;
+}
+
+.divRow {
+	width: 399px;
+}
+
+.inputRow {
+	width: 194px;
+	display: inline-block;
+	position: relative;
+}
+
+.marginR {
+	margin-right: 10px;
+}
+
+.marginBS {
+	margin-bottom: 5px;
+}
+
+.marginBM {
+	margin-bottom: 10px;
+}
+
+.marginTM {
+	margin-top: 10px;
+}
+
+.input_largeW {
+	font-size: 18px;
+	padding: 8px 10px;
+	margin: 0;
+	width: 398px;
+}
+
+.input_smallW {
+	width: 50px;
+}
+
+.relative {
+	position: relative;
+}
+
+.footer {
+	background-color: #FFF;
+	height: 60px;
+	min-width: 980px;
+}
+
+.contPrincipal {
+	border-right: 1px solid #ccc;
+	min-height: 600px;
+	margin-left: -1px;
+	display: block;
+	width: 100%;
+}
+
+.bloqueLeft {
+	float: left;
+	padding: 20px 0 0 2px;
+	position: relative;
+	width: 230px;
+	word-wrap: break-word;
+	display: block;
+}
+
+.divCentral {
+	padding-top: 5px;
+	padding-left: 0;
+	padding-right: 0;
+	border-left: 1px solid #ccc;
+	margin-left: 230px;
+	min-height: 550px;
+	background-color: #fff;
+}
+
+.iniBox {
+	margin-left: 20px;
+}
+
+.iniBox .userName {
+	display: block;
+	font-weight: bold;
+	width: 112px;
+	word-wrap: break-word;
+}
+
+.iniBox .innerBox {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.iniBox .middleBox {
+	padding-right: 5px;
+	display: inline-block;
+}
+
+.inibox .imga {
+	margin-right: 8px;
+	display: block;
+	cursor: pointer;
+}
+
+.imgi {
+	height: 50px !important;
+	width: 50px !important;
+	display: block;
+	border: 0;
+	cursor: pointer;
+}
+
+.leftOptionBox {
+	margin-top: 45px;
+	display: block;
+}
+
+.uiCustom {
+	list-style-type: none;
+}
+
+.liCustom {
+	padding-right: 0;
+	margin-left: -22px;
+	width: 100%;
+	display: list-item;
+	margin-bottom: 20px;
+	height: 22px;
+}
+
+.liCustom:hover {
+	background-color: #ECE0F8;
+}
+
+.optionsA {
+	display: block;
+	min-height: 17px;
+	line-height: 13px;
+	padding: 3px 8px 0 28px;
+	font-size: 15px;
+}
+
+.imgW {
+	width: 18px;
+	margin-left: -22px;
+	margin-top: -1px;
+	float: left;
+}
+
+.imgW2 {
+	width: 18px;
+	margin-left: -1px;
+	margin-top: -1px;
+	float: left;
+}
+
+.cajitaPerfil {
+	background-color: #E6E6E6;
+}
+
+.cajitaFoto {
+	margin-top: 10px;
+	height: 250px
+}
+
+.divTitle {
+	background-color: black;
+	color: white;
+	min-height: 50px;
+	padding-left: 15px;
+	font-size: 22px;
+}
+
+.divButton {
+	background-color: white;
+	color: black;
+	height: 50px;
+	padding-left: 15px;
+	font-size: 22px;
+	border-bottom: solid;
+	border-left: solid;
+	border-right: solid;
+	border-color: #D8D8D8;
+}
+
+.divButton:hover {
+	background-color: black;
+	color: white;
+}
+
+
+.topBorder {
+	border-top: solid;
+	border-color: #D8D8D8;
+}
+
+.divComGrey {
+	background-color: #E6E6E6;
+	color: #000;
+	height: 20px;
+	font-size: 14px;
+}
+
+.divComWhite {
+	background-color: #FFF;
+	color: #000;
+	height: 40px;
+	padding-left: 15px;
+	padding-right: 15px;
+	font-size: 16px;
+	padding-top: 15px;
+}
+
+.divComWhite2 {
+	background-color: #FFF;
+	color: #000;
+	height: 45px;
+	padding-left: 15px;
+	font-size: 16px;
+	padding-top: 13px;
+	padding-bottom: 15px;
+}
+
+.divComWhiteBorder {
+	background-color: #FFF;
+	height: 20px;
+	padding-top: 15px;
+	border-bottom: solid;
+}
+
+.fontN {
+	font-size: 13px;
+}
+
+.perfilEditImg {
+	margin-top: -5px;
+	margin-left: 5px;
+}
+
+.perfImg {
+	width: 225px;
+	margin-left: 2px;
+	max-height: 230px;
+}
+
+.friendImg {
+	height: 160px;
+	width: 160px;
+}
+
+.imgRow {
+	width: 100%;
+	height: 206px;
+}
+
+.imgCel {
+	width: 25%;
+	padding-top: 10px;
+	padding-right: 0px;
+}
+
+.firstImgCel {
+	width: 25%;
+	padding-top: 10px;
+}
+
+.friendDiscardButton {
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+}
+
+.divAlbumTemp {
+	height: 40px;
+	width: 160px;
+	background-color: white;
+	display: block;
+	border-top: 1px solid;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.albumName {
+	font-size: 11px;
+}
+
+.editButton
+{
+	background-image: url(../images/edit_icon.png);
+	width: 24px;
+	height: 24px;
+}
+
+.editButton:hover
+{
+	cursor: pointer;
+}
+
+.foto
+{
+     max-height:  150px;
+     
+}
