@@ -1,0 +1,157 @@
+@(usuario: Usuario)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Freshbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Loading Bootstrap -->
+<link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="assets/bootstrap/css/prettify.css" rel="stylesheet">
+
+<!-- Loading Flat UI -->
+<link href="assets/stylesheets/flat-ui.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="assets/images/favicon.png">
+<link href="assets/stylesheets/pages.css" rel="stylesheet">
+</head>
+<body>
+
+	<div class="header">
+		<div class="cfix log_bar">
+			<div class="left">
+				<img src="assets/images/head_log.png" width="120" height="43" />
+			</div>
+
+		</div>
+	</div>
+	<!-- Header -->
+
+	<div class="contenedorGlobal cfix">
+		<div class="clearfix">
+			<div class="left">
+				<div class="panel3">
+					<div class="pvm divTitle">
+						<div>
+							<span style="font-size: 22px">@(usuario.getNombres + " " + usuario.getApellidos)</span>
+						</div>
+					</div>
+					<div class="pvm cajitaFoto">
+						<div>
+							<img class="perfImg"
+								src=@usuario.getFoto />
+						</div>
+					</div>
+					<a class="cfix" href="/principal">
+						<div class="pvm topBorder divButton">
+							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
+						</div>
+					</a> <a class="cfix" href="#">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>PERFIL</b></span>
+						</div>
+					</a> <a class="cfix" href="#">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>AMIGOS</b></span>
+						</div>
+					</a> <a class="cfix" href="#">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>ALBUMES</b></span>
+						</div>
+					</a>
+				</div>
+				<!-- Panel izquierdo -->
+			</div>
+
+			<div class="panel4 right">
+				<div class="cajitaPerfil">
+					<div class="divTitle pvm">Información de Perfil</div>
+					<div class="divComWhite pvm">
+						<b class="left">Nombres</b>
+						<div class="left fontN" id="nombre-div" name="nombre-div" style="margin-left: 140px">@usuario.getNombres</div>
+						
+							<div class="right cfix editButton" id="names-edit-button" name="names-edit-button" title="editar" onclick="editNombres(@usuario.getId)"></div>
+						
+					</div>
+					
+					<div class="divComWhite pvm">
+						<b class="left">Apellidos</b>
+						<div class="left fontN" id="apellidos-div" name="apellidos-div" style="margin-left: 140px">@usuario.getApellidos</div>
+						<div class="right cfix editButton" id="lastnames-edit-button" name="lastnames-edit-button" title="editar" onclick="editApellidos(@usuario.getId)"></div>
+					</div>
+
+					<div class="divComWhite pvm">
+						<b class="left">NickName</b>
+						<div class="left fontN" id="nickname-div" name="nickname-div" style="margin-left: 132px">@usuario.getUsername</div>
+						<div class="right cfix editButton" id="nickname-edit-button" name="nickname-edit-button" title="editar" onclick="editNickname(@usuario.getId)"></div>
+					</div>
+
+					<div class="divComWhite pvm">
+						<b class="left">Correo Electrónico</b>
+						<div class="left fontN" id="email-div" name="email-div" style="margin-left: 70px">@usuario.getEmail</div>
+						<div class="right cfix editButton" id="email-edit-button" name="email-edit-button" title="editar" onclick="editEmail(@usuario.getId)"></div>
+					</div>
+
+					<div class="divComWhite pvm">
+						<b class="left">Fecha de Nacimiento</b>
+						<div class="left fontN" style="margin-left: 60px">@usuario.getFechaNacimiento</div>
+						<div class="right cfix editButton" id="fecha-edit-button" name="fecha-edit-button" title="editar" onclick=""></div>
+					</div>
+					<div class="divComWhiteBorder" style="border-bottom: solid"></div>
+					<div class="divComWhite pvm">
+						<b>Ubicación</b>
+					</div>
+					<div class="divComWhiteBorder pvm"></div>
+					<div class="divComWhite pvm">
+						<b>Mis Redes Sociales</b>
+					</div>
+					<div class="divComWhite2 pvm relative">
+						<span class="imgW2"> 
+						   <img class="img" src="assets/images/google_icon.png" width="25" height="25" />
+						</span>
+						<div style="margin-left: 28px">
+							<b>Google +</b>
+						</div>
+					</div>
+
+					<div class="divComWhite2 pvm relative">
+						<span class="imgW2"> 
+						  <img class="img" src="assets/images/facebook_icon.png" width="25" height="25">
+						</span>
+						<div style="margin-left: 28px">
+							<b>Facebook</b>
+						</div>
+					</div>
+
+					<div class="divComWhite2 pvm relative">
+						<span class="imgW2"> 
+						  <img class="img" src="assets/images/twitter_icon.png" width="25" height="25">
+						</span>
+						<div style="margin-left: 28px">
+							<b>Twitter</b>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Panel derecho -->
+		</div>
+	</div> 
+	
+	<input type="hidden" id="modify" name="modify" value="0" />
+	
+	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
+	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="assets/javascripts/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/javascripts/bootstrap.min.js"></script>
+	<script src="assets/javascripts/bootstrap-select.js"></script>
+	<script src="assets/javascripts/bootstrap-switch.js"></script>
+	<script src="assets/javascripts/flatui-checkbox.js"></script>
+	<script src="assets/javascripts/flatui-radio.js"></script>
+	<script src="assets/javascripts/jquery.tagsinput.js"></script>
+	<script src="assets/javascripts/jquery.placeholder.js"></script>
+	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
+	<script src="assets/javascripts/application.js"></script>
+	<script src="assets/javascripts/aplicacion.js"></script>
+</body>
+</html>

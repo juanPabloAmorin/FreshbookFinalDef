@@ -8,3 +8,36 @@ GET     /                           controllers.Application.index
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
+#pagina de inicio
+GET     /principal                           controllers.Application.showPrincipal
+
+#validacion pagina de perfil de usuario
+GET     /perfil/:id                       controllers.Application.showPerfil(id: Long)
+
+#validacion pagina de albumes de usuario
+GET     /albumes/:op                       controllers.Application.showAlbumes(op: Integer)
+
+#validacion pagina de amigos de usuario
+GET     /amigos/:id                       controllers.Application.showAmigos(id: Long)
+
+#validacion pagina de contenido de album
+GET     /albumContent/:op                       controllers.Application.showAlbumContent(op: Integer)
+
+#pagina de perfil de usuario
+GET     /perfilPag                      controllers.Application.showPerfilPag
+
+#pagina de albumes de usuario
+GET     /albumesPag                      controllers.Application.showAlbumesPag
+
+#pagina de amigos de usuario
+GET     /amigosPag                      controllers.Application.showAmigosPag
+
+#pagina de contenido de album
+GET     /albumContentPag                      controllers.Application.showAlbumContentPag
+
+#peticion ajax validacion de usuario
+GET     /userAutentication/:username/:pass          controllers.Application.autenticationRegisteredUser(username :String,pass: String)
+
+#peticion ajax actualizacion de usuario
+GET     /userUpdate/:option/:attr/:id      controllers.Application.updateRegisteredUser(option: Int,attr: String,id: Long)
+
