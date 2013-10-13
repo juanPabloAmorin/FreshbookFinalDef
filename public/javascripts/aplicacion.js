@@ -1,7 +1,10 @@
 function autenticationUser() {
 
+	
 	var jqxhr = $.ajax("/userAutentication/" + $("#user").val() + "/" + $("#pass").val())
-			.done(function(jqXHR) 
+			
+	
+	.done(function(jqXHR) 
 			{
 				if (jqXHR == "true") 
 				{
