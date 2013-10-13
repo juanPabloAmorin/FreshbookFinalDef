@@ -12,5 +12,3 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 #pagina de inicio
 GET     /principal                           controllers.Application.showPrincipal
 
-#peticion ajax validacion de usuario
-GET     /userAutentication/:username/:pass          controllers.Application.autenticationRegisteredUser(username :String,pass: String)
