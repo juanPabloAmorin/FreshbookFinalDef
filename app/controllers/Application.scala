@@ -21,7 +21,31 @@ object Application extends Controller {
   var friendId: Long = 0;
   
   def index = Action {
-    Ok(views.html.index())
+    Ok(views.html.index()).withNewSession
+  }
+  
+  def autenticationRegisteredUser(username: String,pass: String) = Action 
+  {
+      var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
+      currentUser = userDao.findByLog(username, pass).getOrElse{null}
+      friendId = currentUser.getId
+      userDao.findByLog(username,pass).isEmpty match {
+        case true => Ok("false")
+        case false => Ok("true").withSession(
+                    "usuario" -> username
+          )
+      }
+    
+  }
+  
+  def showPrincipal = Action
+  {
+    request => request.session.get("usuario").map { usuario =>
+            Ok(html.principal(currentUser))
+    }.getOrElse 
+    {
+       Ok(views.html.index()).withNewSession
+    }
   }
 
 }
