@@ -9,7 +9,7 @@ import models._
 
 case class Album(id: Long,
   nombre: String,
-  privacidad: Short,
+  privacidad: Int,
   caratula: String,
   fecha_creacion: Date,
   descripcion: Option[String]) {

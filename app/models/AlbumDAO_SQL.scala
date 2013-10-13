@@ -17,7 +17,7 @@ class AlbumDAO_SQL extends AlbumDAO
   val parser = {
     get[Long]("album.id") ~
       get[String]("album.nombre") ~
-      get[Short]("album.privacidad") ~
+      get[Int]("album.privacidad") ~
       get[String]("album.caratula") ~
       get[Date]("album.fecha_creacion") ~
       get[Option[String]]("album.descripcion") map {
