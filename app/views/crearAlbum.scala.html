@@ -1,4 +1,4 @@
-@(listaAlbumes: List[Album],usuario: Usuario,dao: AlbumDAO)
+@(usuario: Usuario)
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +16,9 @@
 <link rel="shortcut icon" href="assets/images/favicon.png">
 <link href="assets/stylesheets/pages.css" rel="stylesheet">
 
+
 </head>
+
 <body>
 	<div class="header">
 		<div class="cfix log_bar">
@@ -26,8 +28,7 @@
 		</div>
 	</div>
 	<!-- Header -->
-
-
+	
 	<div class="contenedorGlobal cfix">
 		<div class="clearfix">
 			<div class="left">
@@ -68,36 +69,15 @@
 			</div>
 
 			<div class="panel4 right">
-				<div class="cajitaPerfil">
-					<div class="divTitle pvl">Albumes de @(usuario.getNombres + " " + usuario.getApellidos)
-					   <a href="/crearAlbum"><button class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Nuevo Album</button></a>
-					</div>
-					
-						 @listaAlbumes.map { 
-                    case (album) => {
-                    	<div class="left firstImgCel">
-                    	 	 <a href="/albumContent/0"> <img class="friendImg  relative"
-								src= @album.getCaratula />
-							</a>
-							<div class="divAlbumTemp">
-								<div>
-									<span class="albumName">@album.getNombre</span>
-								</div>
-								<div>
-									<span class="albumName">@dao.cantidadArchivos(album.getId) Archivos Multimedia</span>
-								</div>
-							</div>
-							<div align="center" class="pvs">
-								<img title="Eliminar de amigos" class="friendDiscardButton"
-									src="assets/images/trash.png"  />
-							</div> 
-                        </div>
-                    } 
-                }
-
-						
-					
-				</div>
+			  <div class="divDataAlbum cfix left ">
+			     
+			       <input type="text" placeholder="Nombre del Album" class="form-control flat" />
+			     
+			     
+			       <input type="text" placeholder="Descripción" class="form-control flat" style="margin-top:5px" />
+			       
+			  </div>
+			  <div class="divBuscadorMultimedia cfix"></div>
 			</div>
 		</div>
 		<!-- Panel derecho -->
@@ -119,5 +99,5 @@
 	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"
 		type="text/javascript"></script>
 	<script src="assets/javascripts/application.js" type="text/javascript"></script>
+	
 </body>
-</html>

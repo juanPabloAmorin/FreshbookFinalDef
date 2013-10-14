@@ -15,13 +15,13 @@ GET     /principal                           controllers.Application.showPrincip
 GET     /perfil/:id                       controllers.Application.showPerfil(id: Long)
 
 #validacion pagina de albumes de usuario
-GET     /albumes/:op                       controllers.Application.showAlbumes(op: Integer)
+GET     /albumes/:id                       controllers.Application.showAlbumes(id: Long)
 
 #validacion pagina de amigos de usuario
 GET     /amigos/:id                       controllers.Application.showAmigos(id: Long)
 
 #validacion pagina de contenido de album
-GET     /albumContent/:op                       controllers.Application.showAlbumContent(op: Integer)
+GET     /albumContent/:id                       controllers.Application.showAlbumContent(id: Long)
 
 #pagina de perfil de usuario
 GET     /perfilPag                      controllers.Application.showPerfilPag
@@ -34,6 +34,9 @@ GET     /amigosPag                      controllers.Application.showAmigosPag
 
 #pagina de contenido de album
 GET     /albumContentPag                      controllers.Application.showAlbumContentPag
+
+#crear nuevo album
+GET     /crearAlbum                      controllers.Application.createAlbum
 
 #peticion ajax validacion de usuario
 GET     /userAutentication/:username/:pass          controllers.Application.autenticationRegisteredUser(username :String,pass: String)

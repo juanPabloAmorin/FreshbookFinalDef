@@ -62,16 +62,19 @@ object Application extends Controller {
   }
   
   
-  def showAlbumes(op :Integer) = Action
+  def showAlbumes(id :Long) = Action
   {
+      friendId = id;
       Redirect("/albumesPag")
   } 
   
   def showAlbumesPag = Action
   {   
       var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO;
-      var albumes = albumDao.findAlbumsByUser(currentUser.getId) 
-      Ok(views.html.albumes(albumes,currentUser,albumDao))
+      var albumes = albumDao.findAlbumsByUser(friendId) 
+      var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
+      var userSelected = userDao.findUserById(friendId).getOrElse{null}
+      Ok(views.html.albumes(albumes,userSelected,albumDao))
   }
   
   def showAmigos(id :Long) = Action
@@ -88,7 +91,7 @@ object Application extends Controller {
       Ok(views.html.amigos(userSelected))
   }
   
-  def showAlbumContent(op :Integer) = Action
+  def showAlbumContent(id :Long) = Action
   {
       Redirect("/albumContentPag")
   } 
@@ -125,6 +128,11 @@ object Application extends Controller {
          }
          
          Ok("true")
+   }
+   
+   def createAlbum() = Action
+   {
+         Ok(views.html.crearAlbum(currentUser))
    }
   
   

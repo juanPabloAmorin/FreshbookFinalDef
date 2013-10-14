@@ -433,3 +433,18 @@
      max-height:  150px;
      
 }
+
+.divDataAlbum
+{
+	width : 400px;
+	
+}
+
+.divBuscadorMultimedia
+{
+	 margin-top: 100px;
+	 width : 100%;
+	 min-height: 400px;
+	 background-color: white;
+	 display: block;
+}
