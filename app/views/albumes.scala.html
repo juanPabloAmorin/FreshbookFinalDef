@@ -1,4 +1,4 @@
-@(listaAlbumes: List[Album],usuario: Usuario,dao: AlbumDAO)
+@(listaAlbumes: List[Album],usuario: Usuario,dao: AlbumDAO,currentUser: Usuario)
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +70,10 @@
 			<div class="panel4 right">
 				<div class="cajitaPerfil">
 					<div class="divTitle pvl">Albumes de @(usuario.getNombres + " " + usuario.getApellidos)
-					   <a href="/crearAlbum"><button class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Nuevo Album</button></a>
+					   @if(usuario.getId == currentUser.getId){
+					   
+					  <a href="/crearAlbum"><button class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Nuevo Album</button></a>
+					}
 					</div>
 					
 						 @listaAlbumes.map { 
@@ -87,10 +90,12 @@
 									<span class="albumName">@dao.cantidadArchivos(album.getId) Archivos Multimedia</span>
 								</div>
 							</div>
+							@if(usuario.getId == currentUser.getId){
 							<div align="center" class="pvs">
-								<img title="Eliminar de amigos" class="friendDiscardButton"
+								<img title="Eliminar de amigos" class="discardButton"
 									src="assets/images/trash.png"  />
 							</div> 
+							}
                         </div>
                     } 
                 }

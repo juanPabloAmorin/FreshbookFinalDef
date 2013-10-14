@@ -1,4 +1,4 @@
-@(usuario: Usuario)
+@(usuario: Usuario,currentUser: Usuario)
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,10 +82,12 @@
 							<a href="perfil/@amigo.getId"> <img class="friendImg  relative"
 								src=@amigo.getFoto />
 							</a>
+							@if(usuario.getId == currentUser.getId){
 							<div align="center" class="pvs">
-								<img title="Eliminar de amigos" class="friendDiscardButton"
+								<img title="Eliminar de amigos" class="discardButton"
 									src="assets/images/trash.png" />
 							</div>
+							}
 						</div>
 					 }
 					}

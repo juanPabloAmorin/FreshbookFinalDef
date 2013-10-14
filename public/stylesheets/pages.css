@@ -104,7 +104,7 @@
 	padding-right: 10px;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	background-color: white;
+	background-color: #E6E6E6;
 	display: block;
 	width: 250px;
 }
@@ -118,7 +118,7 @@
 	padding-right: 10px;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	width: 695px;
+	width: 69%;
 	background-color: #E6E6E6;
 	display: block;
 }
@@ -334,7 +334,7 @@
 }
 
 .divComWhite {
-	background-color: #FFF;
+	background-color: #F5EFFB;
 	color: #000;
 	height: 40px;
 	padding-left: 15px;
@@ -344,7 +344,7 @@
 }
 
 .divComWhite2 {
-	background-color: #FFF;
+	background-color: #F5EFFB;
 	color: #000;
 	height: 45px;
 	padding-left: 15px;
@@ -354,7 +354,7 @@
 }
 
 .divComWhiteBorder {
-	background-color: #FFF;
+	background-color: #F5EFFB;
 	height: 20px;
 	padding-top: 15px;
 	border-bottom: solid;
@@ -396,7 +396,7 @@
 	padding-top: 10px;
 }
 
-.friendDiscardButton {
+.discardButton {
 	width: 25px;
 	height: 25px;
 	cursor: pointer;
@@ -436,7 +436,7 @@
 
 .divDataAlbum
 {
-	width : 400px;
+	width : 50%;
 	
 }
 
@@ -447,4 +447,19 @@
 	 min-height: 400px;
 	 background-color: white;
 	 display: block;
+	 padding-left: 15px;
+	 padding-right: 15px;
+	 padding-top: 15px;
+	 padding-bottom: 15px;
+}
+
+.tumbnail
+{
+	width: 15%;
+	height: 88px;
+	background-image: url(../images/folder.jpg);
+	background-color: white;
+	cursor: pointer;
+	max-width: 80px;
+	
 }

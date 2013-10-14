@@ -58,7 +58,7 @@ object Application extends Controller {
   {
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
       var userSelected = userDao.findUserById(friendId).getOrElse{null}
-      Ok(views.html.perfil(userSelected))
+      Ok(views.html.perfil(userSelected,currentUser))
   }
   
   
@@ -74,7 +74,7 @@ object Application extends Controller {
       var albumes = albumDao.findAlbumsByUser(friendId) 
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
       var userSelected = userDao.findUserById(friendId).getOrElse{null}
-      Ok(views.html.albumes(albumes,userSelected,albumDao))
+      Ok(views.html.albumes(albumes,userSelected,albumDao,currentUser))
   }
   
   def showAmigos(id :Long) = Action
@@ -88,7 +88,7 @@ object Application extends Controller {
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
       var userSelected = userDao.findUserById(friendId).getOrElse{null}
       userSelected.setAmistades(userDao.findFriendsByUser(userSelected.getId))
-      Ok(views.html.amigos(userSelected))
+      Ok(views.html.amigos(userSelected,currentUser))
   }
   
   def showAlbumContent(id :Long) = Action
