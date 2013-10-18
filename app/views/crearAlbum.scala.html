@@ -1,4 +1,4 @@
-@(usuario: Usuario)
+@(currentUser: Usuario)
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,13 +35,13 @@
 				<div class="panel3">
 					<div class="pvm divTitle">
 						<div>
-							<span style="font-size: 22px">@(usuario.getNombres + " " + usuario.getApellidos)</span>
+							<span style="font-size: 22px">@(currentUser.getNombres + " " + currentUser.getApellidos)</span>
 						</div>
 					</div>
 					<div class="pvm cajitaFoto">
 						<div>
 							<img class="perfImg"
-								src=@usuario.getFoto />
+								src=@currentUser.getFoto />
 						</div>
 					</div>
 					<a class="cfix" href="/principal">
@@ -49,17 +49,17 @@
 							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
 						</div>
 					</a> 
-					<a class="cfix" href="/perfil/@usuario.getId">
+					<a class="cfix" href="/perfil/@currentUser.getId">
 						<div class="pvm divButton">
 							<span style="font-size: 18px"><b>PERFIL</b></span>
 						</div>
 					</a> 
-					<a class="cfix" href="/amigos/@usuario.getId">
+					<a class="cfix" href="/amigos/@currentUser.getId">
 						<div class="pvm divButton">
 							<span style="font-size: 18px"><b>AMIGOS</b></span>
 						</div>
 					</a> 
-					<a class="cfix" href="/albumes/@usuario.getId">
+					<a class="cfix" href="/albumes/@currentUser.getId">
 						<div class="pvm divButton">
 							<span style="font-size: 18px"><b>ALBUMES</b></span>
 						</div>
@@ -69,34 +69,39 @@
 			</div>
 
 			<div class="panel4 right">
-			  <div class="divDataAlbum cfix left ">
+			  
+			    <div class="divDataAlbum cfix left ">
 			     
-			       <input type="text" placeholder="Nombre del Album" class="form-control flat" style="border-radius:0px"/>
+			       <input id="input-name" type="text" placeholder="Nombre del Album" class="form-control flat" style="border-radius:0px"/>
 			     
 			     
-			       <input type="text" placeholder="Descripción" class="form-control flat" style="margin-top:10px;border-radius:0px" />
+			       <input id="input-description" type="text" placeholder="Descripción" class="form-control flat" style="margin-top:10px;border-radius:0px" />
 			       
 			  </div>
 			  
-			  <div class="tumbnail left" style="margin-left: 12px"></div>
+			  <div id="albumImage" class="tumbnail left" style="margin-left: 12px" value="assets/images/folder.jpg" ></div>
 			  
 			  <div class="left" style="width:34%;margin-left:14px">
 			    
-			    
+			   <form name="newAlbumForm">
 			   <label class="radio checked left">
-                 <span class="icons" ><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" data-toggle="radio" checked="checked">
+                 <span class="icons" ><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="optionsRadios"  value="0" data-toggle="radio" checked="checked" >
                  Público
                </label>
                <label class="radio left" style="margin-top:10px;margin-left:10px">
-                <span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="optionsRadios" id="optionsRadios2" value="option1" data-toggle="radio">
+                <span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="optionsRadios"  value="1" data-toggle="radio">
                   Solo Amigos
                </label>
                
+               </form>
+               
 			     <div style="margin-right: 90px">
-			       <button class="btn btn-primary right" style="border-radius:0px">Guardar</button>
+			       <button class="btn btn-primary right" style="border-radius:0px" onclick="createAlbum()">Guardar</button>
 			     </div>  
 			       
 			  </div>
+			  
+			  
 			  
 			  <div class="divBuscadorMultimedia cfix">
 			     <input type="text" placeholder="Busca contenido multimedia" class="form-control left" style="border-radius:0px;width:89%"/>

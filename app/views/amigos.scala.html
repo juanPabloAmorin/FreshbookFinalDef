@@ -1,4 +1,4 @@
-@(usuario: Usuario,currentUser: Usuario)
+@(selectedUser: Usuario,currentUser: Usuario)
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,13 +34,13 @@
 				<div class="panel3">
 					<div class="pvm divTitle">
 						<div>
-							<span style="font-size: 22px">@(usuario.getNombres + " " + usuario.getApellidos)</span>
+							<span style="font-size: 22px">@(selectedUser.getNombres + " " + selectedUser.getApellidos)</span>
 						</div>
 					</div>
 					<div class="pvm cajitaFoto">
 						<div>
 							<img class="perfImg"
-								src=@usuario.getFoto />
+								src=@selectedUser.getFoto />
 						</div>
 					</div>
 					<a class="cfix" href="/principal">
@@ -49,19 +49,19 @@
 								<span style="font-size: 18px"><b>PRINCIPAL</b></span>
 							</div>
 						</div>
-					</a> <a class="cfix" href="/perfil/@usuario.getId">
+					</a> <a class="cfix" href="/perfil/@selectedUser.getId">
 						<div class="pvm divButton">
 							<div>
 								<span style="font-size: 18px"><b>PERFIL</b></span>
 							</div>
 						</div>
-					</a> <a class="cfix" href="/amigos/@usuario.getId">
+					</a> <a class="cfix" href="/amigos/@selectedUser.getId">
 						<div class="pvm divButton">
 							<div>
 								<span style="font-size: 18px"><b>AMIGOS</b></span>
 							</div>
 						</div>
-					</a> <a class="cfix" href="/albumes/@usuario.getId">
+					</a> <a class="cfix" href="/albumes/@selectedUser.getId">
 						<div class="pvm divButton">
 							<div>
 								<span style="font-size: 18px"><b>ALBUMES</b></span>
@@ -74,15 +74,15 @@
 
 			<div class="panel4 right">
 				<div class="cajitaPerfil">
-					<div class="divTitle pvm">Amigos de @(usuario.getNombres + " " + usuario.getApellidos) </div>
+					<div class="divTitle pvm">Amigos de @(selectedUser.getNombres + " " + selectedUser.getApellidos) </div>
                     
-					 @usuario.getAmistades.map { 
+					 @selectedUser.getAmistades.map { 
                     case (amigo) => {
 						<div class="left firstImgCel">
 							<a href="perfil/@amigo.getId"> <img class="friendImg  relative"
 								src=@amigo.getFoto />
 							</a>
-							@if(usuario.getId == currentUser.getId){
+							@if(selectedUser.getId == currentUser.getId){
 							<div align="center" class="pvs">
 								<img title="Eliminar de amigos" class="discardButton"
 									src="assets/images/trash.png" />

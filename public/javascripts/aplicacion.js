@@ -196,3 +196,40 @@ function editEmail(id)
 
 	}
 }
+
+function createAlbum()
+{
+	var name = document.getElementById("input-name").value;
+	var description = document.getElementById("input-description").value;
+	var privacy;
+	//modificar esta variable con el valor de la ruta
+	var imageRoute = "folder.jpg";
+	
+	if(document.newAlbumForm.optionsRadios[0].checked)
+		privacy = 0;
+	else
+		privacy = 1;
+	
+    var jqxhr = $.ajax("/insertAlbum/"+name+"/"+description+"/"+privacy+"/"+imageRoute)
+			
+	
+	.done(function(jqXHR) 
+			{
+				if (jqXHR == "true") 
+				{
+					
+					location.href = "/albumesPag"
+				} 
+				else 
+				{ 
+					
+					//mensaje de error en campos
+				}
+			})
+			.fail(function(jqXHR) {
+				alert(jqXHR.statusText);
+				//mensaje de error en conexion
+			})
+	
+	    
+}

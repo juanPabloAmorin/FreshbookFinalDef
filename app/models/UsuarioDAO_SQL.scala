@@ -24,12 +24,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       get[Option[String]]("usuario.gmail") ~
       get[Date]("usuario.fecha_registro") ~
       get[Option[Date]]("usuario.fecha_baja") ~
-      get[Date]("usuario.ultima_conexion") map {
-        case id ~ nombres ~ apellidos ~ username ~ pass ~ fecha_nacimiento ~ email ~ foto ~ twitter ~ facebook ~ gmail ~ fecha_registro ~ fecha_baja ~ ultima_conexion  => Usuario(id, nombres, apellidos, username, pass, fecha_nacimiento, email, foto, twitter, facebook, gmail, fecha_registro, fecha_baja, ultima_conexion)
+      get[Date]("usuario.ultima_conexion") ~
+      get[Int]("usuario.privacidad") map {
+        case id ~ nombres ~ apellidos ~ username ~ pass ~ fechaNacimiento ~ email ~ foto ~ twitter ~ facebook ~ gmail ~ fechaRegistro ~ fechaBaja ~ ultimaConexion ~ privacidad => Usuario(id, nombres, apellidos, username, pass, fechaNacimiento, email, foto, twitter, facebook, gmail, fechaRegistro, fechaBaja, ultimaConexion, privacidad)
       }
   }
 
-  override def findByLog(username: String, pass: String): Option[Usuario] = {
+  override def findUserByLog(username: String, pass: String): Option[Usuario] = {
     DB.withConnection { implicit connection =>
       SQL("select * from USUARIO where username = {username} and pass = {pass}").on('username -> username, 'pass -> pass).as(this.parser.singleOpt)
     }
@@ -115,7 +116,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
         """
           SELECT distinct usuario.id,usuario.nombres,usuario.apellidos,usuario.username,usuario.pass,usuario.fecha_nacimiento,
        usuario.email,usuario.foto,usuario.twitter,usuario.facebook,usuario.gmail,
-       usuario.fecha_registro,usuario.fecha_baja,usuario.ultima_conexion
+       usuario.fecha_registro,usuario.fecha_baja,usuario.ultima_conexion,usuario.privacidad
        FROM usuario,amistad
        WHERE (amistad.fk_usuario1 = usuario.id or amistad.fk_usuario2 = usuario.id) and usuario.id != {id}
        

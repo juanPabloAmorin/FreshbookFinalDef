@@ -18,7 +18,7 @@ import anorm.SqlParser._
 object Application extends Controller {
   
   var currentUser: Usuario = null;
-  var friendId: Long = 0;
+  var lastFriendVistedId: Long = 0;
   
   def index = Action {
     Ok(views.html.index()).withNewSession
@@ -27,9 +27,9 @@ object Application extends Controller {
   def autenticationRegisteredUser(username: String,pass: String) = Action 
   {
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-      currentUser = userDao.findByLog(username, pass).getOrElse{null}
-      friendId = currentUser.getId
-      userDao.findByLog(username,pass).isEmpty match {
+      currentUser = userDao.findUserByLog(username, pass).getOrElse{null}
+      lastFriendVistedId = currentUser.getId
+      userDao.findUserByLog(username,pass).isEmpty match {
         case true => Ok("false")
         case false => Ok("true").withSession(
                     "usuario" -> username
@@ -38,7 +38,7 @@ object Application extends Controller {
     
   }
   
-  def showPrincipal = Action
+  def showPrincipalPage = Action
   {
     request => request.session.get("usuario").map { usuario =>
             Ok(html.principal(currentUser))
@@ -48,50 +48,50 @@ object Application extends Controller {
     }
   }
   
-  def showPerfil(id :Long) = Action
+  def showPerfil(userId :Long) = Action
   {
-      friendId = id;
+      lastFriendVistedId = userId;
       Redirect("/perfilPag")
   }
   
   def showPerfilPag = Action
   {
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-      var userSelected = userDao.findUserById(friendId).getOrElse{null}
+      var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse{null}
       Ok(views.html.perfil(userSelected,currentUser))
   }
   
   
-  def showAlbumes(id :Long) = Action
+  def showAlbumes(userId :Long) = Action
   {
-      friendId = id;
+      lastFriendVistedId = userId;
       Redirect("/albumesPag")
   } 
   
   def showAlbumesPag = Action
   {   
       var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO;
-      var albumes = albumDao.findAlbumsByUser(friendId) 
+      var albumes = albumDao.findAlbumsByUser(lastFriendVistedId) 
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-      var userSelected = userDao.findUserById(friendId).getOrElse{null}
+      var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse{null}
       Ok(views.html.albumes(albumes,userSelected,albumDao,currentUser))
   }
   
-  def showAmigos(id :Long) = Action
+  def showAmigos(userId :Long) = Action
   {
-      friendId = id;
+      lastFriendVistedId = userId;
       Redirect("/amigosPag")
   } 
   
   def showAmigosPag = Action
   {
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-      var userSelected = userDao.findUserById(friendId).getOrElse{null}
+      var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse{null}
       userSelected.setAmistades(userDao.findFriendsByUser(userSelected.getId))
       Ok(views.html.amigos(userSelected,currentUser))
   }
   
-  def showAlbumContent(id :Long) = Action
+  def showAlbumContent(albumId :Long) = Action
   {
       Redirect("/albumContentPag")
   } 
@@ -102,29 +102,29 @@ object Application extends Controller {
    }
    
    
-   def updateRegisteredUser(option: Int,attr: String,id: Long) = Action
+   def updateRegisteredUser(option: Int,attribute: String,userId: Long) = Action
    {
          var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
          
          if(option == 1)
          {
-             userDao.updateUserNames(attr,id)
-             currentUser.setNombres(attr)
+             userDao.updateUserNames(attribute,userId)
+             currentUser.setNombres(attribute)
          }
          if(option == 2)
          {
-             userDao.updateUserLastnames(attr,id)
-             currentUser.setApellidos(attr)
+             userDao.updateUserLastnames(attribute,userId)
+             currentUser.setApellidos(attribute)
          }
          if(option == 3)
          {
-             userDao.updateUserNickname(attr,id)
-             currentUser.setUsername(attr)
+             userDao.updateUserNickname(attribute,userId)
+             currentUser.setUsername(attribute)
          }
          if(option == 4)
          {
-             userDao.updateUserEmail(attr,id)
-             currentUser.setEmail(attr)
+             userDao.updateUserEmail(attribute,userId)
+             currentUser.setEmail(attribute)
          }
          
          Ok("true")
@@ -133,6 +133,22 @@ object Application extends Controller {
    def createAlbum() = Action
    {
          Ok(views.html.crearAlbum(currentUser))
+   }
+   
+   def deleteAlbum(albumId: Long) = Action
+   {
+       var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+       albumDao.deleteAlbumById(albumId)
+       Redirect("/albumesPag")
+   }
+   
+   def insertAlbum(albumName: String,albumDescription: String,albumPrivacy: Int,albumImgRoute: String)= Action {
+      
+      var album: Album = new Album(albumName,albumPrivacy,"assets/images/"+albumImgRoute,Some(albumDescription),currentUser.getId)
+      var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+      albumDao.insertAlbum(album)
+       
+       Ok("true");
    }
   
   

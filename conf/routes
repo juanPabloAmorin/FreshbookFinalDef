@@ -9,19 +9,19 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 #pagina de inicio
-GET     /principal                           controllers.Application.showPrincipal
+GET     /principal                           controllers.Application.showPrincipalPage
 
 #validacion pagina de perfil de usuario
-GET     /perfil/:id                       controllers.Application.showPerfil(id: Long)
+GET     /perfil/:userId                       controllers.Application.showPerfil(userId: Long)
 
 #validacion pagina de albumes de usuario
-GET     /albumes/:id                       controllers.Application.showAlbumes(id: Long)
+GET     /albumes/:userId                       controllers.Application.showAlbumes(userId: Long)
 
 #validacion pagina de amigos de usuario
-GET     /amigos/:id                       controllers.Application.showAmigos(id: Long)
+GET     /amigos/:userId                       controllers.Application.showAmigos(userId: Long)
 
 #validacion pagina de contenido de album
-GET     /albumContent/:id                       controllers.Application.showAlbumContent(id: Long)
+GET     /albumContent/:albumId                       controllers.Application.showAlbumContent(albumId: Long)
 
 #pagina de perfil de usuario
 GET     /perfilPag                      controllers.Application.showPerfilPag
@@ -35,12 +35,17 @@ GET     /amigosPag                      controllers.Application.showAmigosPag
 #pagina de contenido de album
 GET     /albumContentPag                      controllers.Application.showAlbumContentPag
 
-#crear nuevo album
+#crear nuevo album page
 GET     /crearAlbum                      controllers.Application.createAlbum
 
 #peticion ajax validacion de usuario
 GET     /userAutentication/:username/:pass          controllers.Application.autenticationRegisteredUser(username :String,pass: String)
 
 #peticion ajax actualizacion de usuario
-GET     /userUpdate/:option/:attr/:id      controllers.Application.updateRegisteredUser(option: Int,attr: String,id: Long)
+GET     /userUpdate/:option/:attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
 
+#borrar album
+GET     /deleteAlbum/:albumId      controllers.Application.deleteAlbum(albumId: Long)
+
+#crear nuevo album persistencia
+GET     /insertAlbum/:albumName/:albumDescription/:albumPrivacy/:albumImgRoute    controllers.Application.insertAlbum(albumName: String,albumDescription: String,albumPrivacy: Int, albumImgRoute: String)

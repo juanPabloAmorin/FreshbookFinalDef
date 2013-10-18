@@ -15,5 +15,7 @@ import models._
 trait AlbumDAO
 {
       def findAlbumsByUser(userId: Long): List[Album];
-      def cantidadArchivos(albumId: Long): Long;
+      def getNumberOfFilesInAlbum(albumId: Long): Long;
+      def insertAlbum(newAlbum: Album)
+      def deleteAlbumById(albumId: Long)
 }

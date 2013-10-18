@@ -1,6 +1,6 @@
 package models
 
-import java.util.{Date}
+import java.util.{ Date }
 
 import play.api._
 import play.api.mvc._
@@ -11,20 +11,20 @@ import anorm._
 import anorm.SqlParser._
 import models._
 
-class AlbumDAO_SQL extends AlbumDAO
-{
-  
+class AlbumDAO_SQL extends AlbumDAO {
+
   val parser = {
     get[Long]("album.id") ~
       get[String]("album.nombre") ~
       get[Int]("album.privacidad") ~
       get[String]("album.caratula") ~
       get[Date]("album.fecha_creacion") ~
-      get[Option[String]]("album.descripcion") map {
-        case id ~ nombre ~ privacidad ~ caratula ~ fecha_creacion ~ descripcion => Album(id, nombre, privacidad, caratula, fecha_creacion, descripcion)
+      get[Option[String]]("album.descripcion") ~
+      get[Long]("album.fk_usuario") map {
+        case id ~ nombre ~ privacidad ~ caratula ~ fechaCreacion ~ descripcion ~ ownerId => Album(id, nombre, privacidad, caratula, fechaCreacion, descripcion,ownerId)
       }
   }
-  
+
   override def findAlbumsByUser(userId: Long): List[Album] = {
 
     DB.withConnection { implicit connection =>
@@ -40,8 +40,8 @@ class AlbumDAO_SQL extends AlbumDAO
     }
 
   }
-  
-      override def cantidadArchivos(albumId: Long): Long = {
+
+  override def getNumberOfFilesInAlbum(albumId: Long): Long = {
 
     DB.withConnection { implicit connection =>
 
@@ -53,6 +53,38 @@ class AlbumDAO_SQL extends AlbumDAO
           'albumId -> albumId).as(scalar[Long].single)
 
       totalArchivos
+    }
+  }
+
+  override def insertAlbum(newAlbum: Album) {
+
+     DB.withConnection { implicit connection =>
+      SQL(
+        """
+          INSERT INTO ALBUM VALUES( (select next value for seq_album),{nombre},{privacy},
+          {imgRoute},'1986-02-10',{description},{ownerId})
+        """
+      
+      ).on(
+          'nombre->newAlbum.getNombre,
+          'privacy->newAlbum.getPrivacidad,
+          'imgRoute->newAlbum.getCaratula,
+          'description->newAlbum.getDescripcion,
+          'ownerId->newAlbum.getOwnerId
+          
+          
+      ).executeUpdate() 
+    }
+  }
+  
+  override def deleteAlbumById(albumId: Long) {
+
+    DB.withConnection { implicit connection =>
+      SQL("delete from album where album.id = {albumId}"   
+        ).on(
+        'albumId -> albumId
+  
+      ).executeUpdate()
     }
   }
 }
