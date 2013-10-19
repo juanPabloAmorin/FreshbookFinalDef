@@ -32,44 +32,11 @@
 	float: right;
 }
 
-.menu_log table tr {
-	vertical-align: top
+.menu_log {
+	vertical-align: top;
+	width: 380px;
 }
 
-.menu_log table tr td {
-	padding: 0 0 0 12px
-}
-
-.menu_log .html_pad {
-	padding-bottom: 4px
-}
-
-.menu_log .inputtext,.menu_log .inputpassword {
-	border-color: #1d2a5b;
-	margin: 0;
-	width: 142px
-}
-
-.menu_log .login_lfield label,.menu_log .login_lfield a {
-	color: #4C0B5F;
-	font-weight: normal;
-	font-size: 14px;
-}
-
-.menu_log .login_lfield {
-	padding-top: 1px
-}
-
-.menu_log .html_pad label {
-	font-size: 11px;
-	color: #fff;
-	font-weight: normal;
-	padding-left: 1px
-}
-
-.menu_log #email {
-	direction: ltr
-}
 
 .contenedorGlobal {
 	margin: 0 auto;
@@ -93,7 +60,7 @@
 
 .panel1 {
 	margin-right: 15px;
-	width: 565px;
+	width: 45%;
 }
 
 .panel3 {
@@ -124,8 +91,7 @@
 }
 
 .panel2 {
-	max-width: 470px;
-	min-width: 470px;
+	width: 55%;
 }
 
 .div1 {
@@ -440,7 +406,7 @@
 	
 }
 
-.divBuscadorMultimedia
+.divBuscador
 {
 	 margin-top: 100px;
 	 width : 100%;
@@ -453,6 +419,16 @@
 	 padding-bottom: 15px;
 }
 
+.divBuscadorPrincipal
+{
+	 margin-top: 20px;
+	 width : 85%;
+	 min-height: 100%;
+	 display: block;
+	 margin-right:36px;
+	 
+}
+
 .tumbnail
 {
 	width: 15%;
@@ -463,3 +439,94 @@
 	max-width: 80px;
 	
 }
+
+.googleButton 
+{
+	margin-top:10px;
+	width: 150px;
+	margin-left:10px;
+}
+
+.facebookButton
+{
+	margin-top: 9px;
+	font-size: 13px;
+    line-height: 16px;
+    padding: 5px 6px 3px;
+    
+    display: inline-block;
+border-top: 1px solid #879ac0;
+white-space: nowrap;
+text-align: left;
+border-collapse: collapse;
+border-spacing: 0;
+border-spacing: 2px;
+border-color: gray;
+color: #fff;
+cursor: pointer;
+background-color: #5b74a8;
+height: 26px;
+border-top: solid 1px #424242;
+border-bottom: solid 1px #424242;
+border-right: solid 1px #424242;
+
+}
+
+.facebookButtonLogo
+{
+	
+cursor: pointer;
+width: 24px;
+height: 26px;
+background-position: 0 -80px;
+background-image: url(http://static.ak.fbcdn.net/rsrc.php/v2/yx/r/j_i0CTUUUEe.png);
+background-size: auto;
+background-repeat: no-repeat;
+display: inline-block;
+vertical-align: top;
+margin-top:9px;
+border-bottom: solid 1px #424242;
+border-right: solid 1px #424242;
+
+}
+
+#customBtn {
+      display: inline-block;
+      background: #dd4b39;
+      color: white;
+      width: 165px;
+      cursor: pointer;
+      white-space: nowrap;
+      margin-left: 10px;
+      margin-top: 10px;
+      border: #bb3f30 1px solid;
+    }
+    
+    #customBtn:hover {
+      background: #e74b37;
+      cursor: hand;
+    }
+    
+    span.label {
+      font-weight: bold;
+    }
+    
+    span.icon {
+      background: url(../images/Red-signin_google.png) transparent 100% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 35px;
+      height: 23px;
+      border-right: #bb3f30 1px solid;
+    }
+    
+    span.buttonText {
+      display: inline-block;
+      vertical-align: middle;
+      
+      padding-right: 35px;
+      font-size: 14px;
+      font-weight: bold;
+      /* Use the Roboto font that is loaded in the <head> */
+     
+    }

@@ -39,7 +39,7 @@ GET     /albumContentPag                      controllers.Application.showAlbumC
 GET     /crearAlbum                      controllers.Application.createAlbum
 
 #peticion ajax validacion de usuario
-GET     /userAutentication/:username/:pass          controllers.Application.autenticationRegisteredUser(username :String,pass: String)
+GET     /userAutentication          controllers.Application.autenticationRegisteredUser()
 
 #peticion ajax actualizacion de usuario
 GET     /userUpdate/:option/:attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)

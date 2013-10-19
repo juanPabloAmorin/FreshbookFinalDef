@@ -24,17 +24,19 @@ object Application extends Controller {
     Ok(views.html.index()).withNewSession
   }
   
-  def autenticationRegisteredUser(username: String,pass: String) = Action 
+  def autenticationRegisteredUser() = Action 
   {
+      //buscar usuario por correo, si empty es true enviar a registro sino enviar a su pagina
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-      currentUser = userDao.findUserByLog(username, pass).getOrElse{null}
+      currentUser = userDao.findUserByLog("THE BIG BOSS").getOrElse{null}
       lastFriendVistedId = currentUser.getId
-      userDao.findUserByLog(username,pass).isEmpty match {
+      userDao.findUserByLog("THE BIG BOSS").isEmpty match {
         case true => Ok("false")
-        case false => Ok("true").withSession(
-                    "usuario" -> username
+        case false => Redirect("/principal").withSession(
+                    "usuario" -> currentUser.getEmail
           )
       }
+      
     
   }
   

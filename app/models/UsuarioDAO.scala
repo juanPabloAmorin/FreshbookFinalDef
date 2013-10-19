@@ -9,7 +9,7 @@ import anorm.SqlParser._
 
 trait UsuarioDAO
 {
-     def findUserByLog(username: String, pass: String ): Option[Usuario];
+     def findUserByLog(username: String): Option[Usuario];
      def updateUserNames(names: String, userId: Long);
      def updateUserLastnames(lastnames: String, userId: Long);
      def updateUserNickname(nickname: String, userId: Long);

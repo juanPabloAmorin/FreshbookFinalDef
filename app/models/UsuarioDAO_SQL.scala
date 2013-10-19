@@ -30,9 +30,9 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       }
   }
 
-  override def findUserByLog(username: String, pass: String): Option[Usuario] = {
+  override def findUserByLog(username: String): Option[Usuario] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from USUARIO where username = {username} and pass = {pass}").on('username -> username, 'pass -> pass).as(this.parser.singleOpt)
+      SQL("select * from USUARIO where username = {username} ").on('username -> username).as(this.parser.singleOpt)
     }
 
   }
