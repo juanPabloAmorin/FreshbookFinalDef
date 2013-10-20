@@ -35,7 +35,7 @@
 				<div class="panel3">
 					<div class="pvm divTitle">
 						<div>
-							<span style="font-size: 22px">@(currentUser.getNombres + " " + currentUser.getApellidos)</span>
+							<span style="font-size: 22px">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
 						</div>
 					</div>
 					<div class="pvm cajitaFoto">
@@ -103,7 +103,7 @@
 			  
 			  
 			  
-			  <div class="divBuscadorPrincipal cfix">
+			  <div class="divBuscador cfix">
 			     <input type="text" placeholder="Busca contenido multimedia" class="form-control left" style="border-radius:0px;width:89%"/>
 			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:11%">Buscar</button>
 			  </div>

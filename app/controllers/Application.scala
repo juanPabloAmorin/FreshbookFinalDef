@@ -24,20 +24,36 @@ object Application extends Controller {
     Ok(views.html.index()).withNewSession
   }
   
-  def autenticationRegisteredUser() = Action 
+  def autenticationRegisteredUser(userEmail :String) = Action 
   {
       //buscar usuario por correo, si empty es true enviar a registro sino enviar a su pagina
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-      currentUser = userDao.findUserByLog("THE BIG BOSS").getOrElse{null}
-      lastFriendVistedId = currentUser.getId
-      userDao.findUserByLog("THE BIG BOSS").isEmpty match {
-        case true => Ok("false")
-        case false => Redirect("/principal").withSession(
+      currentUser = userDao.findUserByEmail(userEmail).getOrElse{null}
+      userDao.findUserByEmail(userEmail).isEmpty match {
+        case true => Redirect("/registroPaso1Pag")
+        case false => 
+          lastFriendVistedId = currentUser.getId
+          Redirect("/principal").withSession(
                     "usuario" -> currentUser.getEmail
           )
       }
       
     
+  }
+  
+  def showRegistroPaso1Pag = Action{
+    
+      Ok(html.registroPaso1())
+  }
+  
+  def showRegistroPaso2Pag = Action{
+    
+      Ok(html.registroPaso2())
+  }
+  
+  def showRegistroPaso3Pag = Action{
+    
+      Ok(html.registroPaso3())
   }
   
   def showPrincipalPage = Action
@@ -111,12 +127,12 @@ object Application extends Controller {
          if(option == 1)
          {
              userDao.updateUserNames(attribute,userId)
-             currentUser.setNombres(attribute)
+             currentUser.setPrimerNombre(attribute)
          }
          if(option == 2)
          {
              userDao.updateUserLastnames(attribute,userId)
-             currentUser.setApellidos(attribute)
+             currentUser.setPrimerApellido(attribute)
          }
          if(option == 3)
          {

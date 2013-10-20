@@ -34,7 +34,7 @@
 				<div class="panel3">
 					<div class="pvm divTitle">
 						<div>
-							<span style="font-size: 22px">@(selectedUser.getNombres + " " + selectedUser.getApellidos)</span>
+							<span style="font-size: 22px">@(selectedUser.getPrimerNombre + " " + (selectedUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + selectedUser.getPrimerApellido + " " + (selectedUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
 						</div>
 					</div>
 					<div class="pvm cajitaFoto">
@@ -69,7 +69,7 @@
 					<div class="divTitle pvm">Información de Perfil</div>
 					<div class="divComWhite pvm">
 						<b class="left">Nombres</b>
-						<div class="left fontN" id="nombre-div" name="nombre-div" style="margin-left: 140px">@selectedUser.getNombres</div>
+						<div class="left fontN" id="nombre-div" name="nombre-div" style="margin-left: 140px">@selectedUser.getPrimerNombre</div>
 						@if(selectedUser.getId == currentUser.getId){
 							<div class="right cfix editButton" id="names-edit-button" name="names-edit-button" title="editar" onclick="editNombres(@selectedUser.getId)"></div>
 						}
@@ -77,7 +77,7 @@
 					
 					<div class="divComWhite pvm">
 						<b class="left">Apellidos</b>
-						<div class="left fontN" id="apellidos-div" name="apellidos-div" style="margin-left: 140px">@selectedUser.getApellidos</div>
+						<div class="left fontN" id="apellidos-div" name="apellidos-div" style="margin-left: 140px">@selectedUser.getPrimerApellido</div>
 						@if(selectedUser.getId == currentUser.getId){
 						<div class="right cfix editButton" id="lastnames-edit-button" name="lastnames-edit-button" title="editar" onclick="editApellidos(@selectedUser.getId)"></div>
 					    }

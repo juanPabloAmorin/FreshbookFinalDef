@@ -12,10 +12,11 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
   val parser = {
     get[Long]("usuario.id") ~
-      get[String]("usuario.nombres") ~
-      get[String]("usuario.apellidos") ~
+      get[String]("usuario.primer_nombre") ~
+      get[Option[String]]("usuario.segundo_nombre") ~
+      get[String]("usuario.primer_apellido") ~
+      get[Option[String]]("usuario.segundo_apellido") ~
       get[String]("usuario.username") ~
-      get[String]("usuario.pass") ~
       get[Date]("usuario.fecha_nacimiento") ~
       get[String]("usuario.email") ~
       get[Option[String]]("usuario.foto") ~
@@ -26,13 +27,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       get[Option[Date]]("usuario.fecha_baja") ~
       get[Date]("usuario.ultima_conexion") ~
       get[Int]("usuario.privacidad") map {
-        case id ~ nombres ~ apellidos ~ username ~ pass ~ fechaNacimiento ~ email ~ foto ~ twitter ~ facebook ~ gmail ~ fechaRegistro ~ fechaBaja ~ ultimaConexion ~ privacidad => Usuario(id, nombres, apellidos, username, pass, fechaNacimiento, email, foto, twitter, facebook, gmail, fechaRegistro, fechaBaja, ultimaConexion, privacidad)
+        case id ~ primerNombre ~ segundoNombre ~ primerApellido ~ segundoApellido ~ username ~ fechaNacimiento ~ email ~ foto ~ twitter ~ facebook ~ gmail ~ fechaRegistro ~ fechaBaja ~ ultimaConexion ~ privacidad => Usuario(id, primerNombre, segundoNombre, primerApellido, segundoApellido, username, fechaNacimiento, email, foto, twitter, facebook, gmail, fechaRegistro, fechaBaja, ultimaConexion, privacidad)
       }
   }
 
-  override def findUserByLog(username: String): Option[Usuario] = {
+  override def findUserByEmail(email: String): Option[Usuario] = {
     DB.withConnection { implicit connection =>
-      SQL("select * from USUARIO where username = {username} ").on('username -> username).as(this.parser.singleOpt)
+      SQL("select * from USUARIO where email = {email} ").on('email -> email).as(this.parser.singleOpt)
     }
 
   }
@@ -114,7 +115,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
       val amigos = SQL(
         """
-          SELECT distinct usuario.id,usuario.nombres,usuario.apellidos,usuario.username,usuario.pass,usuario.fecha_nacimiento,
+          SELECT distinct usuario.id,usuario.primer_nombre,usuario.segundo_nombre,usuario.primer_apellido, usuario.segundo_apellido,usuario.username,usuario.fecha_nacimiento,
        usuario.email,usuario.foto,usuario.twitter,usuario.facebook,usuario.gmail,
        usuario.fecha_registro,usuario.fecha_baja,usuario.ultima_conexion,usuario.privacidad
        FROM usuario,amistad

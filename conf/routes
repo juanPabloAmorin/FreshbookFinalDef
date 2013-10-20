@@ -39,7 +39,7 @@ GET     /albumContentPag                      controllers.Application.showAlbumC
 GET     /crearAlbum                      controllers.Application.createAlbum
 
 #peticion ajax validacion de usuario
-GET     /userAutentication          controllers.Application.autenticationRegisteredUser()
+GET     /userAutentication/:userEmail          controllers.Application.autenticationRegisteredUser(userEmail: String)
 
 #peticion ajax actualizacion de usuario
 GET     /userUpdate/:option/:attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
@@ -49,3 +49,12 @@ GET     /deleteAlbum/:albumId      controllers.Application.deleteAlbum(albumId: 
 
 #crear nuevo album persistencia
 GET     /insertAlbum/:albumName/:albumDescription/:albumPrivacy/:albumImgRoute    controllers.Application.insertAlbum(albumName: String,albumDescription: String,albumPrivacy: Int, albumImgRoute: String)
+
+#pagina de registro de usuario. paso 1
+GET     /registroPaso1Pag      controllers.Application.showRegistroPaso1Pag()
+
+#pagina de registro de usuario. paso 2
+GET     /registroPaso2Pag      controllers.Application.showRegistroPaso2Pag()
+
+#pagina de registro de usuario. paso 3
+GET     /registroPaso3Pag      controllers.Application.showRegistroPaso3Pag()

@@ -43,68 +43,6 @@
 	  </script>
 
 
-
-
-<script>
-	window.fbAsyncInit = function() {
-		FB.init({
-			appId : '672888336062808', // App ID
-			channelUrl : 'http://localhost:9000', // Channel File
-			status : true, // check login status
-			cookie : true, // enable cookies to allow the server to access the session
-			xfbml : true
-		// parse XFBML
-		});
-
-		FB.getLoginStatus(function(response) {
-		    if (response.status === 'connected') {
-		    	window.location = encodeURI("/userAutentication");
-		        // connected
-		    } else if (response.status === 'not_authorized') {
-		        // not_authorized
-		        
-		      
-		    } else {
-		        // not_logged_in
-		     
-		    }
-		    }, {scope: 'email,user_likes,user_birthday'});
-
-		    // Additional init code here
-
-	};
-
-	var uri = encodeURI('http://localhost:9000');
-	function login() {
-		  
-		window.location = encodeURI("https://www.facebook.com/dialog/oauth?client_id=672888336062808&redirect_uri="+uri+"&response_type=token");
-	    }
-		  function testAPI() {
-
-			   
-			    console.log('Welcome!  Fetching your information.... ');
-			    FB.api('/me', function(response) {
-			    	 alert(response.birthday + " "+response.first_name+" "+response.middle_name+" "+response.last_name);
-			        console.log('Good to see you, ' + response.name + '.');
-			    });
-			  }
-	// Load the SDK asynchronously
-	(function(d) {
-		var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-		if (d.getElementById(id)) {
-			return;
-		}
-		js = d.createElement('script');
-		js.id = id;
-		js.async = true;
-		js.src = "//connect.facebook.net/en_US/all.js";
-		ref.parentNode.insertBefore(js, ref);
-	}(document));
-
-
-</script>
-
-
 	<div class="log_container">
 		<div class="cfix log_bar">
 			<div class="left">
@@ -177,6 +115,7 @@
 	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
 	<script src="assets/javascripts/application.js"></script>
 	<script src="assets/javascripts/aplicacion.js"></script>
+	<script src="assets/javascripts/facebookFunctions.js"></script>
 
 
 </body>

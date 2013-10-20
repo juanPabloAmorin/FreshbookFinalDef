@@ -34,7 +34,7 @@
 				<div class="panel3">
 					<div class="pvm divTitle">
 						<div>
-							<span style="font-size: 22px">@(selectedUser.getNombres + " " + selectedUser.getApellidos)</span>
+							<span style="font-size: 22px">@(selectedUser.getPrimerNombre + " " + (selectedUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + selectedUser.getPrimerApellido + " " + (selectedUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
 						</div>
 					</div>
 					<div class="pvm cajitaFoto">
@@ -69,7 +69,7 @@
 
 			<div class="panel4 right">
 				<div class="cajitaPerfil">
-					<div class="divTitle pvl">Albumes de @(selectedUser.getNombres + " " + selectedUser.getApellidos)
+					<div class="divTitle pvl">Albumes de @(selectedUser.getPrimerNombre + " " + (selectedUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + selectedUser.getPrimerApellido + " " + (selectedUser.getSegundoApellido match {case Some(value) => value case _ => ""}))
 					   @if(selectedUser.getId == currentUser.getId){
 					   
 					  <a href="/crearAlbum"><button class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Nuevo Album</button></a>

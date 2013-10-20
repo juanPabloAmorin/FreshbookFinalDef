@@ -9,10 +9,11 @@ import models._
 
 
 case class Usuario(private var id: Long, 
-                   private var nombres: String, 
-                   private var apellidos: String, 
-                   private var username: String,
-                   private var pass: String,  
+                   private var primerNombre: String, 
+                   private var segundoNombre: Option[String],
+                   private var primerApellido: String, 
+                   private var segundoApellido: Option[String], 
+                   private var username: String,  
                    private var fechaNacimiento: Date, 
                    private var email: String, 
                    private var foto: Option[String],
@@ -26,12 +27,14 @@ case class Usuario(private var id: Long,
 {
       private var amistades: List[Usuario] = null;
       
-      def this() = this(0,"","","","",null,"",null,null,null,null,null,null,null,0)
+      def this() = this(0,"",Some(""),"",Some(""),"",null,"",Some(""),Some(""),Some(""),Some(""),null,null,null,0)
      
         
 
-  def getNombres() = this.nombres
-  def getApellidos() = this.apellidos
+  def getPrimerNombre() = this.primerNombre
+  def getSegundoNombre() =  this.segundoNombre
+  def getPrimerApellido() = this.primerApellido
+  def getSegundoApellido() = this.segundoApellido
   def getId() = this.id
   def getUsername() = this.username
   def getFechaNacimiento() = this.fechaNacimiento;
@@ -46,8 +49,10 @@ case class Usuario(private var id: Long,
   def getAmistades() = this amistades
   def getPrivacidad() = this privacidad
   
-  def setNombres(nombres: String) = {this.nombres = nombres}
-  def setApellidos(apellidos: String) = {this.apellidos = apellidos}
+  def setPrimerNombre(primerNombre: String) = {this.primerNombre = primerNombre}
+  def setSegundoNombre(segundoNombre: Option[String]) = {this.segundoNombre = segundoNombre}
+  def setPrimerApellido(primerApellido: String) = {this.primerApellido = primerApellido}
+  def setSegundoApellido(segundoApellido: Option[String]) = {this.segundoApellido = segundoApellido}
   def setUsername(username: String) = {this.username = username}
   def setFechaNacimiento(fecha_nacimiento: Date) = {this.fechaNacimiento = fecha_nacimiento}
   def setEmail(email: String) = {this.email = email}
