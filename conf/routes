@@ -2,6 +2,7 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+
 # Home page
 GET     /                           controllers.Application.index
 
@@ -39,7 +40,7 @@ GET     /albumContentPag                      controllers.Application.showAlbumC
 GET     /crearAlbum                      controllers.Application.createAlbum
 
 #peticion ajax validacion de usuario
-GET     /userAutentication/:userEmail          controllers.Application.autenticationRegisteredUser(userEmail: String)
+GET     /userAutentication/:userEmail/*link/:firstName/:middleName/:lastName        controllers.Application.userAutentication(userEmail: String,link: String,firstName: String,middleName: String, lastName: String)
 
 #peticion ajax actualizacion de usuario
 GET     /userUpdate/:option/:attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
@@ -53,8 +54,15 @@ GET     /insertAlbum/:albumName/:albumDescription/:albumPrivacy/:albumImgRoute  
 #pagina de registro de usuario. paso 1
 GET     /registroPaso1Pag      controllers.Application.showRegistroPaso1Pag()
 
+#registro de usuario. paso 2
+GET     /registroPaso2/:firstName/:secondName/:firstLastName/:secondLastName/:username/:dia/:mes/:anio/:privacy/*photo      controllers.Application.registroPaso2(firstName: String, secondName: String,firstLastName: String,secondLastName: String, username: String,dia: String,mes: String,anio: String,privacy: Int,photo: String)
+
 #pagina de registro de usuario. paso 2
 GET     /registroPaso2Pag      controllers.Application.showRegistroPaso2Pag()
+
+#registro de usuario. paso 3
+GET     /registroPaso3/:country/:state/:city      controllers.Application.registroPaso3(country: String, state: String, city: String)
+
 
 #pagina de registro de usuario. paso 3
 GET     /registroPaso3Pag      controllers.Application.showRegistroPaso3Pag()

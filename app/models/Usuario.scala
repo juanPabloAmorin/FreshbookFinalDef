@@ -26,9 +26,11 @@ case class Usuario(private var id: Long,
                    private var privacidad: Int)
 {
       private var amistades: List[Usuario] = null;
+      private var ubicacion: Lugar = null;
       
       def this() = this(0,"",Some(""),"",Some(""),"",null,"",Some(""),Some(""),Some(""),Some(""),null,null,null,0)
-     
+      def this(primerNombre: String,segundoNombre: String, primerApellido: String,fechaNacimiento: Date,email: String,facebook: String, gmail: String) = 
+        this(0,primerNombre,Some(segundoNombre),primerApellido,Some(""),"",fechaNacimiento,email,Some(""),Some(""),Some(facebook),Some(gmail),null,null,null,0)
         
 
   def getPrimerNombre() = this.primerNombre
@@ -48,6 +50,7 @@ case class Usuario(private var id: Long,
   def getUltimaConexion() = this.ultimaConexion
   def getAmistades() = this amistades
   def getPrivacidad() = this privacidad
+  def getUbicacion() = this ubicacion
   
   def setPrimerNombre(primerNombre: String) = {this.primerNombre = primerNombre}
   def setSegundoNombre(segundoNombre: Option[String]) = {this.segundoNombre = segundoNombre}
@@ -65,5 +68,6 @@ case class Usuario(private var id: Long,
   def setUltimaConexion(ultima_conexion: Date) = {this.ultimaConexion = ultima_conexion}
   def setAmistades(amistades: List[Usuario]) = {this.amistades = amistades}
   def setPrivacidad(privacidad: Int) = {this.privacidad = privacidad}
+  def setUbicacion(ubicacion: Lugar) = {this.ubicacion = ubicacion}
   
 }

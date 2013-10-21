@@ -48,12 +48,12 @@ function fectchUserInformation() {
                    
               
               birthday = response.birthday;
-              firtsName = response.first_name;
+              firstName = response.first_name;
               middleName = response.middle_name;
               lastName = response.last_name;
               email = response.email;
               linkFacebook = response.link;
               
-              window.location = encodeURI("/userAutentication/"+email);
+              window.location = encodeURI("/userAutentication/"+email+"/"+linkFacebook+"/"+firstName+"/"+middleName+"/"+lastName);
           });
         }

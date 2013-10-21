@@ -1,29 +1,3 @@
-function autenticationUser() {
-
-	
-	var jqxhr = $.ajax("/userAutentication/" + $("#user").val() + "/" + $("#pass").val())
-			
-	
-	.done(function(jqXHR) 
-			{
-				if (jqXHR == "true") 
-				{
-					
-					location.href = "/principal"
-				} 
-				else 
-				{ 
-					
-					$("#logError").fadeIn(150);
-				}
-			})
-			.fail(function(jqXHR) {
-				
-				$("#logError").fadeIn(150);
-			})
-
-}
-
 function updateUser(opcion,atributo,id) {
     
 
@@ -232,4 +206,79 @@ function createAlbum()
 			})
 	
 	    
+}
+
+function validateUserPersonalData()
+{
+	var firstName = $("#first-name").val();
+	var secondName = $("#second-name").val();
+	var firstLastName = $("#first-lastname").val();
+	var secondLastName = $("#second-lastname").val();
+	var username = $("#username").val();
+	var photo = "assets/images/user_images/userImage.jpg";
+	var dia = $("#dia").val();
+	var mes = $("#mes").val();
+	var anio = $("#anio").val();
+	var validUserData = true;
+	var privacy;
+	
+	if(document.newUserForm.optionsRadios[0].checked)
+		privacy = 0;
+	else
+		privacy = 1;
+	
+	if(firstName == ""){
+		
+		$("#div-first-name").addClass("has-error");
+		validUserData = false;
+	}
+    if(secondName == ""){
+		
+		secondName = "null";
+	}
+    if(firstLastName == ""){
+		
+		$("#div-first-lastname").addClass("has-error");
+		validUserData = false;
+	}
+    if(secondLastName == ""){
+		
+		secondLastName = "null";
+	}
+    if(username == ""){
+		
+		$("#div-username").addClass("has-error");
+		validUserData = false;
+	}
+    if(dia == 0 || mes==0 || anio==0)
+    {
+    	validUserData = false;
+    }
+    
+    if(validUserData)
+    {
+    	location.href = "/registroPaso2/"+firstName+"/"+secondName+"/"+firstLastName+"/"+secondLastName+"/"+username+"/"+dia+"/"+mes+"/"+anio+"/"+privacy+"/"+photo;
+    }
+    
+}
+
+function removeError(object)
+{
+	$("#"+object).removeClass("has-error");
+}
+
+function goUserRegisterStep3()
+{
+	if(country != null )
+	{
+	   if(state == "")
+	   {
+		   state = "null";
+	   }
+	   if(city == "")
+	   {
+		   city = "null";
+	   }
+	   location.href = "/registroPaso3/"+country+"/"+state+"/"+city;
+	}
 }

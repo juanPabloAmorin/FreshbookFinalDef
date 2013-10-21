@@ -530,3 +530,12 @@ border-right: solid 1px #424242;
       /* Use the Roboto font that is loaded in the <head> */
      
     }
+    
+    #map-canvas {
+        height: 400px;;
+        width: 400px;;
+        margin: 0px;
+        padding: 0px;
+        margin-left: 140px;
+        
+      }

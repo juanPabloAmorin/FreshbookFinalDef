@@ -1,3 +1,4 @@
+@(newUser: Usuario)
 <!DOCTYPE html>
 
 <html>
@@ -37,44 +38,71 @@
 					<span style="font-size: 36px">Registro de usuario</span>
 				</div>
 				<div id="form_box" class="marginTM" align="center">
-					<div class="cfix divRow marginBM">
-						<div class="inputRow marginR left">
-							<input type="text" class="form-control" data-type="text"
+				
+				<div id="paneleft" class="left" style="width:40%">
+				      
+				   
+				      <div id="div-photo-panel" class="photoPanel" style="width:200px;height:250px;display:block;margin-right:-60px">
+				         <img src="assets/images/user_images/userImage.jpg" style="width: 100%; height: 100%;"/>
+				      </div>
+				   
+				    
+				<form name="newUserForm" style="margin-left:130px;margin-top:20px">
+			   <label class="radio checked left">
+                 <span class="icons" ><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="optionsRadios"  value="0" data-toggle="radio" checked="checked" >
+                 Público
+               </label>
+               <label class="radio left" style="margin-top:10px;margin-left:10px">
+                <span class="icons"><span class="first-icon fui-radio-unchecked"></span><span class="second-icon fui-radio-checked"></span></span><input type="radio" name="optionsRadios"  value="1" data-toggle="radio">
+                  Solo Amigos
+               </label>
+               
+               </form>	
+               
+             		       
+				   
+				   
+				   </div>
+				   
+				<div id="panelRight" class="right" style="width:60%" align="left">	
+					<div class="cfix divRow">
+						<div class="inputRow marginR left form-group" id="div-first-name">
+							<input type="text" class="form-control" data-type="text" value="@newUser.getPrimerNombre"
 								name="first-name" placeholder="Primer Nombre" id="first-name"
-								style="border-radius: 0; font-size: 18px;" />
+								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-name')"/>
 						</div>
-						<div class="inputRow">
-							<input type="text" class="form-control" data-type="text"
+						<div class="inputRow form-group" >
+							<input type="text" class="form-control" data-type="text" value="@newUser.getSegundoNombre"
 								name="second-name" placeholder="Segundo Nombre" id="second-name"
 								style="border-radius: 0; font-size: 18px;" />
 						</div>
 					</div>
-					<div class="cfix divRow marginBM">
-						<div class="inputRow marginR left">
-							<input type="text" class="form-control" data-type="text"
+					<div class="cfix divRow">
+						<div class="inputRow marginR left form-group" id="div-first-lastname">
+							<input type="text" class="form-control" data-type="text" value="@newUser.getPrimerApellido"
 								name="first-lastname" placeholder="Primer Apellido" id="first-lastname"
-								style="border-radius: 0; font-size: 18px;" />
+								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-lastname')"/>
 						</div>
-						<div class="inputRow">
+						<div class="inputRow form-group">
 							<input type="text" class="form-control" data-type="text"
 								name="second-lastname" placeholder="Segundo Apellido" id="second-lastname"
 								style="border-radius: 0; font-size: 18px;" />
 						</div>
 					</div>
-					<div class="divRow marginBM">
-						<input type="text" class="input_largeW form-control"
+					<div class="divRow form-group" id="div-username">
+						<input type="text" class="input_largeW form-control" 
 							data-type="text" name="username" placeholder="Username"
-							id="username" style="border-radius: 0" />
+							id="username" style="border-radius: 0" onkeypress="removeError('div-username')"/>
 					</div>
 					<div class="marginBM">
-						<div class="divRow marginBM">
-							<input type="text" class="input_largeW form-control"
+						<div class="divRow marginBM form-group">
+							<input type="text" class="input_largeW form-control" value="@newUser.getEmail" readonly="readonly"
 								data-type="text" name="mail" placeholder="Correo Electrónico"
-								id="mail" style="border-radius: 0" />
+								id="mail" style="border-radius: 0;color:grey" />
 						</div>
 					</div>
 					<div class="relative">
-						<div class="marginTM marginBS" style="font-size: 18px;margin-left:-240px">Fecha de nacimiento</div>
+						<div class="marginTM marginBS" style="font-size: 18px">Fecha de nacimiento</div>
 
 						<span class="inline relative"> 
 						    <select name="dia" id="dia">
@@ -240,11 +268,12 @@
 							</select>				
 						</span>
 						<div class="cfix marginTM">
-							<a href="/registroPaso2Pag"><button type="submit" class="btn btn-hg btn-primary marginTM"
-								name="continuar-button" id="continuar-button" style="border-radius:0">Continuar</button></a>
+							<button type="submit" class="btn btn-hg btn-primary marginTM"
+								name="continuar-button" id="continuar-button" style="border-radius:0" onclick="validateUserPersonalData()">Continuar</button>
 						</div>
 					</div>
 				</div>
+		  </div>
 		
 	</div>
 	<!-- Contenedor Global -->
