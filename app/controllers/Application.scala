@@ -10,6 +10,7 @@ import routes.javascript._
 
 import views._
 import models._
+import controllers._
 
 import anorm._
 import anorm.SqlParser._
@@ -75,7 +76,14 @@ object Application extends Controller {
     Ok(html.registroPaso2())
   }
   
-  def registroPaso3(country: String, state: String, city: String) = TODO
+  def registroPaso3(country: String, state: String, city: String) = Action {
+    
+        var userLocation = Util.getUserLocation(country,state,city)
+        newUser.setUbicacion(userLocation)
+        
+        Redirect("/registroPaso3Pag")
+    
+  }
 
   def showRegistroPaso3Pag = Action {
 

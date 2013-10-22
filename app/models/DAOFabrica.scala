@@ -15,4 +15,9 @@ object DAOFabrica {
          
           new AlbumDAO_SQL
       }
+      
+      def getLugarDAO(): LugarDAO = {
+         
+          new LugarDAO_SQL
+      }
 }
