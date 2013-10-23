@@ -41,8 +41,9 @@ object Util {
               case _ =>
                 if(city != "null"){
                   
-                    newCity = new Lugar(city, "ciudad", stateValue)
+                    newCity = new Lugar(city, "ciudad", Some(stateValue))
                     lugarDao.insertLugar(newCity)
+                    newCity.setId(lugarDao.getNewLugarLastIdFromSequence)
                     userLugar = newCity
                 }
             }
@@ -52,14 +53,16 @@ object Util {
           case _ => 
             
             if(state != "null"){
-               newState = new Lugar(state, "estado", countryValue)
+               newState = new Lugar(state, "estado", Some(countryValue))
                lugarDao.insertLugar(newState)
+               newState.setId(lugarDao.getNewLugarLastIdFromSequence)
                userLugar = newState
             }        
             if(city != "null"){
           
-               newCity = new Lugar(city, "ciudad", newState)
+               newCity = new Lugar(city, "ciudad", Some(newState))
                lugarDao.insertLugar(newCity)
+               newCity.setId(lugarDao.getNewLugarLastIdFromSequence)
                userLugar = newCity
             }
           
@@ -69,17 +72,20 @@ object Util {
         
          newCountry = new Lugar(country, "pais", null)
          lugarDao.insertLugar(newCountry)
+         newCountry.setId(lugarDao.getNewLugarLastIdFromSequence)
          userLugar = newCountry
          
          if(state != "null") {
-            newState = new Lugar(state, "estado", newCountry)
-            lugarDao.insertLugar(newState)         
+            newState = new Lugar(state, "estado", Some(newCountry))
+            lugarDao.insertLugar(newState)   
+            newState.setId(lugarDao.getNewLugarLastIdFromSequence)
             userLugar = newState
          }
-         else if(city != "null"){
+         if(city != "null"){
          
-            newCity = new Lugar(city, "ciudad", newState)
-            lugarDao.insertLugar(newCity)    
+            newCity = new Lugar(city, "ciudad", Some(newState))
+            lugarDao.insertLugar(newCity) 
+            newCity.setId(lugarDao.getNewLugarLastIdFromSequence)
             userLugar = newCity
       }
         

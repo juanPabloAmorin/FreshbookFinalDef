@@ -161,6 +161,16 @@
 	width: 230px;
 	word-wrap: break-word;
 	display: block;
+	
+}
+
+.bloqueRight
+{
+	float: right;
+	padding: 20px 0 0 2px;
+	position: relative;
+	width: 200px;
+	display: block;
 }
 
 .divCentral {
@@ -171,6 +181,7 @@
 	margin-left: 230px;
 	min-height: 550px;
 	background-color: #fff;
+	overflow:auto;
 }
 
 .iniBox {
@@ -539,3 +550,35 @@ border-right: solid 1px #424242;
         margin-left: 140px;
         
       }
+      
+      
+  .div-userFriend
+  {
+      width: 40%;
+      height: 150px;
+      display: block;
+      margin-left: 35px;
+      float: left;
+      
+      padding-top: 20px;
+      padding-left: 15px;
+      padding-right: 10px;
+      
+      
+  
+  }
+  
+  .div-userFriend img
+  {
+     width: 40%; 
+     height: 80%;
+     float: left;
+  }
+  
+  .div-userFriend span
+  {
+     font-size: 12px;
+     color: #4C0B5F;
+     
+     
+  }

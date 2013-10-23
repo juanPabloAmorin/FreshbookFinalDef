@@ -61,8 +61,8 @@ class AlbumDAO_SQL extends AlbumDAO {
      DB.withConnection { implicit connection =>
       SQL(
         """
-          INSERT INTO ALBUM VALUES( (select next value for seq_album),{nombre},{privacy},
-          {imgRoute},'1986-02-10',{description},{ownerId})
+          INSERT INTO ALBUM VALUES( nextval('seq_album'),{nombre},{privacy},
+          {imgRoute},NOW(),{description},{ownerId})
         """
       
       ).on(

@@ -89,6 +89,15 @@ object Application extends Controller {
 
     Ok(html.registroPaso3())
   }
+  
+  def registroFinalUsuario() = Action{
+    
+       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+       userDao.insertUser(newUser)
+       currentUser = newUser
+       lastFriendVistedId = currentUser.getId
+       Redirect("/principal").withSession("usuarioEmail" -> currentUser.getEmail)
+  }
 
   def showPrincipalPage = Action {
     request =>

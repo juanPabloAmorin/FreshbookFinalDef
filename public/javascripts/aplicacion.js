@@ -201,7 +201,7 @@ function createAlbum()
 				}
 			})
 			.fail(function(jqXHR) {
-				alert(jqXHR.statusText);
+				
 				//mensaje de error en conexion
 			})
 	
@@ -264,20 +264,22 @@ function validateUserPersonalData()
 
 function removeError(object)
 {
+	
 	$("#"+object).removeClass("has-error");
 }
 
-function goUserRegisterStep3()
+function goUserRegisterStep3()  
 {
-	if(country != null )
+	if(country != null && country != "")
 	{
+	   
 	   if(state == "")
 	   {
-		   state = "null";
+		   state="null"
 	   }
 	   if(city == "")
 	   {
-		   city = "null";
+		   ciudad="null"
 	   }
 	   location.href = "/registroPaso3/"+country+"/"+state+"/"+city;
 	}

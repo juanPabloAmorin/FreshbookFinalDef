@@ -17,5 +17,6 @@ trait LugarDAO
       def insertLugar(newLugar: Lugar)
       def getLugarById(id: Long): Option[Lugar]
       def getLugarByNameAndType(name: String, typo: String): Option[Lugar]
+      def getNewLugarLastIdFromSequence(): Long
       
 }

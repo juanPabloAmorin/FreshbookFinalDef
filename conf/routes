@@ -66,3 +66,6 @@ GET     /registroPaso3/:country/:state/:city      controllers.Application.regist
 
 #pagina de registro de usuario. paso 3
 GET     /registroPaso3Pag      controllers.Application.showRegistroPaso3Pag()
+
+#funcion registro final de usuario. 
+GET     /registroFinalUsuario      controllers.Application.registroFinalUsuario()

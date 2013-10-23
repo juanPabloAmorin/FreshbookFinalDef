@@ -16,6 +16,7 @@ trait UsuarioDAO
      def updateUserEmail(email: String, userId: Long);
      def findUserById(id: Long): Option[Usuario];
      def findFriendsByUser(userId: Long): List[Usuario];
+     def insertUser(newUsuario: Usuario)
      
      
 }

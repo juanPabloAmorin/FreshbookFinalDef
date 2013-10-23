@@ -19,6 +19,8 @@ class LugarDAO_SQL extends LugarDAO {
       }
   }
   
+  var lastLugarSequenceNumber: Long = 0
+  
   
   override def getLugarById(id: Long): Option[Lugar] = {
     DB.withConnection { implicit connection =>
@@ -29,19 +31,29 @@ class LugarDAO_SQL extends LugarDAO {
   
   override def insertLugar(newLugar: Lugar) {
 
+     var fkLugar: Option[String] = null
+     var newLugarLugar  = newLugar.getLugar
+     newLugarLugar match{
+       case Some(lugar) =>
+         
+          fkLugar = Some(lugar.getId.toString)
+         
+       case _ =>
+          
+         fkLugar = Some("null");
+          
+     }
      DB.withConnection { implicit connection =>
-      SQL(
-        """
-          INSERT INTO LUGAR VALUES( (select next value for seq_lugar),{nombre},{tipo},
-          {fk_lugar})
-        """
+      SQL("INSERT INTO LUGAR VALUES(nextval('seq_lugar'),{nombre},{tipo},"+ fkLugar.get +")"
       
       ).on(
           'nombre->newLugar.getNombre,
-          'tipo->newLugar.getTipo,
-          'fk_lugar->Option(newLugar.getLugar.getId).getOrElse{"null"}
+          'tipo->newLugar.getTipo
+          
                    
       ).executeUpdate() 
+      
+      lastLugarSequenceNumber = SQL("select currval('seq_lugar')").as(scalar[Long].single)
     }
   }
   
@@ -49,6 +61,11 @@ class LugarDAO_SQL extends LugarDAO {
        DB.withConnection { implicit connection =>
       SQL("select * from LUGAR where nombre = {name} and tipo = {typo} ").on('name -> name, 'typo -> typo).as(this.parser.singleOpt)
     }
+  }
+  
+  override def getNewLugarLastIdFromSequence(): Long = {
+    
+      return lastLugarSequenceNumber
   }
   
 }

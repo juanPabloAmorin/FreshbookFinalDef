@@ -11,7 +11,8 @@ var geocoder;
 var country;
 var state;
 var city;
-
+var latitud;
+var longitud;
 var popup = null;
 
 function initialize() {
@@ -51,13 +52,13 @@ function initialize() {
 
 function codeLatLng(marker) {
 	  var markerLatLng = marker.getPosition();
-	  var lat = markerLatLng.lat();
-	  var lng = markerLatLng.lng();
+	  latitud = markerLatLng.lat();
+	  longitud = markerLatLng.lng();
 	  country = "";
 	  state = "";
 	  city = "";
 	 
-	  var latlng = new google.maps.LatLng(lat, lng);
+	  var latlng = new google.maps.LatLng(latitud, longitud);
 	  geocoder.geocode({'latLng': latlng}, function(results, status) {
 	    if (status == google.maps.GeocoderStatus.OK) {
 	      if (results[0]) {

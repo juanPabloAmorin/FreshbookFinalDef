@@ -119,7 +119,8 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
        usuario.email,usuario.foto,usuario.twitter,usuario.facebook,usuario.gmail,
        usuario.fecha_registro,usuario.fecha_baja,usuario.ultima_conexion,usuario.privacidad
        FROM usuario,amistad
-       WHERE (amistad.fk_usuario1 = usuario.id or amistad.fk_usuario2 = usuario.id) and usuario.id != {id}
+       WHERE (amistad.fk_usuario1 = usuario.id or amistad.fk_usuario2 = usuario.id) 
+          and (amistad.fk_usuario1 = {id} or amistad.fk_usuario2 = {id}) and usuario.id != {id}
        
         """).on(
           'id -> userId).as(this.parser *)
@@ -128,6 +129,35 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
     } 
 
-  }  
+  }
+   
+   override def insertUser(newUsuario: Usuario)
+   {
+       DB.withConnection { implicit connection =>
+      SQL(
+        """
+          INSERT INTO USUARIO VALUES( nextval('seq_usuario'),{primer_nombre},
+          {segundo_nombre},{primer_apellido},{segundo_apellido},{username},{fecha_nacimiento},
+          {email},{foto},{twitter},{facebook},{gmail},NOW(),null,NOW(),{privacidad},{fk_lugar})
+        """
+      
+      ).on(
+          'primer_nombre->newUsuario.getPrimerNombre,
+          'segundo_nombre->newUsuario.getSegundoNombre.getOrElse{"null"},
+          'primer_apellido->newUsuario.getPrimerApellido,
+          'segundo_apellido->newUsuario.getSegundoApellido.getOrElse{"null"},
+          'username->newUsuario.getUsername,
+          'fecha_nacimiento->newUsuario.getFechaNacimiento,
+          'email->newUsuario.getEmail,
+          'foto->newUsuario.getFoto,
+          'twitter->newUsuario.getTwitter.getOrElse{"null"},
+          'facebook->newUsuario.getFacebook.getOrElse{"null"},
+          'gmail->newUsuario.getGmail.getOrElse{"null"},
+          'privacidad->newUsuario.getPrivacidad,
+          'fk_lugar->newUsuario.getUbicacion.getId
+         
+      ).executeUpdate() 
+    }
+   }
 
 }
