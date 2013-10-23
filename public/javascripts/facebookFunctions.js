@@ -36,7 +36,7 @@ FB.Event.subscribe('auth.authResponseChange', function(response) {
 
 
 //var uri = encodeURI('http://localhost:9000');
-var uri = encodeURI('agile-sands-9357.herokuapp.com');
+var uri = encodeURI('http://agile-sands-9357.herokuapp.com');
 
       function login() {
                 
