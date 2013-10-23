@@ -10,6 +10,8 @@ import models._
 
 class UsuarioDAO_SQL() extends UsuarioDAO {
 
+  var lastUserSequenceNumber: Long = 0;
+  
   val parser = {
     get[Long]("usuario.id") ~
       get[String]("usuario.primer_nombre") ~
@@ -157,7 +159,34 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'fk_lugar->newUsuario.getUbicacion.getId
          
       ).executeUpdate() 
+      
+      lastUserSequenceNumber = SQL("select currval('seq_usuario')").as(scalar[Long].single)
     }
+   }
+   
+   override def getNewUserLastIdFromSequence(): Long = {
+    
+      return lastUserSequenceNumber
+  }
+   
+   override def searchUsersByFullNamePattern(namePattern: String): List[Usuario] = {
+         
+         DB.withConnection { implicit connection =>
+
+      val users = SQL(
+        """
+          select * from usuario where  (lower(primer_nombre) like lower('{namePattern}%')) 
+          or (lower(segundo_nombre) like lower('{namePattern}%')) 
+          or (lower(primer_apellido) like lower('{namePattern}%')) 
+          or (lower(segundo_apellido) like lower('{namePattern}%')) 
+          or (lower(username) like lower('{namePattern}%')) 
+          
+        """).on(
+          'namePattern -> namePattern).as(this.parser *)
+
+      users
+
+    } 
    }
 
 }

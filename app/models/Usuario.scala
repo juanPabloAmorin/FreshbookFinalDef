@@ -52,6 +52,7 @@ case class Usuario(private var id: Long,
   def getPrivacidad() = this privacidad
   def getUbicacion() = this ubicacion
   
+  def setId(id: Long) = {this.id = id}
   def setPrimerNombre(primerNombre: String) = {this.primerNombre = primerNombre}
   def setSegundoNombre(segundoNombre: Option[String]) = {this.segundoNombre = segundoNombre}
   def setPrimerApellido(primerApellido: String) = {this.primerApellido = primerApellido}

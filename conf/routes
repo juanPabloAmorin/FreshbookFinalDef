@@ -69,3 +69,6 @@ GET     /registroPaso3Pag      controllers.Application.showRegistroPaso3Pag()
 
 #funcion registro final de usuario. 
 GET     /registroFinalUsuario      controllers.Application.registroFinalUsuario()
+
+#buscador de usuarios. 
+GET     /searchForFriends/:nameUserPattern      controllers.Application.searchForFriends(nameUserPattern :String)

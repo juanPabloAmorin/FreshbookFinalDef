@@ -68,4 +68,10 @@ class LugarDAO_SQL extends LugarDAO {
       return lastLugarSequenceNumber
   }
   
+  override def getLugarByNameAndTypeAndZone(name: String, typo: String, zone: Long): Option[Lugar] = {
+       DB.withConnection { implicit connection =>
+      SQL("select * from LUGAR where nombre = {name} and tipo = {typo} and fk_lugar = {zone}").on('name -> name, 'typo -> typo,'zone -> zone).as(this.parser.singleOpt)
+    }
+  }
+  
 }

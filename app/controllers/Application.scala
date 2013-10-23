@@ -94,6 +94,7 @@ object Application extends Controller {
     
        var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
        userDao.insertUser(newUser)
+       newUser.setId(userDao.getNewUserLastIdFromSequence)
        currentUser = newUser
        lastFriendVistedId = currentUser.getId
        Redirect("/principal").withSession("usuarioEmail" -> currentUser.getEmail)
@@ -192,6 +193,13 @@ object Application extends Controller {
     albumDao.insertAlbum(album)
 
     Ok("true");
+  }
+  
+  def searchForFriends(nameUserPattern: String) = Action{
+    
+        var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
+        var users: List[Usuario] = userDao.searchUsersByFullNamePattern(nameUserPattern)
+        Ok("true");
   }
 
 }

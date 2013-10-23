@@ -284,3 +284,19 @@ function goUserRegisterStep3()
 	   location.href = "/registroPaso3/"+country+"/"+state+"/"+city;
 	}
 }
+
+function searchForFriends()
+{
+	var nameUserPattern = $("#input-search").val();
+	
+	var jqxhr = $.ajax("/searchForFriends/"+nameUserPattern)
+	.done(function(jqXHR) 
+	{
+		 alert(nameUserPattern);
+		 //programar manejo de errores de update
+	})
+	.fail(function(jqXHR) {
+		 
+		//programar manejo de errores de update
+	})
+}

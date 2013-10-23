@@ -7,6 +7,7 @@ import models._
 
 object Util {
 
+  
   def getUserLocation(country: String, state: String, city: String): Lugar = {
     
     var userLugar: Lugar = null
@@ -23,14 +24,14 @@ object Util {
       case Some(countryValue) =>
       
         userLugar = countryValue
-        var foundState = lugarDao.getLugarByNameAndType(state, "estado")
+        var foundState = lugarDao.getLugarByNameAndTypeAndZone(state, "estado",countryValue.getId)
         
         foundState match{
           
           case Some(stateValue) =>
             
             userLugar = stateValue
-            var foundCity = lugarDao.getLugarByNameAndType(city, "ciudad")
+            var foundCity = lugarDao.getLugarByNameAndTypeAndZone(city, "ciudad",stateValue.getId)
             
             foundCity match{
               

@@ -17,6 +17,7 @@ trait UsuarioDAO
      def findUserById(id: Long): Option[Usuario];
      def findFriendsByUser(userId: Long): List[Usuario];
      def insertUser(newUsuario: Usuario)
-     
+     def getNewUserLastIdFromSequence(): Long
+     def searchUsersByFullNamePattern(namePattern: String): List[Usuario]
      
 }

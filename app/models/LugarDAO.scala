@@ -18,5 +18,5 @@ trait LugarDAO
       def getLugarById(id: Long): Option[Lugar]
       def getLugarByNameAndType(name: String, typo: String): Option[Lugar]
       def getNewLugarLastIdFromSequence(): Long
-      
+      def getLugarByNameAndTypeAndZone(name: String, typo: String, zone: Long): Option[Lugar]
 }
