@@ -8,7 +8,8 @@ var birthday;
 window.fbAsyncInit = function() {
 FB.init({
   appId      : '672888336062808', // App ID
-  channelUrl : 'http://localhost:9000', // Channel File
+  //channelUrl : 'http://localhost:9000', // Channel File
+  channelUrl : 'http://agile-sands-9357.herokuapp.com', // Channel File
   status     : true, // check login status
   cookie     : true, // enable cookies to allow the server to access the session
   xfbml      : true  // parse XFBML
@@ -34,7 +35,9 @@ FB.Event.subscribe('auth.authResponseChange', function(response) {
 }(document));
 
 
-var uri = encodeURI('http://localhost:9000');
+//var uri = encodeURI('http://localhost:9000');
+var uri = encodeURI('agile-sands-9357.herokuapp.com');
+
       function login() {
                 
               window.location = encodeURI("https://www.facebook.com/dialog/oauth?client_id=672888336062808&redirect_uri="+uri+"&response_type=token&scope=email,user_birthday");
