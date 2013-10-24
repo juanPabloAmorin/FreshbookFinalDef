@@ -275,11 +275,11 @@ function goUserRegisterStep3()
 	   
 	   if(state == "")
 	   {
-		   state="null"
+		   state="null";
 	   }
 	   if(city == "")
 	   {
-		   ciudad="null"
+		   city="null";
 	   }
 	   location.href = "/registroPaso3/"+country+"/"+state+"/"+city;
 	}
@@ -288,15 +288,15 @@ function goUserRegisterStep3()
 function searchForFriends()
 {
 	var nameUserPattern = $("#input-search").val();
-	
-	var jqxhr = $.ajax("/searchForFriends/"+nameUserPattern)
-	.done(function(jqXHR) 
+
+	var jqxhr = $.getJSON("/searchForFriends/"+nameUserPattern)
+	.done(function(json) 
 	{
-		 alert(nameUserPattern);
-		 //programar manejo de errores de update
+		 alert(json.users[0].id);
+		 //programar manejo de errores de get json
 	})
 	.fail(function(jqXHR) {
 		 
-		//programar manejo de errores de update
+		//programar manejo de errores de get json
 	})
 }

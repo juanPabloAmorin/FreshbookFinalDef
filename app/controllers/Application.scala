@@ -17,6 +17,8 @@ import anorm.SqlParser._
 
 import java.util.{ Date }
 
+import play.api.libs.json._
+
 object Application extends Controller {
 
   var currentUser: Usuario = null;
@@ -33,7 +35,7 @@ object Application extends Controller {
 
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
     currentUser = userDao.findUserByEmail(userEmail).getOrElse { null }
-    
+
     userDao.findUserByEmail(userEmail).isEmpty match {
       case true => Redirect("/registroPaso1Pag")
       case false =>
@@ -48,56 +50,55 @@ object Application extends Controller {
     Ok(html.registroPaso1(newUser))
   }
 
-  def registroPaso2(firstName: String, secondName: String,firstLastName: String,secondLastName: String, username: String,dia: String,mes: String,anio: String,privacy: Int,photo: String) = Action {
+  def registroPaso2(firstName: String, secondName: String, firstLastName: String, secondLastName: String, username: String, dia: String, mes: String, anio: String, privacy: Int, photo: String) = Action {
 
     newUser.setPrimerNombre(firstName)
-    if(secondName != "null"){
-        newUser.setSegundoNombre(Some(secondName))
+    if (secondName != "null") {
+      newUser.setSegundoNombre(Some(secondName))
     }
     newUser.setPrimerApellido(firstLastName)
-    if(secondLastName != "null"){
-        newUser.setSegundoApellido(Some(secondLastName))
+    if (secondLastName != "null") {
+      newUser.setSegundoApellido(Some(secondLastName))
     }
     newUser.setUsername(username)
     newUser.setPrivacidad(privacy)
     newUser.setFoto(Some(photo))
-    
-    var stringBirthDate = dia+"/"+mes+"/"+anio 
-    var birthDay :Date = new Date(stringBirthDate)
-    
+
+    var stringBirthDate = dia + "/" + mes + "/" + anio
+    var birthDay: Date = new Date(stringBirthDate)
+
     newUser.setFechaNacimiento(birthDay)
-    
+
     Redirect("/registroPaso2Pag")
   }
-  
+
   def showRegistroPaso2Pag = Action {
 
-    
     Ok(html.registroPaso2())
   }
-  
+
   def registroPaso3(country: String, state: String, city: String) = Action {
-    
-        var userLocation = Util.getUserLocation(country,state,city)
-        newUser.setUbicacion(userLocation)
-        
-        Redirect("/registroPaso3Pag")
-    
+
+    var userLocation = Util.getUserLocation(country, state, city)
+    newUser.setUbicacion(userLocation)
+
+    Redirect("/registroPaso3Pag")
+
   }
 
   def showRegistroPaso3Pag = Action {
 
     Ok(html.registroPaso3())
   }
-  
-  def registroFinalUsuario() = Action{
-    
-       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
-       userDao.insertUser(newUser)
-       newUser.setId(userDao.getNewUserLastIdFromSequence)
-       currentUser = newUser
-       lastFriendVistedId = currentUser.getId
-       Redirect("/principal").withSession("usuarioEmail" -> currentUser.getEmail)
+
+  def registroFinalUsuario() = Action {
+
+    var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+    userDao.insertUser(newUser)
+    newUser.setId(userDao.getNewUserLastIdFromSequence)
+    currentUser = newUser
+    lastFriendVistedId = currentUser.getId
+    Redirect("/principal").withSession("usuarioEmail" -> currentUser.getEmail)
   }
 
   def showPrincipalPage = Action {
@@ -194,12 +195,40 @@ object Application extends Controller {
 
     Ok("true");
   }
-  
-  def searchForFriends(nameUserPattern: String) = Action{
+
+  def searchForFriends(nameUserPattern: String) = Action {
+
+    var json: JsValue = null;
+    var jsonString = ""
+    var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
+    var users: List[Usuario] = userDao.searchUsersByFullNamePattern(nameUserPattern)
+
+    if(users.length > 0)
+    {
+      jsonString = """ {"users": [ """
+      for(usuario<-users)
+      {
+        jsonString = jsonString + """
+        {
+               "primerNombre" : """"+usuario.getPrimerNombre+"""",
+               "segundoNombre" : """"+(usuario.getSegundoNombre match{ case Some(value) => value case _ => ""})+"""",
+               "primerApellido" : """"+usuario.getPrimerApellido+"""",
+               "segundoApellido" : """"+(usuario.getSegundoApellido match{ case Some(value) => value case _ => ""})+"""",
+               "username" : """"+usuario.getUsername+"""",
+               "id" : """"+usuario.getId+""""
+     
+            }
+        """
+        
+      }
+      
+      jsonString = jsonString + " ]}"
+    }
     
-        var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-        var users: List[Usuario] = userDao.searchUsersByFullNamePattern(nameUserPattern)
-        Ok("true");
+    json = Json.parse(jsonString)
+    
+
+    Ok(json).as("application/json")
   }
 
 }

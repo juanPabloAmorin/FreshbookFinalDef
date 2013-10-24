@@ -175,14 +175,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
       val users = SQL(
         """
-          select * from usuario where  (lower(primer_nombre) like lower('{namePattern}%')) 
-          or (lower(segundo_nombre) like lower('{namePattern}%')) 
-          or (lower(primer_apellido) like lower('{namePattern}%')) 
-          or (lower(segundo_apellido) like lower('{namePattern}%')) 
-          or (lower(username) like lower('{namePattern}%')) 
+          select * from usuario where  (lower(primer_nombre) like lower('"""+namePattern+"""%')) 
+          or (lower(segundo_nombre) like lower('"""+namePattern+"""%')) 
+          or (lower(primer_apellido) like lower('"""+namePattern+"""%')) 
+          or (lower(segundo_apellido) like lower('"""+namePattern+"""%')) 
+          or (lower(username) like lower('"""+namePattern+"""%')) 
           
-        """).on(
-          'namePattern -> namePattern).as(this.parser *)
+        """).as(this.parser *)
 
       users
 
