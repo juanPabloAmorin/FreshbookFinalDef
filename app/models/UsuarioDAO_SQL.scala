@@ -40,38 +40,72 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
   }
   
-   def updateUserNames(names: String, userId: Long)
+   def updateUserFirstName(firstName: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
         """
           update usuario
-          set nombres = {nombres}
+          set primer_nombre = {primerNombre}
           where id = {id}
         """
       ).on(
         'id -> userId,
-        'nombres -> names
+        'primerNombre -> firstName
       ).executeUpdate()
     }
    }
    
-   def updateUserLastnames(lastnames: String, userId: Long)
+   def updateUserSecondName(secondName: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
         """
           update usuario
-          set apellidos = {apellidos}
+          set segundo_nombre = {segundoNombre}
           where id = {id}
         """
       ).on(
         'id -> userId,
-        'apellidos -> lastnames
+        'segundoNombre -> secondName
+      ).executeUpdate()
+    }
+   }
+   
+   def updateUserFirstLastname(firstLastname: String, userId: Long)
+   {
+      DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update usuario
+          set primer_apellido = {primerApellido}
+          where id = {id}
+        """
+      ).on(
+        'id -> userId,
+        'primerApellido -> firstLastname
       ).executeUpdate()
     }
       
    }
+   
+   def updateUserSecondLastname(secondLastname: String, userId: Long)
+   {
+      DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update usuario
+          set segundo_apellido = {segundoApellido}
+          where id = {id}
+        """
+      ).on(
+        'id -> userId,
+        'segundoApellido -> secondLastname
+      ).executeUpdate()
+    }
+      
+   }
+   
    def updateUserNickname(nickname: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
@@ -87,21 +121,58 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       ).executeUpdate()
     }
    }
-   def updateUserEmail(email: String, userId: Long)
+   
+   def updateUserGoogle(google: String, userId: Long)
    {
-        DB.withConnection { implicit connection =>
+      DB.withConnection { implicit connection =>
       SQL(
         """
           update usuario
-          set email = {email}
+          set gmail = {gmail}
           where id = {id}
         """
       ).on(
         'id -> userId,
-        'email -> email
+        'gmail -> google
       ).executeUpdate()
     }
    }
+   
+   
+   def updateUserFacebook(facebook: String, userId: Long)
+   {
+      DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update usuario
+          set facebook = {facebook}
+          where id = {id}
+        """
+      ).on(
+        'id -> userId,
+        'facebook -> facebook
+      ).executeUpdate()
+    }
+   }
+   
+   def updateUserTwitter(twitter: String, userId: Long)
+   {
+      DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update usuario
+          set twitter = {twitter}
+          where id = {id}
+        """
+      ).on(
+        'id -> userId,
+        'twitter -> twitter
+      ).executeUpdate()
+    }
+   }
+   
+   
+   
    
    override def findUserById(id: Long): Option[Usuario] = {
     DB.withConnection { implicit connection =>

@@ -23,7 +23,7 @@ object Application extends Controller {
 
   var currentUser: Usuario = null;
   var lastFriendVistedId: Long = 0;
-  var newUser: Usuario = null;
+  var newUser: Usuario = null;  
 
   def index = Action {
     Ok(views.html.index()).withNewSession
@@ -77,28 +77,18 @@ object Application extends Controller {
     Ok(html.registroPaso2())
   }
 
-  def registroPaso3(country: String, state: String, city: String) = Action {
+  def addingNewUser(country: String, state: String, city: String) = Action {
 
     var userLocation = Util.getUserLocation(country, state, city)
     newUser.setUbicacion(userLocation)
-
-    Redirect("/registroPaso3Pag")
-
-  }
-
-  def showRegistroPaso3Pag = Action {
-
-    Ok(html.registroPaso3())
-  }
-
-  def registroFinalUsuario() = Action {
-
+    
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
     userDao.insertUser(newUser)
     newUser.setId(userDao.getNewUserLastIdFromSequence)
     currentUser = newUser
     lastFriendVistedId = currentUser.getId
     Redirect("/principal").withSession("usuarioEmail" -> currentUser.getEmail)
+
   }
 
   def showPrincipalPage = Action {
@@ -158,22 +148,41 @@ object Application extends Controller {
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
 
     if (option == 1) {
-      userDao.updateUserNames(attribute, userId)
+      userDao.updateUserFirstName(attribute, userId)
       currentUser.setPrimerNombre(attribute)
     }
-    if (option == 2) {
-      userDao.updateUserLastnames(attribute, userId)
+    else if (option == 5) {
+      userDao.updateUserSecondName(attribute, userId)
+      currentUser.setSegundoNombre(Some(attribute))
+    }
+    else if (option == 2) {
+      userDao.updateUserFirstLastname(attribute, userId)
       currentUser.setPrimerApellido(attribute)
     }
-    if (option == 3) {
+    else if (option == 6) {
+      userDao.updateUserSecondLastname(attribute, userId)
+      currentUser.setSegundoApellido(Some(attribute))
+    }
+    else if (option == 3) {
       userDao.updateUserNickname(attribute, userId)
       currentUser.setUsername(attribute)
     }
-    if (option == 4) {
-      userDao.updateUserEmail(attribute, userId)
-      currentUser.setEmail(attribute)
+    
+    else if (option == 7) {
+      userDao.updateUserTwitter(attribute, userId)
+      currentUser.setTwitter(Some(attribute))
     }
-
+    
+    else if (option == 8) {
+      userDao.updateUserFacebook(attribute, userId)
+      currentUser.setFacebook(Some(attribute))
+    }
+    
+    else if (option == 9) {
+      userDao.updateUserGoogle(attribute, userId)
+      currentUser.setGmail(Some(attribute))
+    }
+    
     Ok("true")
   }
 
@@ -202,12 +211,14 @@ object Application extends Controller {
     var jsonString = ""
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
     var users: List[Usuario] = userDao.searchUsersByFullNamePattern(nameUserPattern)
+    var usersFoundNumber = 0;
 
     if(users.length > 0)
     {
       jsonString = """ {"users": [ """
       for(usuario<-users)
       {
+        usersFoundNumber += 1
         jsonString = jsonString + """
         {
                "primerNombre" : """"+usuario.getPrimerNombre+"""",
@@ -217,8 +228,13 @@ object Application extends Controller {
                "username" : """"+usuario.getUsername+"""",
                "id" : """"+usuario.getId+""""
      
-            }
+        }
         """
+               
+        if(usersFoundNumber != users.length)
+        {
+            jsonString = jsonString + ","
+        }
         
       }
       

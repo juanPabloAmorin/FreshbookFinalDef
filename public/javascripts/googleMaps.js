@@ -1,10 +1,6 @@
 
-// The following example creates a marker in Stockholm, Sweden
-// using a DROP animation. Clicking on the marker will toggle
-// the animation between a BOUNCE animation and no animation.
-
-var stockholm = new google.maps.LatLng(59.32522, 18.07002);
-var parliament = new google.maps.LatLng(59.327383, 18.06747);
+var caracas = new google.maps.LatLng(10.491016, -66.902061);
+var parliament = new google.maps.LatLng(10.491016, -66.902061);
 var marker;
 var map;
 var geocoder;
@@ -19,7 +15,7 @@ function initialize() {
   var mapOptions = {
     zoom: 11,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    center: stockholm
+    center: caracas
   };
   
 

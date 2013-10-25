@@ -23,21 +23,29 @@
 			<div class="left">
 				<img src="assets/images/head_log.png" width="120" height="43" />
 			</div>
+			<div class="divBuscadorHeader cfix left" >
+			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
+			     <button class="btn btn-primary right input-sm" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
+			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
+			        
+			
+			     </div>
+			  </div>
 		</div>
 	</div>
 	<!-- Header -->
 
 
-	<div class="contenedorGlobal cfix">
-		<div class="bloqueLeft">
+	<div class="contenedorGlobal cfix relative" style="z-index: 1">
+		<div class="bloqueLeft" style="position:absolute;z-index:1">
 			<div class="cfix iniBox" style="margin-bottom:60%">
-				<a class="imga left" href="perfil/0"> <img class="imgi"
-					src=@currentUser.getFoto >
+				<a class="imga left" href="perfil/@currentUser.getId"> <img class="imgi"
+					src=@currentUser.getFoto />
 				</a>
 				<div class="middleBox">
 					<div class="innerBox" style="height: 40px"></div>
 					<div class="innerBox">
-						<a class="userName" href="perfil/0">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""})) </a>
+						<a class="userName" href="perfil/@currentUser.getId">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""})) </a>
 					</div>
 				</div>
 			</div>
@@ -58,7 +66,7 @@
 			</div>
 		</div> <!-- .bloqueLeft -->
 		
-		<div class="divCentral"></div>
+		<div class="divCentral" style="position:absolute;z-index:-1"></div>
 
 	</div>
 
@@ -74,5 +82,6 @@
 	<script src="assets/javascripts/jquery.placeholder.js"></script>
 	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
 	<script src="assets/javascripts/application.js"></script>
+	<script src="assets/javascripts/aplicacion.js"></script>
 </body>
 </html>

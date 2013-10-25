@@ -43,7 +43,7 @@ GET     /crearAlbum                      controllers.Application.createAlbum
 GET     /userAutentication/:userEmail/*link/:firstName/:middleName/:lastName        controllers.Application.userAutentication(userEmail: String,link: String,firstName: String,middleName: String, lastName: String)
 
 #peticion ajax actualizacion de usuario
-GET     /userUpdate/:option/:attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
+GET     /userUpdate/:option/*attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
 
 #borrar album
 GET     /deleteAlbum/:albumId      controllers.Application.deleteAlbum(albumId: Long)
@@ -61,14 +61,7 @@ GET     /registroPaso2/:firstName/:secondName/:firstLastName/:secondLastName/:us
 GET     /registroPaso2Pag      controllers.Application.showRegistroPaso2Pag()
 
 #registro de usuario. paso 3
-GET     /registroPaso3/:country/:state/:city      controllers.Application.registroPaso3(country: String, state: String, city: String)
-
-
-#pagina de registro de usuario. paso 3
-GET     /registroPaso3Pag      controllers.Application.showRegistroPaso3Pag()
-
-#funcion registro final de usuario. 
-GET     /registroFinalUsuario      controllers.Application.registroFinalUsuario()
+GET     /addingNewUser/:country/:state/:city      controllers.Application.addingNewUser(country: String, state: String, city: String)
 
 #buscador de usuarios. 
 GET     /searchForFriends/:nameUserPattern      controllers.Application.searchForFriends(nameUserPattern :String)
