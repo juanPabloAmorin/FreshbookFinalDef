@@ -30,5 +30,6 @@ trait UsuarioDAO
      def getUserFriendshipStatus(userId: Long, friendId: Long): Option[Int]
      def insertAmistad(friend1Id: Long, friend2Id: Long)
      def confimFriendship(friend1Id: Long, friend2Id: Long)
+     def getUsersByFullNamePart(namePart: String): List[Usuario]
      
 }

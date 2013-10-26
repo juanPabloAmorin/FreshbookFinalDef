@@ -384,6 +384,27 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
     }
      
    }
+     
+     override def getUsersByFullNamePart(namePart: String): List[Usuario] = {
+        
+       DB.withConnection { implicit connection =>
+
+      val users = SQL(
+        """
+          select * from usuario where  (lower(primer_nombre) = lower('"""+namePart+"""')) 
+          or (lower(segundo_nombre) = lower('"""+namePart+"""')) 
+          or (lower(primer_apellido) = lower('"""+namePart+"""')) 
+          or (lower(segundo_apellido) = lower('"""+namePart+"""')) 
+          or (lower(username) = lower('"""+namePart+"""')) 
+          
+        """).as(this.parser *)
+
+      users
+
+    } 
+       
+       
+   }
 
 
 }

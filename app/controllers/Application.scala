@@ -466,5 +466,48 @@ object Application extends Controller {
     
   }
   
+  
+  def searchFriends(nameUserPattern: String) = Action {
+
+    var json: JsValue = null;
+    var jsonString = ""
+    var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
+    var users: List[Usuario] = userDao.searchUsersByFullNamePattern(nameUserPattern)
+    var usersFoundNumber = 0;
+
+    if(users.length > 0)
+    {
+      jsonString = """ {"users": [ """
+      for(usuario<-users)
+      {
+        usersFoundNumber += 1
+        jsonString = jsonString + """
+        {
+               "primerNombre" : """"+usuario.getPrimerNombre+"""",
+               "segundoNombre" : """"+(usuario.getSegundoNombre match{ case Some(value) => value case _ => ""})+"""",
+               "primerApellido" : """"+usuario.getPrimerApellido+"""",
+               "segundoApellido" : """"+(usuario.getSegundoApellido match{ case Some(value) => value case _ => ""})+"""",
+               "username" : """"+usuario.getUsername+"""",
+               "id" : """"+usuario.getId+""""
+     
+        }
+        """
+               
+        if(usersFoundNumber != users.length)
+        {
+            jsonString = jsonString + ","
+        }
+        
+      }
+      
+      jsonString = jsonString + " ]}"
+    }
+    
+    json = Json.parse(jsonString)
+    
+
+    Ok(json).as("application/json")
+  }
+  
 
 }
