@@ -467,12 +467,12 @@ object Application extends Controller {
   }
   
   
-  def searchFriends(nameUserPattern: String) = Action {
+  def searchFriends(namePart: String) = Action {
 
     var json: JsValue = null;
     var jsonString = ""
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
-    var users: List[Usuario] = userDao.searchUsersByFullNamePattern(nameUserPattern)
+    var users: List[Usuario] = userDao.getUsersByFullNamePart(namePart)
     var usersFoundNumber = 0;
 
     if(users.length > 0)
@@ -488,7 +488,8 @@ object Application extends Controller {
                "primerApellido" : """"+usuario.getPrimerApellido+"""",
                "segundoApellido" : """"+(usuario.getSegundoApellido match{ case Some(value) => value case _ => ""})+"""",
                "username" : """"+usuario.getUsername+"""",
-               "id" : """"+usuario.getId+""""
+               "id" : """"+usuario.getId+"""",
+               "foto" : """"+usuario.getFoto+""""
      
         }
         """

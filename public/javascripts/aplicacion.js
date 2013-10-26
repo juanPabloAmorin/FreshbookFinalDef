@@ -640,3 +640,19 @@ function index()
 		});
 	 
 }
+
+function usersSearch(namePart){
+	
+	var jqxhr = $.getJSON("/userSearch/"+namePart)
+	.done(function(json) 
+	{
+		alert("done");
+		 //programar manejo de errores de update
+	})
+	.fail(function(jqXHR) {
+		alert("fail");
+		//programar manejo de errores de update
+	})
+
+	
+}
