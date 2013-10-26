@@ -240,10 +240,11 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
         """
           SELECT distinct usuario.id,usuario.primer_nombre,usuario.segundo_nombre,usuario.primer_apellido, usuario.segundo_apellido,usuario.username,usuario.fecha_nacimiento,
        usuario.email,usuario.foto,usuario.twitter,usuario.facebook,usuario.gmail,
-       usuario.fecha_registro,usuario.fecha_baja,usuario.ultima_conexion,usuario.privacidad
+       usuario.fecha_registro,usuario.fecha_baja,usuario.ultima_conexion,usuario.privacidad,usuario.latitud,usuario.longitud
        FROM usuario,amistad
        WHERE (amistad.fk_usuario1 = usuario.id or amistad.fk_usuario2 = usuario.id) 
           and (amistad.fk_usuario1 = {id} or amistad.fk_usuario2 = {id}) and usuario.id != {id}
+          and amistad.status = 1
        
         """).on(
           'id -> userId).as(this.parser *)
