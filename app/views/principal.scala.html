@@ -23,6 +23,16 @@
 			<div class="left">
 				<img src="assets/images/head_log.png" width="120" height="43" />
 			</div>
+			
+			
+			<div id="friendship-div" class="divFriendship cfix left" >
+			<img class="imgis left" src="assets/images/amistad.png" onclick="mostrarSolicitudesAmistad(@currentUser.getId)"/>
+			     <div id="div-friendship-sol" style="overflow:auto;width:332px;background-color:#FFF;z-index:2;position:absolute;margin-top:35px;margin-left:-145px">
+			        
+			
+			     </div>
+			</div>
+			
 			<div class="divBuscadorHeader cfix left" >
 			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
 			     <button class="btn btn-primary right input-sm" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
@@ -30,7 +40,18 @@
 			        
 			
 			     </div>
-			  </div>
+			</div>
+			<div class="cfix headBox right">
+				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
+					src=@currentUser.getFoto />
+				</a>
+				<div class="middleBox">
+					<div class="innerBox" style="height: 40px"></div>
+					<div class="innerBox">
+						<a class="userName" style="color:#FFF" href="perfil/@currentUser.getId">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""})) </a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<!-- Header -->
@@ -66,7 +87,15 @@
 			</div>
 		</div> <!-- .bloqueLeft -->
 		
-		<div class="divCentral" style="position:absolute;z-index:-1"></div>
+		<div class="divCentral" style="position:absolute;z-index:-1">
+		    <div class="notification-div cfix" style="font-size:20px;">
+		      Entra a la seccion <a class="cfix" href="amigos/@currentUser.getId">AMIGOS</a> y conecta con tus amigos en Freshbook!
+		    </div>
+		    <div class="notification-div cfix" style="font-size:20px;">
+		      Crea nuevos <a class="cfix" href="albumes/@currentUser.getId">ALBUMES</a> y guarda tu contenido multimedia.
+		    </div>
+		    
+		</div>
 
 	</div>
 

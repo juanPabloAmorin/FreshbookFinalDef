@@ -193,7 +193,7 @@
 	border-left: 1px solid #ccc;
 	margin-left: 230px;
 	min-height: 550px;
-	background-color: #fff;
+	background-color: #FFF;
 	overflow:auto;
 }
 
@@ -223,6 +223,41 @@
 	display: block;
 	cursor: pointer;
 }
+
+
+
+.headBox .userName {
+	display: block;
+	font-weight: bold;
+	width: 140px;
+	word-wrap: break-word;
+}
+
+.headBox .innerBox {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.headBox .middleBox {
+	padding-right: 5px;
+	display: inline-block;
+}
+
+.headbox .imga {
+	margin-right: 8px;
+	display: block;
+	cursor: pointer;
+}
+
+
+.imgis {
+	height: 40px !important;
+	width: 40px !important;
+	display: block;
+	border: 0;
+	cursor: pointer;
+}
+
 
 .imgi {
 	height: 50px !important;
@@ -460,7 +495,15 @@
 	 width : 40%;
 	 display: block;
 	 margin-top: 8px;
-	 margin-left: 50px;
+	 
+}
+
+.divFriendship
+{
+	 width : 20%;
+	 display: block;
+	
+	 margin-left: 20px;
 }
 
 
@@ -623,9 +666,24 @@ border-right: solid 1px #424242;
       height: 63px;
   }
   
+  .friendship-next
+  {
+      padding-top: 8px;
+      padding-left: 10px;
+      width: 100%;
+      height: 63px;
+  }
+  
   .founded-user-next img
   {
      width: 15%; 
+     height: 80%;
+     float: left;
+  }
+   
+   .friendship-next img
+  {
+     width: 25%; 
      height: 80%;
      float: left;
   }
@@ -635,4 +693,16 @@ border-right: solid 1px #424242;
      width: 10%; 
      height: 80%;
      float: left;
+  }
+  
+  .notification-div
+  {
+     min-width: 792px;
+     overflow: auto;
+     border-bottom: solid 1px #D8D8D8;
+     padding-left: 10px;
+     padding-right: 10px;
+     padding-top: 20px;
+     padding-bottom:20px;
+     
   }

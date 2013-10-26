@@ -19,6 +19,9 @@ import java.util.{ Date }
 
 import play.api.libs.json._
 
+import akka.actor.Actor
+import akka.actor.Props
+
 object Application extends Controller {
 
   var currentUser: Usuario = null;
@@ -309,6 +312,30 @@ object Application extends Controller {
        
        Ok("true")
        
+  }
+  
+  def getSolicitudesAmistad(userId: Long) = Action {
+
+   
+        val jsonString = """ {"user":
+        {
+               "primerNombre" : "nombre",
+               "segundoNombre" : "apellido",
+               "primerApellido" : "apellido",
+               "segundoApellido" : "segundo",
+               "username" : "nameus",
+               "id" : "id"
+     
+        } 
+        }
+        """
+               
+        
+       
+    val json = Json.parse(jsonString)
+    
+
+    Ok(json).as("application/json")
   }
   
 
