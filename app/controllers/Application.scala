@@ -306,6 +306,7 @@ object Application extends Controller {
        newNotification.setContenido(currentUser.getPrimerNombre + " " + currentUser.getPrimerApellido + " quiere ser tu amigo en Feeshbook")
        newNotification.setTipo(notificacionDao.getTypeNotificationNumberFormat("SOLICITUD"))
        newNotification.setIdAmigo(Some(currentUser.getId))
+       newNotification.setIdUsuarioGenerador(currentUser.getId)
 
        notificacionDao.insertNotification(newNotification,lastFriendVistedId)
        
@@ -316,26 +317,86 @@ object Application extends Controller {
   
   def getSolicitudesAmistad(userId: Long) = Action {
 
-   
-        val jsonString = """ {"user":
+    var json: JsValue = null;
+    var jsonString = ""
+    var notificacionDao: NotificacionDAO = DAOFabrica.getNotificacionDAO
+    var notifications: List[Notificacion] = notificacionDao.getNotificationsByUserAndType(currentUser.getId,"SOLICITUD")
+    var notificationsFoundNumber = 0;
+    var userId: Option[Long] = null;
+    
+   if(notifications.length > 0)
+    {
+      jsonString = """ {"notification": [ """
+      for(notification<-notifications)
+      {
+        var amigoId: Long = 0
+        notificationsFoundNumber += 1
+        userId = notification.getIdAmigo
+        
+        userId match{
+          case Some(id) => amigoId = id
+        }
+        
+        var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+        var user: Option[Usuario] = userDao.findUserById(amigoId)
+        var notificationUser = new Usuario()
+        
+        user match{
+          case Some(person) => notificationUser = person
+        }
+        jsonString = jsonString + """
         {
-               "primerNombre" : "nombre",
-               "segundoNombre" : "apellido",
-               "primerApellido" : "apellido",
-               "segundoApellido" : "segundo",
-               "username" : "nameus",
-               "id" : "id"
+               "primerNombre" : """"+notificationUser.getPrimerNombre+"""",
+               "segundoNombre" : """"+(notificationUser.getSegundoNombre match{ case Some(value) => value case _ => ""})+"""",
+               "primerApellido" : """"+notificationUser.getPrimerApellido+"""",
+               "segundoApellido" : """"+(notificationUser.getSegundoApellido match{ case Some(value) => value case _ => ""})+"""",
+               "id" : """"+notificationUser.getId+"""",
+               "notificationid" : """"+notification.getId+""""
      
-        } 
         }
         """
                
+        if(notificationsFoundNumber != notifications.length)
+        {
+            jsonString = jsonString + ","
+        }
         
-       
-    val json = Json.parse(jsonString)
+      }
+      
+      jsonString = jsonString + " ]}"
+    }
+    
+    json = Json.parse(jsonString)
     
 
     Ok(json).as("application/json")
+    
+    
+  }
+  
+  def confirmFriendship(friendId: Long, notificationId: Long) = Action
+  {
+    var userDao: UsuarioDAO= DAOFabrica.getUsuarioDAO
+    userDao.confimFriendship(currentUser.getId, friendId)
+    
+    var notificacionDao: NotificacionDAO = DAOFabrica.getNotificacionDAO
+    notificacionDao.deleteFriendshipRequestNotifications(currentUser.getId,notificationId)
+   
+    var newNotification: Notificacion = new Notificacion()
+    newNotification.setContenido("ahora es amigo de")
+    newNotification.setTipo(notificacionDao.getTypeNotificationNumberFormat("AMISTAD"))
+    newNotification.setIdAmigo(Some(friendId))
+     newNotification.setIdUsuarioGenerador(currentUser.getId)
+    notificacionDao.insertNotification(newNotification,currentUser.getId)
+    
+    currentUser.setAmistades(userDao.findFriendsByUser(currentUser.getId))
+ 
+    val newNotificationId = notificacionDao.getNewNotificationLastIdFromSequence
+    notificacionDao.insertNotificationMulticast(currentUser.getAmistades, newNotificationId)
+    
+    //falta notificar amigos de mi nuevo amigo qu no sean mis amigos
+    Ok("true")
+    
   }
   
 

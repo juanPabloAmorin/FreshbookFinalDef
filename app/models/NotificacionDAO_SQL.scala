@@ -12,14 +12,17 @@ import anorm.SqlParser._
 import models._
 
 class NotificacionDAO_SQL extends NotificacionDAO {
+  
+  var lastNotificationSequenceNumber: Long = 0;
 
   val parser = {
     get[Long]("notificacion.id") ~
       get[String]("notificacion.contenido") ~
-      get[Long]("notificacion.tipo") ~
+      get[Long]("notificacion.fk_tipo") ~
       get[Date]("notificacion.fecha_creacion") ~
+      get[Long]("notificacion.id_usuario_generador") ~
       get[Option[Long]]("notificacion.fk_amigo") map {
-        case id ~ contenido ~ fechaCreacion ~ tipo ~ idAmigo  => Notificacion(id, contenido, tipo, fechaCreacion, idAmigo)
+        case id ~ contenido ~ fechaCreacion ~ tipo ~ usuarioGenerador ~ idAmigo  => Notificacion(id, contenido, tipo, fechaCreacion,usuarioGenerador, idAmigo)
       }
   }
   
@@ -43,14 +46,17 @@ class NotificacionDAO_SQL extends NotificacionDAO {
       SQL(
         """
           INSERT INTO NOTIFICACION VALUES( nextval('seq_notificacion'),{contenido},
-          NOW(),"""+fkAmigo.get+""",{tipo})
+          NOW(),"""+fkAmigo.get+""",{currentUserId},{tipo})
         """
       
       ).on(
           'contenido->newNotification.getContenido,
-          'tipo->newNotification.getTipo  
+          'tipo->newNotification.getTipo,
+          'currentUserId -> newNotification.getIdUsuarioGenerador
           
       ).executeUpdate() 
+      
+      lastNotificationSequenceNumber = SQL("select currval('seq_notificacion')").as(scalar[Long].single)
       
       SQL(
         """
@@ -77,6 +83,64 @@ class NotificacionDAO_SQL extends NotificacionDAO {
    
    }
    
-   
+    override def getNotificationsByUserAndType(userId: Long, typex: String): List[Notificacion] = {
 
+    DB.withConnection { implicit connection =>
+
+      val notifications = SQL(
+        """
+          select * from NOTIFICACION, TIPO_NOTIFICACION,NOTIFICACION_USUARIO 
+          where notificacion.fk_tipo = tipo_notificacion.id 
+          and NOTIFICACION_USUARIO.fk_notificacion = NOTIFICACION.id
+          and NOTIFICACION_USUARIO.fk_usuario = {userId}
+          and tipo_notificacion.nombre = {typex}
+          
+        """).on(
+          'userId -> userId,'typex -> typex).as(this.parser *)
+
+      notifications
+
+    } 
+
+  }
+    
+  
+    override def deleteFriendshipRequestNotifications(userId: Long, notificationId: Long)
+    {
+        DB.withConnection { implicit connection =>
+        SQL("delete from notificacion_usuario where fk_usuario = {userId} and fk_notificacion = {notificationId}"   
+        ).on(
+        'userId -> userId,
+        'notificationId -> notificationId
+  
+      ).executeUpdate()
+    }
+  }
+    
+    override def insertNotificationMulticast(users: List[Usuario],notificationId: Long)
+    {
+         
+      DB.withConnection { implicit connection =>
+        
+        for(usuario<-users){
+      SQL(
+        
+          "INSERT INTO NOTIFICACION_USUARIO VALUES("+usuario.getId+",{notificationId})"
+            
+      ).on(
+          'notificationId->notificationId
+          
+      ).executeUpdate() 
+        }
+    }
+        
+         
+    }
+    
+    override def getNewNotificationLastIdFromSequence(): Long = {
+    
+      return lastNotificationSequenceNumber
+  }
+    
+ 
 }

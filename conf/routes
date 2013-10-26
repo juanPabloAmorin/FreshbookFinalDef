@@ -80,3 +80,6 @@ GET     /createFriendshipNotification      controllers.Application.createUserFri
 
 #crear notificacion de solicitud de amistad 
 GET     /getSolicitudesAmistad/:userId      controllers.Application.getSolicitudesAmistad(userId: Long)
+
+#confirmacion de amistad 
+GET     /confirmFriendship/:userId/:idNotificacion      controllers.Application.confirmFriendship(userId: Long,idNotificacion: Long)

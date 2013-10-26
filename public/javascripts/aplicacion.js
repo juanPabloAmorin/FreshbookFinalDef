@@ -590,35 +590,40 @@ function mostrarSolicitudesAmistad(userId)
 	var jqxhr = $.getJSON("/getSolicitudesAmistad/"+userId)
 	.done(function(json) 
 	{
-		alert("done");
+		
 		
 		document.getElementById('div-friendship-sol').innerHTML = "";
 		
-		document.getElementById('div-friendship-sol').innerHTML = document.getElementById('div-friendship-sol').innerHTML +
-		'<div class="founded-user-next" style="border-bottom:solid 1px black;background-color:#DCC">'+
-           '<a href="perfil/'+this.id+'"><img src="assets/images/user_images/userImage.jpg" /></a>'+
-            '<div id="div-user-fullname" style="margin-left:55px;"><a href="perfil/'+this.id+'"><span>'+this.primerNombre+' '+this.segundoNombre+' '+
-            this.primerApellido+' '+this.segundoApellido+'</span></a></div>'+
-             '<div id="div-username" class="left"  style="margin-left:55px;margin-top:12px"><span>'+this.username+'</span></div>'+
-             '<button class="btn btn-primary input-sm">Confirmar</button>'
-       '</div>';
-		
-		document.getElementById('div-friendship-sol').innerHTML = document.getElementById('div-friendship-sol').innerHTML +
-		'<div class="founded-user-next" style="border-bottom:solid 1px black;background-color:#DCC">'+
-           '<a href="perfil/'+this.id+'"><img src="assets/images/user_images/userImage.jpg" /></a>'+
-            '<div id="div-user-fullname" style="margin-left:55px;"><a href="perfil/'+this.id+'"><span>'+this.primerNombre+' '+this.segundoNombre+' '+
-            this.primerApellido+' '+this.segundoApellido+'</span></a></div>'+
-             '<div id="div-username" class="left"  style="margin-left:55px;margin-top:12px"><span>'+this.username+'</span></div>'+
-             '<button class="btn btn-primary input-sm">Confirmar</button>'
-       '</div>';
-
-			
+		$.each(json.notification, function() {
+			document.getElementById('div-friendship-sol').innerHTML = document.getElementById('div-friendship-sol').innerHTML +
+			'<div id="'+this.notificationid+'" class="friendship-next" style="border-bottom:solid 1px black;background-color:#DCC">'+
+	           '<a href="perfil/'+this.id+'"><img src="assets/images/user_images/userImage.jpg" /></a>'+
+	            '<div id="div-user-fullname" align="center" style="margin-left:55px;"><a href="perfil/'+this.id+'"><span>'+this.primerNombre+' '+this.segundoNombre+' '+
+	            this.primerApellido+' '+this.segundoApellido+'</span></a></div>'+
+	             '<div id="confirm-button" align="center" style="margin-left:55px;margin-top:12px"><button class="btn btn-primary input-sm" style="border-radius:0px" onclick="confirmFriendship('+this.id+','+this.notificationid+')">Confirmar</button></div>'+
+	             '<input type="hidden" id="input-user-'+this.notificationId+'" value="'+this.id+'" />'+
+	       '</div>';
+		})
 		
 		 //programar manejo de errores de get json
 	})
 	.fail(function(jqXHR) {
-		alert("fail");
-		 
+		
+		document.getElementById('div-friendship-sol').innerHTML = "No hay solicitudes de amistad pendientes";
 		//programar manejo de errores de get json
+	})
+}
+
+function confirmFriendship(idAmigo,idNotificacion){
+
+	
+	var jqxhr = $.ajax("/confirmFriendship/"+idAmigo+"/"+idNotificacion)
+	.done(function(jqXHR) 
+	{
+		 //done
+	})
+	.fail(function(jqXHR) {
+	      //errores
+		
 	})
 }

@@ -16,4 +16,8 @@ trait NotificacionDAO
 {
       def insertNotification(newNotification: Notificacion,notificatedUserId: Long)
       def getTypeNotificationNumberFormat(typeNotification: String): Int
+      def getNotificationsByUserAndType(userId: Long, typex: String): List[Notificacion]
+      def deleteFriendshipRequestNotifications(userId: Long, friendId: Long)
+      def insertNotificationMulticast(users: List[Usuario],notificationId: Long)
+      def getNewNotificationLastIdFromSequence(): Long
 }

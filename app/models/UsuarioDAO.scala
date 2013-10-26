@@ -29,5 +29,6 @@ trait UsuarioDAO
      def isThisUserAFriend(userId: Long, friendId: Long): Boolean
      def getUserFriendshipStatus(userId: Long, friendId: Long): Option[Int]
      def insertAmistad(friend1Id: Long, friend2Id: Long)
+     def confimFriendship(friend1Id: Long, friend2Id: Long)
      
 }

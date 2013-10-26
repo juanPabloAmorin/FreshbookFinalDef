@@ -366,5 +366,24 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
     }
   }
   
+     
+     override def confimFriendship(friend1Id: Long, friend2Id: Long){
+       
+       DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update amistad
+          set status = 1
+          where (amistad.fk_usuario1 = {friend1Id} and amistad.fk_usuario2 = {friend2Id}) 
+           or (amistad.fk_usuario1 = {friend2Id} and amistad.fk_usuario2 ={friend1Id})
+        """
+      ).on(
+        'friend1Id -> friend1Id,
+        'friend2Id -> friend2Id
+      ).executeUpdate()
+    }
+     
+   }
+
 
 }
