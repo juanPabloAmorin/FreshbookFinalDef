@@ -18,4 +18,5 @@ trait AlbumDAO
       def getNumberOfFilesInAlbum(albumId: Long): Long;
       def insertAlbum(newAlbum: Album)
       def deleteAlbumById(albumId: Long)
+      
 }

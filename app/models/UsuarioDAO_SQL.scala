@@ -28,8 +28,10 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       get[Date]("usuario.fecha_registro") ~
       get[Option[Date]]("usuario.fecha_baja") ~
       get[Date]("usuario.ultima_conexion") ~
-      get[Int]("usuario.privacidad") map {
-        case id ~ primerNombre ~ segundoNombre ~ primerApellido ~ segundoApellido ~ username ~ fechaNacimiento ~ email ~ foto ~ twitter ~ facebook ~ gmail ~ fechaRegistro ~ fechaBaja ~ ultimaConexion ~ privacidad => Usuario(id, primerNombre, segundoNombre, primerApellido, segundoApellido, username, fechaNacimiento, email, foto, twitter, facebook, gmail, fechaRegistro, fechaBaja, ultimaConexion, privacidad)
+      get[Int]("usuario.privacidad") ~
+      get[String]("usuario.latitud") ~ 
+      get[String]("usuario.longitud") map  {
+        case id ~ primerNombre ~ segundoNombre ~ primerApellido ~ segundoApellido ~ username ~ fechaNacimiento ~ email ~ foto ~ twitter ~ facebook ~ gmail ~ fechaRegistro ~ fechaBaja ~ ultimaConexion ~ privacidad ~ latitud ~ longitud => Usuario(id, primerNombre, segundoNombre, primerApellido, segundoApellido, username, fechaNacimiento, email, foto, twitter, facebook, gmail, fechaRegistro, fechaBaja, ultimaConexion, privacidad,latitud,longitud)
       }
   }
 
@@ -40,7 +42,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
   }
   
-   def updateUserFirstName(firstName: String, userId: Long)
+   override def updateUserFirstName(firstName: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -56,7 +58,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
     }
    }
    
-   def updateUserSecondName(secondName: String, userId: Long)
+   override def updateUserSecondName(secondName: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -72,7 +74,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
     }
    }
    
-   def updateUserFirstLastname(firstLastname: String, userId: Long)
+   override def updateUserFirstLastname(firstLastname: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -89,7 +91,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       
    }
    
-   def updateUserSecondLastname(secondLastname: String, userId: Long)
+   override def updateUserSecondLastname(secondLastname: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -106,7 +108,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       
    }
    
-   def updateUserNickname(nickname: String, userId: Long)
+   override def updateUserNickname(nickname: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -122,7 +124,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
     }
    }
    
-   def updateUserGoogle(google: String, userId: Long)
+   override def updateUserGoogle(google: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -139,7 +141,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
    }
    
    
-   def updateUserFacebook(facebook: String, userId: Long)
+   override def updateUserFacebook(facebook: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -155,7 +157,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
     }
    }
    
-   def updateUserTwitter(twitter: String, userId: Long)
+   override def updateUserTwitter(twitter: String, userId: Long)
    {
       DB.withConnection { implicit connection =>
       SQL(
@@ -167,6 +169,54 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       ).on(
         'id -> userId,
         'twitter -> twitter
+      ).executeUpdate()
+    }
+   }
+   
+   override def updateUserLocation(fkLugar: Long, userId: Long)
+   {
+      DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update usuario
+          set fk_lugar = {fk_lugar}
+          where id = {id}
+        """
+      ).on(
+        'id -> userId,
+        'fk_lugar -> fkLugar
+      ).executeUpdate()
+    }
+   }
+   
+   override def updateUserLatitud(latitud: String, userId: Long)
+   {
+      DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update usuario
+          set latitud = {latitud}
+          where id = {id}
+        """
+      ).on(
+        'id -> userId,
+        'latitud -> latitud
+      ).executeUpdate()
+    }
+   }
+   
+   override def updateUserLongitud(longitud: String, userId: Long)
+   {
+      DB.withConnection { implicit connection =>
+      SQL(
+        """
+          update usuario
+          set longitud = {longitud}
+          where id = {id}
+        """
+      ).on(
+        'id -> userId,
+        'longitud -> longitud
       ).executeUpdate()
     }
    }
@@ -211,7 +261,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
         """
           INSERT INTO USUARIO VALUES( nextval('seq_usuario'),{primer_nombre},
           {segundo_nombre},{primer_apellido},{segundo_apellido},{username},{fecha_nacimiento},
-          {email},{foto},{twitter},{facebook},{gmail},NOW(),null,NOW(),{privacidad},{fk_lugar})
+          {email},{foto},{twitter},{facebook},{gmail},NOW(),null,NOW(),{privacidad},{fk_lugar},{latitud},{longitud})
         """
       
       ).on(
@@ -227,7 +277,9 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'facebook->newUsuario.getFacebook.getOrElse{"null"},
           'gmail->newUsuario.getGmail.getOrElse{"null"},
           'privacidad->newUsuario.getPrivacidad,
-          'fk_lugar->newUsuario.getUbicacion.getId
+          'fk_lugar->newUsuario.getUbicacion.getId,
+          'latitud->newUsuario.getLatitud,
+          'longitud->newUsuario.getLongitud
          
       ).executeUpdate() 
       
@@ -258,5 +310,60 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
     } 
    }
+   
+    override def isThisUserAFriend(userId: Long, friendId: Long): Boolean ={
+      
+         var response: Boolean = false
+          DB.withConnection { implicit connection =>
+
+         val isFriend = SQL(
+           """
+           select count(*) from AMISTAD where (amistad.fk_usuario1 = {userId} and amistad.fk_usuario2 = {friendId}) 
+           or (amistad.fk_usuario1 = {friendId} and amistad.fk_usuario2 ={userId})
+           """).on(
+          'userId -> userId,'friendId -> friendId).as(scalar[Long].single)
+
+         if(isFriend != 0)  {
+           response = true
+         }
+         else {
+           response = false
+         }
+         
+         response
+       }
+    }
+    
+    override def getUserFriendshipStatus(userId: Long, friendId: Long): Option[Int] ={
+          DB.withConnection { implicit connection =>
+
+         val friendshipStatus = SQL(
+           """
+           select amistad.status from AMISTAD where (amistad.fk_usuario1 = {userId} and amistad.fk_usuario2 = {friendId}) 
+           or (amistad.fk_usuario1 = {friendId} and amistad.fk_usuario2 ={userId})
+           """).on(
+          'userId -> userId,'friendId -> friendId).as(scalar[Option[Int]].single)
+
+         friendshipStatus
+       }
+    }
+    
+     override def insertAmistad(friend1Id: Long, friend2Id: Long) {
+
+     DB.withConnection { implicit connection =>
+      SQL(
+        """
+          INSERT INTO amistad VALUES({friend1Id},{friend2Id},0)
+        """
+      
+      ).on(
+          'friend1Id->friend1Id,
+          'friend2Id->friend2Id
+          
+          
+      ).executeUpdate() 
+    }
+  }
+  
 
 }

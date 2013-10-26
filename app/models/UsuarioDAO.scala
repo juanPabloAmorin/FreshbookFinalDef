@@ -23,5 +23,11 @@ trait UsuarioDAO
      def updateUserTwitter(twitter: String, userId: Long)
      def updateUserFacebook(facebook: String, userId: Long)
      def updateUserGoogle(google: String, userId: Long)
+     def updateUserLatitud(latitud: String, userId: Long)
+     def updateUserLongitud(longitud: String, userId: Long)
+     def updateUserLocation(fkLugar: Long, userId: Long)
+     def isThisUserAFriend(userId: Long, friendId: Long): Boolean
+     def getUserFriendshipStatus(userId: Long, friendId: Long): Option[Int]
+     def insertAmistad(friend1Id: Long, friend2Id: Long)
      
 }

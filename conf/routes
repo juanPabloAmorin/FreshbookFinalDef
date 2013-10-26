@@ -42,7 +42,7 @@ GET     /crearAlbum                      controllers.Application.createAlbum
 #peticion ajax validacion de usuario
 GET     /userAutentication/:userEmail/*link/:firstName/:middleName/:lastName        controllers.Application.userAutentication(userEmail: String,link: String,firstName: String,middleName: String, lastName: String)
 
-#peticion ajax actualizacion de usuario
+#peticion ajax actualizacion de usuariosearchForFriendsPage
 GET     /userUpdate/:option/*attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
 
 #borrar album
@@ -61,7 +61,19 @@ GET     /registroPaso2/:firstName/:secondName/:firstLastName/:secondLastName/:us
 GET     /registroPaso2Pag      controllers.Application.showRegistroPaso2Pag()
 
 #registro de usuario. paso 3
-GET     /addingNewUser/:country/:state/:city      controllers.Application.addingNewUser(country: String, state: String, city: String)
+GET     /addingNewUser/:country/:state/:city/:latitud/:longitud      controllers.Application.addingNewUser(country: String, state: String, city: String,latitud: String, longitud: String)
 
 #buscador de usuarios. 
 GET     /searchForFriends/:nameUserPattern      controllers.Application.searchForFriends(nameUserPattern :String)
+
+#pagina modificacion de ubicacion de usuario. 
+GET     /locationModify      controllers.Application.locationModify()
+
+#modificar ubicación de usuario
+GET     /modifyUserLocation/:country/:state/:city/:latitud/:longitud      controllers.Application.updateUserLocation(country: String, state: String, city: String,latitud: String, longitud: String)
+
+#pagina de busqueda de amigos. 
+GET     /searchForFriendsPage      controllers.Application.searchForFriendsPage()
+
+#crear notificacion de solicitud de amistad 
+GET     /createFriendshipNotification      controllers.Application.createUserFriendRequestNotification()

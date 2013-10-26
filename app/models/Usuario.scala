@@ -1,6 +1,8 @@
 package models
 
 import java.util.{Date}
+import java.text._
+
 import play.api.db._
 import play.api.Play.current
 import anorm._
@@ -23,14 +25,16 @@ case class Usuario(private var id: Long,
                    private var fechaRegistro: Date,
                    private var fechaBaja: Option[Date],
                    private var ultimaConexion: Date,
-                   private var privacidad: Int)
+                   private var privacidad: Int,
+                   private var latitud: String,
+                   private var longitud: String)
 {
       private var amistades: List[Usuario] = null;
       private var ubicacion: Lugar = null;
       
-      def this() = this(0,"",Some(""),"",Some(""),"",null,"",Some(""),Some(""),Some(""),Some(""),null,null,null,0)
+      def this() = this(0,"",Some(""),"",Some(""),"",null,"",Some(""),Some(""),Some(""),Some(""),null,null,null,0,"","")
       def this(primerNombre: String,segundoNombre: String, primerApellido: String,fechaNacimiento: Date,email: String,facebook: String, gmail: String) = 
-        this(0,primerNombre,Some(segundoNombre),primerApellido,Some(""),"",fechaNacimiento,email,Some(""),Some(""),Some(facebook),Some(gmail),null,null,null,0)
+        this(0,primerNombre,Some(segundoNombre),primerApellido,Some(""),"",fechaNacimiento,email,Some(""),Some(""),Some(facebook),Some(gmail),null,null,null,0,"","")
         
 
   def getPrimerNombre() = this.primerNombre
@@ -39,7 +43,13 @@ case class Usuario(private var id: Long,
   def getSegundoApellido() = this.segundoApellido
   def getId() = this.id
   def getUsername() = this.username
-  def getFechaNacimiento() = this.fechaNacimiento;
+  def getFechaNacimientoFormated() = {
+        
+        var formatedDate =  DateFormat.getDateInstance();
+        val formatedDateString =  formatedDate.format(this.fechaNacimiento);
+        formatedDateString
+      }
+  def getFechaNacimiento() = {this.fechaNacimiento}
   def getEmail() = this.email
   def getFoto() = this.foto
   def getTwitter() = this.twitter
@@ -51,6 +61,8 @@ case class Usuario(private var id: Long,
   def getAmistades() = this amistades
   def getPrivacidad() = this privacidad
   def getUbicacion() = this ubicacion
+  def getLatitud() = this latitud
+  def getLongitud() = this longitud
   
   def setId(id: Long) = {this.id = id}
   def setPrimerNombre(primerNombre: String) = {this.primerNombre = primerNombre}
@@ -70,5 +82,7 @@ case class Usuario(private var id: Long,
   def setAmistades(amistades: List[Usuario]) = {this.amistades = amistades}
   def setPrivacidad(privacidad: Int) = {this.privacidad = privacidad}
   def setUbicacion(ubicacion: Lugar) = {this.ubicacion = ubicacion}
+  def setLatitud(latitud: String) = {this.latitud = latitud}
+  def setLongitud(longitud: String) = {this.longitud = longitud}
   
 }

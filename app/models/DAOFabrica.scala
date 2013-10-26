@@ -20,4 +20,9 @@ object DAOFabrica {
          
           new LugarDAO_SQL
       }
+      
+      def getNotificacionDAO(): NotificacionDAO = {
+         
+          new NotificacionDAO_SQL
+      }
 }

@@ -1,4 +1,4 @@
-@(selectedUser: Usuario,currentUser: Usuario)
+@(selectedUser: Usuario,currentUser: Usuario,isFriend: Boolean,friendshipStatus: Int)
 <!DOCTYPE html>
 <html>
 <head>
@@ -66,10 +66,23 @@
 				</div>
 				<!-- Panel izquierdo -->
 			</div>
-
+           
 			<div class="panel4 right">
 				<div class="cajitaPerfil">
-					<div class="divTitle pvm">Información de Perfil</div>
+					<div class="divTitle pvm">Información de Perfil
+					 @if(selectedUser.getId != currentUser.getId){
+					 	@if(!isFriend){
+					        <button id="friendship-button" class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px" onclick="createFriendshipNotification()" >Solicitar Admistad</button>
+					    }
+					    @if(isFriend && friendshipStatus == 0){
+					          <button class="btn btn-info right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Esperando Repuesta</button>
+					    }
+					    @if(isFriend && friendshipStatus == 1){
+					    	
+					    	  <button class="btn btn-info right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Es Amigo</button>
+					    }
+					 }
+					</div>
 					<div class="divComWhite pvm">
 						<b class="left">Primer Nombre</b>
 						<div class="left fontN" id="first-name-div" name="first-name-div" style="margin-left: 93px">@selectedUser.getPrimerNombre</div>
@@ -118,7 +131,7 @@
 
 					<div class="divComWhite pvm">
 						<b class="left">Fecha de Nacimiento</b>
-						<div class="left fontN" style="margin-left: 60px">@selectedUser.getFechaNacimiento</div>
+						<div class="left fontN" style="margin-left: 60px">@selectedUser.getFechaNacimientoFormated</div>
 						@if(selectedUser.getId == currentUser.getId){
 						<div class="right cfix editButton" id="fecha-edit-button" name="fecha-edit-button" title="editar" onclick=""></div>
 					    }
@@ -131,11 +144,13 @@
 					</div>	
 					<div class="pvs">
 						<div id="map-canvas" class="left" style="width:300px;height:260px; margin-left:0px;margin-top:10px;"></div>
-					    <div id="ubicacion" align="center" style="margin-top:20px">descripcion ubicacion</div>
+					    <div id="ubicacion" align="center" style="margin-top:20px"></div>
 					    <br>
+					    @if(selectedUser.getId == currentUser.getId){
 					    <div id="modificar-lugar-button" align="center" style="margin-top:40px">
-					       <button class="btn btn-primary" style="border-radius:0px">Modificar</button>
+					       <a href="/locationModify"><button class="btn btn-primary" style="border-radius:0px">Modificar</button></a>
 					    </div>
+					    }
 					</div>
 					</div>
 					
@@ -200,6 +215,8 @@
 	</div> <!-- .footer -->
 	
 	<input type="hidden" id="modify" name="modify" value="0" />
+	<input type="hidden" id="latitud-input"  value="@selectedUser.getLatitud" />
+	<input type="hidden" id="longitud-input"  value="@selectedUser.getLongitud" />
 	
 	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
 	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>

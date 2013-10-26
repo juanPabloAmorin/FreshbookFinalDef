@@ -503,9 +503,11 @@ function removeError(object)
 
 function goUserRegisterStep3()  
 {
+	
 	if(country != null && country != "")
 	{
-	   
+		
+		
 	   if(state == "")
 	   {
 		   state="null";
@@ -514,7 +516,7 @@ function goUserRegisterStep3()
 	   {
 		   city="null";
 	   }
-	   location.href = "/addingNewUser/"+country+"/"+state+"/"+city;
+	   location.href = "/addingNewUser/"+country+"/"+state+"/"+city+"/"+latitud+"/"+longitud;
 	}
 }
 
@@ -541,5 +543,43 @@ function searchForFriends()
 		document.getElementById('div-search-results').innerHTML = "";
 		 
 		//programar manejo de errores de get json
+	})
+}
+
+function modifyUserLocation()  
+{
+	
+	if(country != null && country != "")
+	{
+			
+	   if(state == "")
+	   {
+		   state="null";
+	   }
+	   if(city == "")
+	   {
+		   city="null";
+	   }
+	   location.href = "/modifyUserLocation/"+country+"/"+state+"/"+city+"/"+latitud+"/"+longitud;
+	}
+}
+
+
+function createFriendshipNotification()
+{
+	
+	var jqxhr = $.ajax("/createFriendshipNotification")
+	.done(function(jqXHR) 
+	{
+		 $("#friendship-button").removeClass("btn-primary");
+		 $("#friendship-button").addClass("btn-info");
+		 $("#friendship-button").html("Esperando Respuesta");
+		 $("#friendship-button").removeAttr("onclick");
+		 //programar manejo de errores de update
+	})
+	.fail(function(jqXHR) {
+		 
+		
+		//programar manejo de errores de update
 	})
 }

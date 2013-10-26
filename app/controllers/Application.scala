@@ -56,6 +56,10 @@ object Application extends Controller {
     if (secondName != "null") {
       newUser.setSegundoNombre(Some(secondName))
     }
+    else
+    {
+       newUser.setSegundoNombre(Some(""))
+    }
     newUser.setPrimerApellido(firstLastName)
     if (secondLastName != "null") {
       newUser.setSegundoApellido(Some(secondLastName))
@@ -77,10 +81,12 @@ object Application extends Controller {
     Ok(html.registroPaso2())
   }
 
-  def addingNewUser(country: String, state: String, city: String) = Action {
+  def addingNewUser(country: String, state: String, city: String, latitud: String, longitud: String) = Action {
 
     var userLocation = Util.getUserLocation(country, state, city)
     newUser.setUbicacion(userLocation)
+    newUser.setLatitud(latitud)
+    newUser.setLongitud(longitud)
     
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
     userDao.insertUser(newUser)
@@ -106,9 +112,21 @@ object Application extends Controller {
   }
 
   def showPerfilPag = Action {
+    
+    var friendshipStatus = -1
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
     var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse { null }
-    Ok(views.html.perfil(userSelected, currentUser))
+    var isFriendUserSelected = userDao.isThisUserAFriend(currentUser.getId, lastFriendVistedId)
+    if(isFriendUserSelected)
+    {
+        var status = userDao.getUserFriendshipStatus(currentUser.getId, lastFriendVistedId)
+        status match{
+          case Some(value) => friendshipStatus = value
+        }
+         
+    }
+    
+    Ok(views.html.perfil(userSelected, currentUser,isFriendUserSelected,friendshipStatus))
   }
 
   def showAlbumes(userId: Long) = Action {
@@ -246,5 +264,52 @@ object Application extends Controller {
 
     Ok(json).as("application/json")
   }
+  
+  def locationModify() = Action{
+    
+       Ok(views.html.modificacionUbicacion(currentUser))
+  }
+  
+  def updateUserLocation(country: String,state: String,city: String,latitud: String, longitud: String) = Action{
+    
+       var userLocation = Util.getUserLocation(country, state, city)
+       
+       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+       userDao.updateUserLatitud(latitud,currentUser.getId)
+       userDao.updateUserLongitud(longitud,currentUser.getId)
+       userDao.updateUserLocation(userLocation.getId, currentUser.getId)
+       
+       currentUser.setUbicacion(userLocation)
+       currentUser.setLatitud(latitud)
+       currentUser.setLongitud(longitud)
+       
+       Redirect("/perfilPag")
+  }
+  
+  def searchForFriendsPage() = Action{
+    
+       Ok(views.html.searchForFriends(currentUser))
+  }
+  
+  
+  def createUserFriendRequestNotification = Action {
+    
+       var notificacionDao = DAOFabrica.getNotificacionDAO
+       var userDao = DAOFabrica.getUsuarioDAO
+       var newNotification: Notificacion = new Notificacion()
+       
+       userDao.insertAmistad(currentUser.getId, lastFriendVistedId)
+       
+       newNotification.setContenido(currentUser.getPrimerNombre + " " + currentUser.getPrimerApellido + " quiere ser tu amigo en Feeshbook")
+       newNotification.setTipo(notificacionDao.getTypeNotificationNumberFormat("SOLICITUD"))
+       newNotification.setIdAmigo(Some(currentUser.getId))
+
+       notificacionDao.insertNotification(newNotification,lastFriendVistedId)
+       
+       
+       Ok("true")
+       
+  }
+  
 
 }
