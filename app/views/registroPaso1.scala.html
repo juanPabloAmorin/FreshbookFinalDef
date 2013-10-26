@@ -67,36 +67,36 @@
 				<div id="panelRight" class="right" style="width:60%" align="left">	
 					<div class="cfix divRow">
 						<div class="inputRow marginR left form-group" id="div-first-name">
-							<input type="text" class="form-control" data-type="text" value="@newUser.getPrimerNombre"
+							<input type="text" class="form-control" data-type="text" maxlength="15" value="@newUser.getPrimerNombre"
 								name="first-name" placeholder="Primer Nombre" id="first-name"
 								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-name')"/>
 						</div>
 						<div class="inputRow form-group" >
-							<input type="text" class="form-control" data-type="text" value="@newUser.getSegundoNombre"
+							<input type="text" class="form-control" data-type="text" maxlength="15" value="@newUser.getSegundoNombre"
 								name="second-name" placeholder="Segundo Nombre" id="second-name"
 								style="border-radius: 0; font-size: 18px;" />
 						</div>
 					</div>
 					<div class="cfix divRow">
 						<div class="inputRow marginR left form-group" id="div-first-lastname">
-							<input type="text" class="form-control" data-type="text" value="@newUser.getPrimerApellido"
+							<input type="text" class="form-control" data-type="text" maxlength="15" value="@newUser.getPrimerApellido"
 								name="first-lastname" placeholder="Primer Apellido" id="first-lastname"
 								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-lastname')"/>
 						</div>
 						<div class="inputRow form-group">
-							<input type="text" class="form-control" data-type="text"
+							<input type="text" class="form-control" data-type="text" maxlength="15"
 								name="second-lastname" placeholder="Segundo Apellido" id="second-lastname"
 								style="border-radius: 0; font-size: 18px;" />
 						</div>
 					</div>
 					<div class="divRow form-group" id="div-username">
 						<input type="text" class="input_largeW form-control" 
-							data-type="text" name="username" placeholder="Username"
+							data-type="text" name="username" placeholder="Username" maxlength="35"
 							id="username" style="border-radius: 0" onkeypress="removeError('div-username')"/>
 					</div>
 					<div class="marginBM">
 						<div class="divRow marginBM form-group">
-							<input type="text" class="input_largeW form-control" value="@newUser.getEmail" readonly="readonly"
+							<input type="text" class="input_largeW form-control"  value="@newUser.getEmail" readonly="readonly"
 								data-type="text" name="mail" placeholder="Correo Electrónico"
 								id="mail" style="border-radius: 0;color:grey" />
 						</div>

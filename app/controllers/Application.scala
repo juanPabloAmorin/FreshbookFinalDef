@@ -29,6 +29,7 @@ object Application extends Controller {
   var newUser: Usuario = null;  
 
   def index = Action {
+    
     Ok(views.html.index()).withNewSession
   }
 
@@ -109,13 +110,19 @@ object Application extends Controller {
       }
   }
 
-  def showPerfil(userId: Long) = Action {
+  def showPerfil(userId: Long) = Action { request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     lastFriendVistedId = userId;
     Redirect("/perfilPag")
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
-  def showPerfilPag = Action {
+  def showPerfilPag = Action { request => 
     
+    request.session.get("usuarioEmail").map { userEmail =>
     var friendshipStatus = -1
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
     var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse { null }
@@ -125,47 +132,88 @@ object Application extends Controller {
         var status = userDao.getUserFriendshipStatus(currentUser.getId, lastFriendVistedId)
         status match{
           case Some(value) => friendshipStatus = value
+          
         }
          
     }
+     
+        Ok(views.html.perfil(userSelected, currentUser,isFriendUserSelected,friendshipStatus))
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
     
-    Ok(views.html.perfil(userSelected, currentUser,isFriendUserSelected,friendshipStatus))
   }
 
-  def showAlbumes(userId: Long) = Action {
+  def showAlbumes(userId: Long) = Action { request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     lastFriendVistedId = userId;
     Redirect("/albumesPag")
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
   def showAlbumesPag = Action {
+    request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO;
     var albumes = albumDao.findAlbumsByUser(lastFriendVistedId)
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
     var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse { null }
     Ok(views.html.albumes(albumes, userSelected, albumDao, currentUser))
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
   def showAmigos(userId: Long) = Action {
+    request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     lastFriendVistedId = userId;
     Redirect("/amigosPag")
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
-  def showAmigosPag = Action {
+  def showAmigosPag = Action { request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
     var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse { null }
     userSelected.setAmistades(userDao.findFriendsByUser(userSelected.getId))
     Ok(views.html.amigos(userSelected, currentUser))
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
-  def showAlbumContent(albumId: Long) = Action {
+  def showAlbumContent(albumId: Long) = Action {request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     Redirect("/albumContentPag")
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
   def showAlbumContentPag = Action {
+    request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     Ok(views.html.carrusel())
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
   def updateRegisteredUser(option: Int, attribute: String, userId: Long) = Action {
+    request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
 
     if (option == 1) {
@@ -205,16 +253,29 @@ object Application extends Controller {
     }
     
     Ok("true")
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
-  def createAlbum() = Action {
+  def createAlbum() = Action {request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     Ok(views.html.crearAlbum(currentUser))
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
-  def deleteAlbum(albumId: Long) = Action {
+  def deleteAlbum(albumId: Long) = Action {request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
     albumDao.deleteAlbumById(albumId)
     Redirect("/albumesPag")
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
 
   def insertAlbum(albumName: String, albumDescription: String, albumPrivacy: Int, albumImgRoute: String) = Action {
@@ -269,8 +330,14 @@ object Application extends Controller {
   }
   
   def locationModify() = Action{
+    request => 
+    
+    request.session.get("usuarioEmail").map { userEmail =>
     
        Ok(views.html.modificacionUbicacion(currentUser))
+    }.getOrElse {
+        Ok(views.html.index()).withNewSession
+    }
   }
   
   def updateUserLocation(country: String,state: String,city: String,latitud: String, longitud: String) = Action{

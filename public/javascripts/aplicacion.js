@@ -24,7 +24,7 @@ function editFirstName(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#first-name-div")
-		.html("<input type='text' id='first-name-input' name='first-name-input' placeholder='Ingresar Nombre' value='"+$("#first-name-div").html()+"' />");
+		.html("<input type='text' id='first-name-input' name='first-name-input' maxlength='15' placeholder='Ingresar Nombre' value='"+$("#first-name-div").html()+"' />");
 		
 		$("#twitter-edit-button").slideUp(150);
 		$("#facebook-edit-button").slideUp(150);
@@ -71,7 +71,7 @@ function editSecondName(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#second-name-div")
-		.html("<input type='text' id='second-name-input' name='second-name-input' placeholder='Ingresar Nombre' value='"+$("#second-name-div").html()+"' />");
+		.html("<input type='text' id='second-name-input' name='second-name-input' maxlength='15' placeholder='Ingresar Nombre' value='"+$("#second-name-div").html()+"' />");
 		
 		$("#twitter-edit-button").slideUp(150);
 		$("#facebook-edit-button").slideUp(150);
@@ -119,7 +119,7 @@ function editFirstLastname(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#first-lastname-div")
-		.html("<input type='text' id='first-lastname-input' name='first-lastname-input' placeholder='Ingresar Nombre' value='"+$("#first-lastname-div").html()+"' />");
+		.html("<input type='text' id='first-lastname-input' name='first-lastname-input' maxlength='15' placeholder='Ingresar Nombre' value='"+$("#first-lastname-div").html()+"' />");
 		
 		$("#twitter-edit-button").slideUp(150);
 		$("#facebook-edit-button").slideUp(150);
@@ -167,7 +167,7 @@ function editSecondLastname(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#second-lastname-div")
-		.html("<input type='text' id='second-lastname-input' name='second-lastname-input' placeholder='Ingresar Nombre' value='"+$("#second-lastname-div").html()+"' />");
+		.html("<input type='text' id='second-lastname-input' name='second-lastname-input' maxlength='15' placeholder='Ingresar Nombre' value='"+$("#second-lastname-div").html()+"' />");
 		
 		$("#twitter-edit-button").slideUp(150);
 		$("#facebook-edit-button").slideUp(150);
@@ -215,7 +215,7 @@ function editNickname(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#nickname-div")
-		.html("<input type='text' id='nickname-input' name='nickname-input' placeholder='Ingresar Nickname' value='"+$("#nickname-div").html()+"' />");
+		.html("<input type='text' id='nickname-input' name='nickname-input' maxlength='35' placeholder='Ingresar Nickname' value='"+$("#nickname-div").html()+"' />");
 		
 		$("#twitter-edit-button").slideUp(150);
 		$("#facebook-edit-button").slideUp(150);
@@ -263,7 +263,7 @@ function editTwitter(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#twitter-div")
-		.html("<input type='text' id='twitter-input' name='twitter-input' placeholder='Ingresar URL' value='"+$("#twitter-link").html()+"' />");
+		.html("<input type='text' id='twitter-input' name='twitter-input' maxlength='100' placeholder='Ingresar dirección URL' value='"+$("#twitter-link").html()+"' />");
 		
 		$("#nickname-edit-button").slideUp(150);
 		$("#facebook-edit-button").slideUp(150);
@@ -312,7 +312,7 @@ function editFacebook(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#facebook-div")
-		.html("<input type='text' id='facebook-input' name='facebook-input' placeholder='Ingresar URL' value='"+$("#facebook-link").html()+"' />");
+		.html("<input type='text' id='facebook-input' name='facebook-input' maxlength='100'  placeholder='Ingresar dirección URL' value='"+$("#facebook-link").html()+"' />");
 		
 		$("#nickname-edit-button").slideUp(150);
 		$("#twitter-edit-button").slideUp(150);
@@ -360,7 +360,7 @@ function editGoogle(id)
 	if ($("#modify").attr("value") == 0) 
 	{
 		$("#google-div")
-		.html("<input type='text' id='google-input' name='google-input' placeholder='Ingresar URL' value='"+$("#google-link").html()+"' />");
+		.html("<input type='text' id='google-input' name='google-input' maxlength='100' placeholder='Ingresar dirección URL' value='"+$("#google-link").html()+"' />");
 		
 		$("#nickname-edit-button").slideUp(150);
 		$("#facebook-edit-button").slideUp(150);
@@ -626,4 +626,17 @@ function confirmFriendship(idAmigo,idNotificacion){
 	      //errores
 		
 	})
+}
+
+function deleteFriendship()
+{
+	
+}
+
+function index()
+{
+	FB.logout(function(response) {
+		location.href="/";
+		});
+	 
 }

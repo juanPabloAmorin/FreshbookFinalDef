@@ -20,14 +20,49 @@
 </head>
 
 <body>
-	<div class="header">
+	<div class="header cfix">
 		<div class="cfix log_bar">
 			<div class="left">
 				<img src="assets/images/head_log.png" width="120" height="43" />
 			</div>
+			
+			
+			<div id="friendship-div" class="divFriendship cfix left" >
+			<img class="imgis left" src="assets/images/amistad.png" onclick="mostrarSolicitudesAmistad(@currentUser.getId)"/>
+			     <div id="div-friendship-sol" style="overflow:auto;width:332px;background-color:#FFF;z-index:2;position:absolute;margin-top:35px;margin-left:-145px">
+			        
+			
+			     </div>
+			</div>
+			
+			<div class="divBuscadorHeader cfix left" style="margin-left:-125px;">
+			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
+			     <button class="btn btn-primary right input-sm" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
+			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
+			        
+			
+			     </div>
+			</div>
+			<div class="cfix headBox left" style="margin-left:120px;">
+				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
+					src=@currentUser.getFoto />
+				</a>
+				<div class="middleBox">
+					<div class="innerBox" style="height: 40px"></div>
+					<div class="innerBox">
+						<a class="userName" style="color:#FFF" href="perfil/@currentUser.getId">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""})) </a>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			<a href="/" onclick="FB.logout()"><img class="imgis left" src="assets/images/amistad.png" style="margin-left:20px" /></a>
+			     
+			
+			
 		</div>
 	</div>
-	<!-- Header -->
 	
 	<div class="contenedorGlobal cfix">
 		<div class="clearfix">
@@ -72,10 +107,10 @@
 			  
 			    <div class="divDataAlbum cfix left ">
 			     
-			       <input id="input-name" type="text" placeholder="Nombre del Album" class="form-control flat" style="border-radius:0px"/>
+			       <input id="input-name" type="text" placeholder="Nombre del Album" class="form-control flat" maxlength="30" style="border-radius:0px"/>
 			     
 			     
-			       <input id="input-description" type="text" placeholder="Descripción" class="form-control flat" style="margin-top:10px;border-radius:0px" />
+			       <input id="input-description" type="text" placeholder="Descripción" class="form-control flat" maxlength="100" style="margin-top:10px;border-radius:0px" />
 			       
 			  </div>
 			  
