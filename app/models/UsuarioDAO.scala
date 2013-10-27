@@ -31,5 +31,6 @@ trait UsuarioDAO
      def insertAmistad(friend1Id: Long, friend2Id: Long)
      def confimFriendship(friend1Id: Long, friend2Id: Long)
      def getUsersByFullNamePart(namePart: String): List[Usuario]
+     def deleteAmistadByUsersId(friend1Id: Long, friend2Id: Long)
      
 }

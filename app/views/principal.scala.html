@@ -1,4 +1,4 @@
-@(currentUser: Usuario)
+@(currentUser: Usuario,notificationList: List[Notificacion])
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,7 +35,7 @@
 			
 			<div class="divBuscadorHeader cfix left" style="margin-left:-125px;">
 			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
-			     <button class="btn btn-primary right input-sm" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
+			     
 			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
 			        
 			
@@ -43,7 +43,7 @@
 			</div>
 			<div class="cfix headBox left" style="margin-left:120px;">
 				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
-					src=@currentUser.getFoto />
+					src="http://graph.facebook.com/@currentUser.getFacebookId/picture" />
 				</a>
 				<div class="middleBox">
 					<div class="innerBox" style="height: 40px"></div>
@@ -55,7 +55,7 @@
 			</div>
 			
 			
-			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/amistad.png" style="margin-left:20px" /></a>
+			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/logout.png" style="margin-left:20px" /></a>
 			     
 			
 			
@@ -68,7 +68,7 @@
 		<div class="bloqueLeft" style="position:absolute;z-index:1">
 			<div class="cfix iniBox" style="margin-bottom:60%">
 				<a class="imga left" href="perfil/@currentUser.getId"> <img class="imgi"
-					src=@currentUser.getFoto />
+					src=http://graph.facebook.com/@currentUser.getFacebookId/picture />
 				</a>
 				<div class="middleBox">
 					<div class="innerBox" style="height: 40px"></div>
@@ -101,6 +101,16 @@
 		    <div class="notification-div cfix" style="font-size:20px;">
 		      Crea nuevos <a class="cfix" href="albumes/@currentUser.getId">ALBUMES</a> y guarda tu contenido multimedia.
 		    </div>
+		    
+		    
+		    
+		     @notificationList.map { 
+                    case (notification) => {
+						<div class="notification-div cfix" style="font-size:20px;">
+		                   @notification.getContenido
+		               </div>
+					 }
+			}
 		    
 		</div>
 

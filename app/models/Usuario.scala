@@ -27,14 +27,19 @@ case class Usuario(private var id: Long,
                    private var ultimaConexion: Date,
                    private var privacidad: Int,
                    private var latitud: String,
-                   private var longitud: String)
+                   private var longitud: String,
+                   private var facebookId: String)
 {
       private var amistades: List[Usuario] = null;
       private var ubicacion: Lugar = null;
       
-      def this() = this(0,"",Some(""),"",Some(""),"",null,"",Some(""),Some(""),Some(""),Some(""),null,null,null,0,"","")
-      def this(primerNombre: String,segundoNombre: String, primerApellido: String,fechaNacimiento: Date,email: String,facebook: String, gmail: String) = 
-        this(0,primerNombre,Some(segundoNombre),primerApellido,Some(""),"",fechaNacimiento,email,Some(""),Some(""),Some(facebook),Some(gmail),null,null,null,0,"","")
+      def this() = this(0,"",Some(""),"",Some(""),"",null,"",Some(""),Some(""),Some(""),
+                   Some(""),null,null,null,0,"","","")
+      
+      def this(primerNombre: String,segundoNombre: String, primerApellido: String,
+              fechaNacimiento: Date,email: String,facebook: String, gmail: String,facebookId: String) = 
+      this(0,primerNombre,Some(segundoNombre),primerApellido,Some(""),"",fechaNacimiento,
+          email,Some(""),Some(""),Some(facebook),Some(gmail),null,null,null,0,"","",facebookId)
         
 
   def getPrimerNombre() = this.primerNombre
@@ -63,6 +68,7 @@ case class Usuario(private var id: Long,
   def getUbicacion() = this ubicacion
   def getLatitud() = this latitud
   def getLongitud() = this longitud
+  def getFacebookId() = this facebookId
   
   def setId(id: Long) = {this.id = id}
   def setPrimerNombre(primerNombre: String) = {this.primerNombre = primerNombre}
@@ -84,5 +90,6 @@ case class Usuario(private var id: Long,
   def setUbicacion(ubicacion: Lugar) = {this.ubicacion = ubicacion}
   def setLatitud(latitud: String) = {this.latitud = latitud}
   def setLongitud(longitud: String) = {this.longitud = longitud}
+  def setFacebookId(facebookId: String) = {this.facebookId = facebookId}
   
 }

@@ -19,7 +19,7 @@
 
 </head>
 
-<body onclick="fadeError()">
+<body>
 
 
 	<div class="header">
@@ -43,7 +43,7 @@
 				      
 				   
 				      <div id="div-photo-panel" class="photoPanel" style="width:200px;height:250px;display:block;margin-right:-60px">
-				         <img src="assets/images/user_images/userImage.jpg" style="width: 100%; height: 100%;"/>
+				         <img src="http://graph.facebook.com/@newUser.getFacebookId/picture?type=large" style="width: 100%; height: 100%;"/>
 				      </div>
 				   
 				    
@@ -69,7 +69,7 @@
 						<div class="inputRow marginR left form-group" id="div-first-name">
 							<input type="text" class="form-control" data-type="text" maxlength="15" value="@newUser.getPrimerNombre"
 								name="first-name" placeholder="Primer Nombre" id="first-name"
-								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-name')"/>
+								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-name','first-name','Primer Nombre')"/>
 						</div>
 						<div class="inputRow form-group" >
 							<input type="text" class="form-control" data-type="text" maxlength="15" value="@newUser.getSegundoNombre"
@@ -81,7 +81,7 @@
 						<div class="inputRow marginR left form-group" id="div-first-lastname">
 							<input type="text" class="form-control" data-type="text" maxlength="15" value="@newUser.getPrimerApellido"
 								name="first-lastname" placeholder="Primer Apellido" id="first-lastname"
-								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-lastname')"/>
+								style="border-radius: 0; font-size: 18px;" onkeypress="removeError('div-first-lastname','first-lastname','Primer Apellido')"/>
 						</div>
 						<div class="inputRow form-group">
 							<input type="text" class="form-control" data-type="text" maxlength="15"
@@ -92,7 +92,7 @@
 					<div class="divRow form-group" id="div-username">
 						<input type="text" class="input_largeW form-control" 
 							data-type="text" name="username" placeholder="Username" maxlength="35"
-							id="username" style="border-radius: 0" onkeypress="removeError('div-username')"/>
+							id="username" style="border-radius: 0" onkeypress="removeError('div-username','username','Username')"/>
 					</div>
 					<div class="marginBM">
 						<div class="divRow marginBM form-group">
@@ -105,7 +105,7 @@
 						<div class="marginTM marginBS" style="font-size: 18px">Fecha de nacimiento</div>
 
 						<span class="inline relative"> 
-						    <select name="dia" id="dia">
+						    <select name="dia" id="dia" onchange="fadeError()">
 									<option value="0" selected="1">Día</option>
 									<option value="1">1</option>
 									<option value="2">2</option>
@@ -139,7 +139,7 @@
 									<option value="30">30</option>
 									<option value="31">31</option>
 							</select> 
-							<select name="mes" id="mes">
+							<select name="mes" id="mes" onchange="fadeError()">
 									<option value="0" selected="1">Mes</option>
 									<option value="1">Ene</option>
 									<option value="2">Feb</option>
@@ -154,7 +154,7 @@
 									<option value="11">Nov</option>
 									<option value="12">Dic</option>
 							</select> 
-							<select name="anio" id="anio">
+							<select name="anio" id="anio" onchange="fadeError()">
 							        <option value="0" selected="1">Año</option>
 									<option value="2013">2013</option>
 									<option value="2012">2012</option>
@@ -268,8 +268,16 @@
 							</select>				
 						</span>
 						<div class="cfix marginTM">
-							<button type="submit" class="btn btn-hg btn-primary marginTM"
+							<button type="submit" class="btn btn-hg btn-primary marginTM left"
 								name="continuar-button" id="continuar-button" style="border-radius:0" onclick="validateUserPersonalData()">Continuar</button>
+						
+						    <div class="left" id="dateError" name="dateError"
+				                  style="width: 200px; height: 50px; margin-left: 70px; margin-top: 5px; display: none">
+				               <div class="tooltip fade bottom in">
+					            <div class="tooltip-arrow"></div>
+					             <div class="tooltip-inner">Indique fecha de nacimiento</div>
+				               </div>
+			                 </div>
 						</div>
 					</div>
 				</div>
@@ -284,6 +292,8 @@
 		</div>
 	</div>
 	<!-- Footer -->
+	
+	<input type="hidden" id="facebookid-input" value="@newUser.getFacebookId">
 
 	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
 	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>

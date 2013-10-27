@@ -4,82 +4,91 @@
 
 
 # Home page
-GET     /                           controllers.Application.index
+GET   /                                                                                                                controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.at(path="/public", file)
+GET   /assets/*file                                                                                                    controllers.Assets.at(path="/public", file)
 
 #pagina de inicio
-GET     /principal                           controllers.Application.showPrincipalPage
+GET   /principal                                                                                                       controllers.Application.showPrincipalPage
 
 #validacion pagina de perfil de usuario
-GET     /perfil/:userId                       controllers.Application.showPerfil(userId: Long)
+GET   /perfil/:userId                                                                                                  controllers.Application.showPerfil(userId: Long)
 
 #validacion pagina de albumes de usuario
-GET     /albumes/:userId                       controllers.Application.showAlbumes(userId: Long)
+GET   /albumes/:userId                                                                                                 controllers.Application.showAlbumes(userId: Long)
 
 #validacion pagina de amigos de usuario
-GET     /amigos/:userId                       controllers.Application.showAmigos(userId: Long)
+GET   /amigos/:userId                                                                                                  controllers.Application.showAmigos(userId: Long)
 
 #validacion pagina de contenido de album
-GET     /albumContent/:albumId                       controllers.Application.showAlbumContent(albumId: Long)
+GET   /albumContent/:albumId                                                                                           controllers.Application.showAlbumContent(albumId: Long)
 
 #pagina de perfil de usuario
-GET     /perfilPag                      controllers.Application.showPerfilPag
+GET   /perfilPag                                                                                                       controllers.Application.showPerfilPag
 
 #pagina de albumes de usuario
-GET     /albumesPag                      controllers.Application.showAlbumesPag
+GET   /albumesPag                                                                                                      controllers.Application.showAlbumesPag
 
 #pagina de amigos de usuario
-GET     /amigosPag                      controllers.Application.showAmigosPag
+GET   /amigosPag                                                                                                       controllers.Application.showAmigosPag
 
 #pagina de contenido de album
-GET     /albumContentPag                      controllers.Application.showAlbumContentPag
+GET   /albumContentPag                                                                                                 controllers.Application.showAlbumContentPag
 
 #crear nuevo album page
-GET     /crearAlbum                      controllers.Application.createAlbum
+GET   /crearAlbum                                                                                                      controllers.Application.createAlbum
 
 #peticion ajax validacion de usuario
-GET     /userAutentication/:userEmail/*link/:firstName/:middleName/:lastName        controllers.Application.userAutentication(userEmail: String,link: String,firstName: String,middleName: String, lastName: String)
+GET   /userAutentication/:userEmail/*link/:firstName/:middleName/:lastName/:facebookId                                             controllers.Application.userAutentication(userEmail: String,link: String,firstName: String,middleName: String, lastName: String, facebookId: String)
 
 #peticion ajax actualizacion de usuariosearchForFriendsPage
-GET     /userUpdate/:option/*attribute/:userId      controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
+GET   /userUpdate/:option/*attribute/:userId                                                                           controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
 
 #borrar album
-GET     /deleteAlbum/:albumId      controllers.Application.deleteAlbum(albumId: Long)
+GET   /deleteAlbum/:albumId                                                                                            controllers.Application.deleteAlbum(albumId: Long)
 
 #crear nuevo album persistencia
-GET     /insertAlbum/:albumName/:albumDescription/:albumPrivacy/:albumImgRoute    controllers.Application.insertAlbum(albumName: String,albumDescription: String,albumPrivacy: Int, albumImgRoute: String)
+GET   /insertAlbum/:albumName/:albumDescription/:albumPrivacy/:albumImgRoute                                           controllers.Application.insertAlbum(albumName: String,albumDescription: String,albumPrivacy: Int, albumImgRoute: String)
 
 #pagina de registro de usuario. paso 1
-GET     /registroPaso1Pag      controllers.Application.showRegistroPaso1Pag()
+GET   /registroPaso1Pag                                                                                                controllers.Application.showRegistroPaso1Pag()
 
 #registro de usuario. paso 2
-GET     /registroPaso2/:firstName/:secondName/:firstLastName/:secondLastName/:username/:dia/:mes/:anio/:privacy/*photo      controllers.Application.registroPaso2(firstName: String, secondName: String,firstLastName: String,secondLastName: String, username: String,dia: String,mes: String,anio: String,privacy: Int,photo: String)
+GET   /registroPaso2/:firstName/:secondName/:firstLastName/:secondLastName/:username/:dia/:mes/:anio/:privacy/*photo/:id   controllers.Application.registroPaso2(firstName: String, secondName: String,firstLastName: String,secondLastName: String, username: String,dia: String,mes: String,anio: String,privacy: Int,photo: String,id: String)
 
 #pagina de registro de usuario. paso 2
-GET     /registroPaso2Pag      controllers.Application.showRegistroPaso2Pag()
+GET   /registroPaso2Pag                                                                                                controllers.Application.showRegistroPaso2Pag()
 
 #registro de usuario. paso 3
-GET     /addingNewUser/:country/:state/:city/:latitud/:longitud      controllers.Application.addingNewUser(country: String, state: String, city: String,latitud: String, longitud: String)
+GET   /addingNewUser/:country/:state/:city/:latitud/:longitud                                                          controllers.Application.addingNewUser(country: String, state: String, city: String,latitud: String, longitud: String)
 
 #buscador de usuarios. 
-GET     /searchForFriends/:nameUserPattern      controllers.Application.searchForFriends(nameUserPattern :String)
+GET   /searchForFriends/:nameUserPattern                                                                               controllers.Application.searchForFriends(nameUserPattern :String)
 
 #pagina modificacion de ubicacion de usuario. 
-GET     /locationModify      controllers.Application.locationModify()
+GET   /locationModify                                                                                                  controllers.Application.locationModify()
 
 #modificar ubicación de usuario
-GET     /modifyUserLocation/:country/:state/:city/:latitud/:longitud      controllers.Application.updateUserLocation(country: String, state: String, city: String,latitud: String, longitud: String)
+GET   /modifyUserLocation/:country/:state/:city/:latitud/:longitud                                                     controllers.Application.updateUserLocation(country: String, state: String, city: String,latitud: String, longitud: String)
 
 #pagina de busqueda de amigos. 
-GET     /searchForFriendsPage      controllers.Application.searchForFriendsPage()
+GET   /searchForFriendsPage                                                                                            controllers.Application.searchForFriendsPage()
 
 #crear notificacion de solicitud de amistad 
-GET     /createFriendshipNotification      controllers.Application.createUserFriendRequestNotification()
+GET   /createFriendshipNotification                                                                                    controllers.Application.createUserFriendRequestNotification()
 
 #crear notificacion de solicitud de amistad 
-GET     /getSolicitudesAmistad/:userId      controllers.Application.getSolicitudesAmistad(userId: Long)
+GET   /getSolicitudesAmistad/:userId                                                                                   controllers.Application.getSolicitudesAmistad(userId: Long)
 
 #confirmacion de amistad 
-GET     /confirmFriendship/:userId/:idNotificacion      controllers.Application.confirmFriendship(userId: Long,idNotificacion: Long)
+GET   /confirmFriendship/:userId/:idNotificacion                                                                       controllers.Application.confirmFriendship(userId: Long,idNotificacion: Long)
+
+#busqueda de usuarios por nombre
+GET   /userSearch/:namePart                                                                                            controllers.Application.searchFriends(namePart: String)
+
+#pagina buqueda
+GET   /searchPage/:namePart                                                                                            controllers.Application.searchPage(namePart: String)
+
+#borrar amistad
+GET /deleteFriendship/:userId/:friendId                   controllers.Application.deleteFriendship(userId: Long, friendId: Long)

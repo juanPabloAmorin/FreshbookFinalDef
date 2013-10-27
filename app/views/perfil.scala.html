@@ -38,7 +38,7 @@
 			
 			<div class="divBuscadorHeader cfix left" style="margin-left:-125px;">
 			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
-			     <button class="btn btn-primary right input-sm" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
+			     
 			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
 			        
 			
@@ -46,7 +46,7 @@
 			</div>
 			<div class="cfix headBox left" style="margin-left:120px;">
 				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
-					src=@currentUser.getFoto />
+					src="http://graph.facebook.com/@currentUser.getFacebookId/picture" />
 				</a>
 				<div class="middleBox">
 					<div class="innerBox" style="height: 40px"></div>
@@ -58,12 +58,13 @@
 			</div>
 			
 			
-			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/amistad.png" style="margin-left:20px" /></a>
+			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/logout.png" style="margin-left:20px" /></a>
 			     
 			
 			
 		</div>
 	</div>
+	<!-- Header -->
 
 	<div class="contenedorGlobal cfix">
 		<div class="clearfix">
@@ -74,12 +75,9 @@
 							<span style="font-size: 22px">@(selectedUser.getPrimerNombre + " " + (selectedUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + selectedUser.getPrimerApellido + " " + (selectedUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
 						</div>
 					</div>
-					<div class="cajitaFoto">
-						<div>
-							<img class="perfImg relative"
-								src=@selectedUser.getFoto />
-						</div>
-					</div>
+					<div id="div-photo-panel" class="photoPanel" style="width:225px;height:250px;display:block;margin-top: 15px; margin-bottom:15px;margin-left:4px">
+				         <img src="http://graph.facebook.com/@selectedUser.getFacebookId/picture?type=large" style="width: 99%; height: 100%;"/>
+				      </div>
 					<a class="cfix" href="/principal">
 						<div class="pvm topBorder divButton">
 							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
@@ -220,9 +218,7 @@
 							<b class="left">Facebook</b>
 							
 							<div class="left fontN" id="facebook-div" name="facebook-div" style="margin-left: 82px"><a id="facebook-link" href="@selectedUser.getFacebook">@selectedUser.getFacebook</div></a>
-						@if(selectedUser.getId == currentUser.getId){
-							<div class="right cfix editButton" id="facebook-edit-button" name="facebook-edit-button" title="editar" onclick="editFacebook(@selectedUser.getId)"></div>
-						}
+						
 						</div>
 					</div>
 
@@ -285,5 +281,6 @@
 	<script src="assets/javascripts/application.js"></script>
 	<script src="assets/javascripts/aplicacion.js"></script>
 	<script src="assets/javascripts/googleMapsPerfil.js"></script>
+	<script src="assets/javascripts/FacebookLogout.js"></script>
 </body>
 </html>

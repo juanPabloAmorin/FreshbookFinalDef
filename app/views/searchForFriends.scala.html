@@ -40,7 +40,7 @@
 			
 			<div class="divBuscadorHeader cfix left" style="margin-left:-125px;">
 			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
-			     <button class="btn btn-primary right input-sm" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
+			     
 			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
 			        
 			
@@ -48,7 +48,7 @@
 			</div>
 			<div class="cfix headBox left" style="margin-left:120px;">
 				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
-					src=@currentUser.getFoto />
+					src="http://graph.facebook.com/@currentUser.getFacebookId/picture" />
 				</a>
 				<div class="middleBox">
 					<div class="innerBox" style="height: 40px"></div>
@@ -60,12 +60,13 @@
 			</div>
 			
 			
-			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/amistad.png" style="margin-left:20px" /></a>
+			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/logout.png" style="margin-left:20px" /></a>
 			     
 			
 			
 		</div>
 	</div>
+	<!-- Header -->
 	
 	<!-- Log container -->
 	<div class="contenedorGlobal cfix">
@@ -76,12 +77,9 @@
 							<span style="font-size: 22px">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
 						</div>
 					</div>
-					<div class="cajitaFoto" style="height:230px">
-						<div>
-							<img class="perfImg relative"
-								src=@currentUser.getFoto />
-						</div>
-					</div>
+					<div id="div-photo-panel" class="photoPanel" style="width:225px;height:250px;display:block;margin-top: 15px; margin-bottom:15px;margin-left:4px">
+				         <img src="http://graph.facebook.com/@currentUser.getFacebookId/picture?type=large" style="width: 99%; height: 100%;"/>
+				      </div>
 					<a class="cfix" href="/principal">
 						<div class="pvm topBorder divButton">
 							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
@@ -105,7 +103,7 @@
 		
 		<div id="div-searchContent" class="divCentral" style="width:60%;border-right:#ccc 1px solid;overflow:auto">	
 				<div class="pvl" style="margin-left:35px">
-					<span style="font-size: 36px">Busca a tus amigos en Freshbook</span>
+					<span id="title" style="font-size: 36px">Busca a tus amigos en Freshbook</span>
 				</div>
 			<!--	<div class="cfix marginTM">
 							<a href="#"><button type="submit" class="btn btn-hg btn-primary marginTM"
@@ -113,15 +111,18 @@
 				</div>
 			-->
 			<div class="divBuscadorPrincipal cfix" style="width:85%; margin-left:35px">
-			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
-			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
-			     <div id="div-search-results" style="overflow:auto;width:85%;background-color:#FFF;border: solid 1px black">
+			     <input id="input-search-input" type="text" placeholder="Busca amigos en Freshbook" class="form-control left" style="border-radius:0px;width:85%" onkeyup="searchForFriends2()" />
+			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:15%" onclick="busquedaDeAmigos()">Buscar</button>
+			     <div id="div-search-results-div" style="overflow:auto;width:85%;background-color:#FFF;border: solid 1px black">
 			        
 			
 			     </div>
 			  </div>
 			  
-			  <!--  
+			  <div id="search-container">
+			 
+			  	
+			  	 <!--  
 			  <div class= "div-userFriend marginTM marginBM cfix">
 			      <a href="#"><img src="assets/images/user_images/userImage.jpg" /></a>
 			      <div id="div-user-fullname" align="center"><a href="#"><span>Nombre del Usuario</span></a></div>
@@ -129,6 +130,9 @@
 			      <button class="btn btn-primary" style="border-radius:0px;height: 30%;font-size:11px; margin-top:12px; margin-left: 17px">Solicitar Amistad</button>
 			  </div>
 			  -->
+			  
+			  
+			  </div>
 			  
 	   </div> <!-- .divCentral -->
 	   
@@ -158,6 +162,7 @@
 	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
 	<script src="assets/javascripts/application.js"></script>
 	<script src="assets/javascripts/aplicacion.js"></script>
+	<script src="assets/javascripts/FacebookLogout.js"></script>
 
 
 </body>

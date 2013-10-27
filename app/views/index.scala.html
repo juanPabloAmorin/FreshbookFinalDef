@@ -23,26 +23,7 @@
 
      <!-- Place this asynchronous JavaScript just before your </body> tag -->
   <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <script type="text/javascript">
-  (function() {
-    var po = document.createElement('script');
-    po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/client:plusone.js?onload=render';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(po, s);
-  })();
-  function render() {
-	    gapi.signin.render('customBtn', {
-	      //'callback': 'signinCallback',
-	      'clientid': '885876118581.apps.googleusercontent.com',
-	      'cookiepolicy': 'single_host_origin',
-	      'requestvisibleactions': 'http://schemas.google.com/AddActivity',
-	      'scope': 'https://www.googleapis.com/auth/plus.login'
-	    });
-	  }
-	  </script>
-
-
+  
 	<div class="log_container">
 		<div class="cfix log_bar">
 			<div class="left">
@@ -56,6 +37,8 @@
 				</div>
 			</div>
 			<div class="menu_log right">
+			    
+			   <div id="facebook-div" class="right">
 			    <div id="messageLogin">
 				<span  style="color:white">Ingresa a Freshbook con:</span>
 				</div>
@@ -63,13 +46,8 @@
 				<div class="facebookButton left" onclick="login()">
 				 Ingresa con Facebook
                 </div>
-                <div id="gSignInWrapper">
-  
-    <div id="customBtn" class="customGPlusSignIn">
-      <span class="icon"></span>
-      <span class="buttonText">Ingresa con Google</span>
-    </div>
-  </div>
+              </div>
+              
 			</div>
 		</div>
 	</div>

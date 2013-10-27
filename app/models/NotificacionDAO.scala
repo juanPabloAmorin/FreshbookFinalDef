@@ -20,4 +20,6 @@ trait NotificacionDAO
       def deleteFriendshipRequestNotifications(userId: Long, friendId: Long)
       def insertNotificationMulticast(users: List[Usuario],notificationId: Long)
       def getNewNotificationLastIdFromSequence(): Long
+      def getNotificationsByUser(userId: Long): List[Notificacion]
+      
 }

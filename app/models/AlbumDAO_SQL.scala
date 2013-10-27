@@ -13,78 +13,83 @@ import models._
 
 class AlbumDAO_SQL extends AlbumDAO {
 
-  val parser = {
-    get[Long]("album.id") ~
-      get[String]("album.nombre") ~
-      get[Int]("album.privacidad") ~
-      get[String]("album.caratula") ~
-      get[Date]("album.fecha_creacion") ~
-      get[Option[String]]("album.descripcion") ~
-      get[Long]("album.fk_usuario") map {
-        case id ~ nombre ~ privacidad ~ caratula ~ fechaCreacion ~ descripcion ~ ownerId => Album(id, nombre, privacidad, caratula, fechaCreacion, descripcion,ownerId)
-      }
-  }
+	val parser = {
+			get[Long]("album.id") ~
+			get[String]("album.nombre") ~
+			get[Int]("album.privacidad") ~
+			get[String]("album.caratula") ~
+			get[Date]("album.fecha_creacion") ~
+			get[Option[String]]("album.descripcion") ~
+			get[Long]("album.fk_usuario") map {
+			case id ~ nombre ~ privacidad ~ caratula ~ fechaCreacion ~ 
+			descripcion ~ ownerId => 
+			Album(id, nombre, privacidad, caratula, fechaCreacion, descripcion, ownerId)
+			}
+	}
 
-  override def findAlbumsByUser(userId: Long): List[Album] = {
+	
+	
+	override def findAlbumsByUser(userId: Long): List[Album] = {
 
-    DB.withConnection { implicit connection =>
+			DB.withConnection { implicit connection =>
 
-      val albumes = SQL(
-        """
-          select * from album where album.fk_usuario = {userId}
-        """).on(
-          'userId -> userId).as(this.parser *)
+			val albumes = SQL(
+					"""
+					select * from album where album.fk_usuario = {userId}
+					""").on(
+							'userId -> userId).as(this.parser *)
 
-      albumes
+							albumes
 
-    }
+			}
 
-  }
+	}
 
-  override def getNumberOfFilesInAlbum(albumId: Long): Long = {
+	
+	
+	override def getNumberOfFilesInAlbum(albumId: Long): Long = {
 
-    DB.withConnection { implicit connection =>
+			DB.withConnection { implicit connection =>
 
-      val totalArchivos = SQL(
-        """
-          SELECT COUNT(*) FROM ALBUM,CONTENIDO_MULTIMEDIA 
-          WHERE contenido_multimedia.FK_ALBUM = album.ID AND album.ID = {albumId}
-        """).on(
-          'albumId -> albumId).as(scalar[Long].single)
+			val totalArchivos = SQL(
+					"""
+					SELECT COUNT(*) FROM ALBUM,CONTENIDO_MULTIMEDIA 
+					WHERE contenido_multimedia.FK_ALBUM = album.ID AND album.ID = {albumId}
+					""").on(
+							'albumId -> albumId).as(scalar[Long].single)
 
-      totalArchivos
-    }
-  }
+							totalArchivos
+			}
+	}
 
-  override def insertAlbum(newAlbum: Album) {
+	
+	
+	override def insertAlbum(newAlbum: Album) {
 
-     DB.withConnection { implicit connection =>
-      SQL(
-        """
-          INSERT INTO ALBUM VALUES( nextval('seq_album'),{nombre},{privacy},
-          {imgRoute},NOW(),{description},{ownerId})
-        """
-      
-      ).on(
-          'nombre->newAlbum.getNombre,
-          'privacy->newAlbum.getPrivacidad,
-          'imgRoute->newAlbum.getCaratula,
-          'description->newAlbum.getDescripcion,
-          'ownerId->newAlbum.getOwnerId
-          
-          
-      ).executeUpdate() 
-    }
-  }
-  
-  override def deleteAlbumById(albumId: Long) {
+		DB.withConnection { implicit connection =>
+		SQL(
+				"""
+				INSERT INTO ALBUM VALUES( nextval('seq_album'),{nombre},{privacy},
+				{imgRoute},NOW(),{description},{ownerId})
+				""").on(
+						'nombre -> newAlbum.getNombre,
+						'privacy -> newAlbum.getPrivacidad,
+						'imgRoute -> newAlbum.getCaratula,
+						'description -> newAlbum.getDescripcion,
+						'ownerId -> newAlbum.getOwnerId).executeUpdate()
+		}
+	}
 
-    DB.withConnection { implicit connection =>
-      SQL("delete from album where album.id = {albumId}"   
-        ).on(
-        'albumId -> albumId
-  
-      ).executeUpdate()
-    }
-  }
+	
+	
+	override def deleteAlbumById(albumId: Long) {
+
+		DB.withConnection { implicit connection =>
+		SQL("delete from album where album.id = {albumId}").on(
+				'albumId -> albumId).executeUpdate()
+		}
+	}
+	
+	
+	
 }
