@@ -1,3 +1,7 @@
+/* La clas notificacion representa las notificaciones enviadas a los usuarios luego   *
+ * de que un amigo ejecute un evento (nuevo amigo, crear album, solicitud de amistad) *
+ * en la aplicacion*/
+
 package models
 
 import java.util.{ Date }

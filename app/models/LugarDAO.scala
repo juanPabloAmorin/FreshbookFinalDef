@@ -31,6 +31,10 @@ trait LugarDAO
   /* El metodo getNewLugarLastIdFromSequence permite obtener el id del ultimo lugar  *
    * insertado en la base de datos                                                   */
   
-      def getNewLugarLastIdFromSequence(): Long
-      def getLugarByNameAndTypeAndZone(name: String, typo: String, zone: Long): Option[Lugar]
+  def getNewLugarLastIdFromSequence(): Long
+  
+  /*el metodo getLugarByNameAndTypeAndZone permite obtener un objeto de la clase lugar
+   * dado su nombre, el tipo (pais,estado,ciudad) y el lugar de nivel superior       */
+      
+  def getLugarByNameAndTypeAndZone(name: String, typo: String, zone: Long): Option[Lugar]
 }

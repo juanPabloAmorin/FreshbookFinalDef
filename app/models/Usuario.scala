@@ -1,3 +1,5 @@
+/*La clase usuario representa a los usuarios que se registran en la aplicacion*/
+
 package models
 
 import java.util.{Date}

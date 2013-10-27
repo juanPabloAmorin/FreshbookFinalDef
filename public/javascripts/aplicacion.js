@@ -676,7 +676,7 @@ function confirmFriendship(idAmigo, idNotificacion) {
 
 	var jqxhr = $.ajax("/confirmFriendship/" + idAmigo + "/" + idNotificacion)
 			.done(function(jqXHR) {
-				// done
+				fadeWindows();
 			}).fail(function(jqXHR) {
 				//errores
 
@@ -835,4 +835,12 @@ function busquedaDeAmigosPublic() {
 						//document.getElementById('div-friendship-sol').innerHTML = "No hay solicitudes de amistad pendientes";
 						//programar manejo de errores de get json
 					})
+}
+
+
+function fadeWindows()
+{
+	
+	$("#div-friendship-sol").fadeOut(100);
+	
 }
