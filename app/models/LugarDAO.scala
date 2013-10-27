@@ -14,9 +14,23 @@ import models._
 
 trait LugarDAO
 {
-      def insertLugar(newLugar: Lugar)
-      def getLugarById(id: Long): Option[Lugar]
-      def getLugarByNameAndType(name: String, typo: String): Option[Lugar]
+  /*El metodo insertLugar permite insertar un nuevo objeto de la clase lugar en la  *
+   * base de datos */
+      
+  def insertLugar(newLugar: Lugar)
+  
+  /*El metodo getLugarById permite obtener un objeto de la clase lugar dado su id  */
+  
+  def getLugarById(id: Long): Option[Lugar]
+  
+  /* el metodo getLugarByNameAndType permite obtener un objeto de la clase lugar
+   * a partir de su nombre y el tipo de lugar(pais,estado o ciudad)                */
+     
+  def getLugarByNameAndType(name: String, typo: String): Option[Lugar]
+  
+  /* El metodo getNewLugarLastIdFromSequence permite obtener el id del ultimo lugar  *
+   * insertado en la base de datos                                                   */
+  
       def getNewLugarLastIdFromSequence(): Long
       def getLugarByNameAndTypeAndZone(name: String, typo: String, zone: Long): Option[Lugar]
 }

@@ -1,3 +1,6 @@
+/* La clase album representa el album creado por un usuario en el cual se guardara *
+ * el contenido multimedia                                                         */
+
 package models
 
 import java.util.{ Date }

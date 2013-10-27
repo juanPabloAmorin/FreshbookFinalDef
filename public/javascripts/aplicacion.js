@@ -741,3 +741,98 @@ function busquedaDeAmigos() {
 						//programar manejo de errores de get json
 					})
 }
+
+
+function searchForFriends3() {
+	var nameUserPattern = $("#input-search-input").val();
+
+	var jqxhr = $
+			.getJSON("/searchForFriends/" + nameUserPattern)
+			.done(
+					function(json) {
+						document.getElementById('div-search-results-div').innerHTML = "";
+						$
+								.each(
+										json.users,
+										function() {
+											document
+													.getElementById('div-search-results-div').innerHTML = document
+													.getElementById('div-search-results-div').innerHTML
+													+ '<div class="founded-user-next" style="border-bottom:solid 1px black;background-color:#DCC">'
+													+ '<a href="perfilPublic/'
+													+ this.id
+													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '<div id="div-user-fullname" style="margin-left:75px;"><a href="perfilPublic/'
+													+ this.id
+													+ '"><span>'
+													+ this.primerNombre
+													+ ' '
+													+ this.segundoNombre
+													+ ' '
+													+ this.primerApellido
+													+ ' '
+													+ this.segundoApellido
+													+ '</span></a></div>'
+													+ '<div id="div-username"  style="margin-left:75px;margin-top:12px"><span>'
+													+ this.username
+													+ '</span></div>'
+													+ '</div>';
+										})
+						// programar manejo de errores de get json
+					})
+			.fail(
+					function(jqXHR) {
+						document.getElementById('div-search-results-div').innerHTML = "";
+
+						// programar manejo de errores de get json
+					})
+}
+
+
+function busquedaDeAmigosPublic() {
+
+	var namePart = $("#input-search-input").val();
+
+	var jqxhr = $
+			.getJSON("/userSearch/" + namePart)
+			.done(
+					function(json) {
+
+						document.getElementById('search-container').innerHTML = "";
+						document.getElementById('div-search-results-div').innerHTML = "";
+						$
+								.each(
+										json.users,
+										function() {
+
+											document
+													.getElementById('search-container').innerHTML = document
+													.getElementById('search-container').innerHTML
+													+ '<div class= "div-userFriend marginTM marginBM cfix" style="border: 1px solid black">'
+													+ '<a href="/perfilPublic/'
+													+ this.id
+													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '<div id="div-user-fullname" align="center"><a href="/perfilPublic/'
+													+ this.id
+													+ '"><span>'
+													+ this.primerNombre
+													+ ' '
+													+ this.primerApellido
+													+ '</span></a></div>'
+													+ '<div id="div-username" align="center" style="margin-top:18px"><span>'
+													+ this.username
+													+ '</span></div>'
+													
+													+ '</div>';
+										})
+
+						//programar manejo de errores de get json
+					})
+			.fail(
+					function(jqXHR) {
+
+						document.getElementById('search-container').innerHTML = "No se encontraron resultados para la busqueda"
+						//document.getElementById('div-friendship-sol').innerHTML = "No hay solicitudes de amistad pendientes";
+						//programar manejo de errores de get json
+					})
+}

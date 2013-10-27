@@ -606,5 +606,21 @@ object Application extends Controller {
       Ok(views.html.index()).withNewSession
     }
   }
+  
+  def showPerfilPublic(userId: Long) = Action { 
+      lastFriendVistedId = userId
+      Redirect("/perfilPublicPag")
+    
+  }
+  
+  def showPerfilPublicPag = Action { 
+     
+      var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
+      var userSelected = userDao.findUserById(lastFriendVistedId).getOrElse { null }
+        
+      Ok(views.html.perfilPublic(userSelected))
+   
+  }
+
 
 }

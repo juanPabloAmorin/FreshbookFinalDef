@@ -55,8 +55,18 @@
 
 	<div class="contenedorGlobal cfix">
 		<div class="clearfix">
-			<div class="left">
+			
 				<div class="panel1">
+				<div class="left" style="width:90%">
+				  <div align="center" style="margin-top:50px;margin-bottom:50px;font-size:22px">Conecta al instante tus redes sociales favoritas en una sola aplicacion.</div>
+		  	 	  <div align="center" style="margin-top:20px;font-size:18px"><img src="@routes.Assets.at("images/Logos/InstagramLogo.png")" class="logo"/></div>		  	 
+				  <div align="center" style="margin-top:20px;font-size:18px">- Explora las fotos mas interesantes de Instagram</div>
+				  <div align="center" style="margin-top:20px;font-size:18px"><img src="@routes.Assets.at("images/Logos/YoutubeLogo.png")" class="logo"/></div>	  	 
+				  <div align="center" style="margin-top:20px;font-size:18px">- Explora los videos compartidos por tus amistades</div>
+				  <div align="center" style="margin-top:20px;font-size:18px"><img src="@routes.Assets.at("images/Logos/SoundcloudLogo.png")" class="logo"/></div>		  	 
+				   <div align="center" style="margin-top:20px;font-size:18px">- Disfruta la musica que comparten en la red</div>
+				  
+			
 					<!-- Panel izquierdo -->
 				</div>
 			</div>
@@ -64,10 +74,20 @@
 			     <div class="pvl" style="margin-top:35px">
 					<span style="font-size: 36px">Descubre quién esta en Freshbook </span>
 				</div>
-				<div class="divBuscadorPrincipal cfix right">
-			     <input type="text" placeholder="Busca amigos en freshbook" class="form-control left" style="border-radius:0px;width:85%"/>
-			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:15%">Buscar</button>
+				
+				<div class="divBuscadorPrincipal cfix" style="width:85%; margin-left:35px">
+			     <input id="input-search-input" type="text" placeholder="Busca amigos en Freshbook" class="form-control left" style="border-radius:0px;width:85%" onkeyup="searchForFriends3()" />
+			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:15%" onclick="busquedaDeAmigosPublic()">Buscar</button>
+			     <div id="div-search-results-div" style="overflow:auto;width:85%;background-color:#FFF;border: solid 1px black">
+			        
+			
+			     </div>
 			  </div>
+			  
+			  <div id="search-container">
+			
+			  </div>
+			
 			</div>
 		</div>
 	</div>

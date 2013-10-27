@@ -92,3 +92,9 @@ GET   /searchPage/:namePart                                                     
 
 #borrar amistad
 GET /deleteFriendship/:userId/:friendId                   controllers.Application.deleteFriendship(userId: Long, friendId: Long)
+
+#validacion pagina de perfil de usuario
+GET   /perfilPublic/:userId                                                                                                  controllers.Application.showPerfilPublic(userId: Long)
+
+#pagina de perfil de usuario
+GET   /perfilPublicPag                                                                                                       controllers.Application.showPerfilPublicPag

@@ -1,5 +1,8 @@
 package models
 
+/* La clase lugar representa la ubicacion geografica de los usuarios en tres niveles *
+ * Pais, estado y ciudad. */
+
 import play.api.db._
 import play.api.Play.current
 import anorm._
