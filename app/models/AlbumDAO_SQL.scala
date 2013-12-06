@@ -27,7 +27,7 @@ class AlbumDAO_SQL extends AlbumDAO {
 			}
 	}
 
-	
+	var lastAlbumSequenceNumber: Long = 0
 	
 	override def findAlbumsByUser(userId: Long): List[Album] = {
 
@@ -77,6 +77,9 @@ class AlbumDAO_SQL extends AlbumDAO {
 						'imgRoute -> newAlbum.getCaratula,
 						'description -> newAlbum.getDescripcion,
 						'ownerId -> newAlbum.getOwnerId).executeUpdate()
+						
+			 lastAlbumSequenceNumber = SQL("select currval('seq_album')").as(scalar[Long].single)
+
 		}
 	}
 
@@ -91,5 +94,39 @@ class AlbumDAO_SQL extends AlbumDAO {
 	}
 	
 	
+	 override def getNewAlbumLastIdFromSequence(): Long = {
+
+      return lastAlbumSequenceNumber
+   }
+	 
+	 
+	 
+	override def getContenidoByAlbum(albumId: Long): List[ContenidoMultimedia] = {
+	  
+    var contenidoDao: ContenidoMultimediaDAO = DAOFabrica.getContenidoMultimediaDAO;
+
+    DB.withConnection { implicit connection =>
+
+      val amigos = SQL(
+        """
+		SELECT *
+        FROM CONTENIDO_MULTIMEDIA
+		WHERE fk_album = {id}
+
+		""").on(
+          'id -> albumId).as(contenidoDao.getParser *)
+
+      amigos
+
+    }
+
+  }
+	
+  override def findAlbumById(id: Long): Option[Album] = {
+    DB.withConnection { implicit connection =>
+      SQL("select * from ALBUM where id = {id}").on('id -> id).as(this.parser.singleOpt)
+    }
+
+  }
 	
 }

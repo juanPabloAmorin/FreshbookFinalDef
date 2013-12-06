@@ -449,6 +449,10 @@
 	width: 50%;
 }
 
+.divDataAlbum2 {
+	width: 100%;
+}
+
 .divBuscador {
 	margin-top: 100px;
 	width: 100%;
@@ -459,6 +463,16 @@
 	padding-right: 15px;
 	padding-top: 15px;
 	padding-bottom: 15px;
+}
+
+#instagram-div{
+	
+	margin-top: 50px;
+	width: 100%;
+	background-color: white;
+	display: block;
+	padding: 10px;
+	
 }
 
 .divBuscadorPrincipal {
@@ -652,3 +666,58 @@ span.buttonText {
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
+
+.firstImgCel .checkMultimedia{
+	position:absolute;
+	margin: 5px 0 0 -145px;
+}
+
+.like-button{
+	font-size: 10px;
+	width:60px;height:30px;
+	padding: 0;
+	margin: 10px 0 10px 2px;
+	border-radius: 0;
+}
+
+.no-like-button {
+	font-size: 10px;
+	width:90px;height:30px;
+	padding: 0;
+	margin: 10px 3px 10px 5px;
+	border-radius:0;
+}
+
+.label-coment{
+	color: #35A;
+	margin: 10px 0 0 5px;
+	cursor: pointer;
+}
+
+.input-coment{
+	margin: 2px 0 10px 2px;
+	width: 95%;height:50px;
+	line-height: 1.28;
+	overflow: hidden;
+	resize: none;
+	max-width: 100%;
+    font: -webkit-small-control;
+    -webkit-writing-mode: horizontal-tb;
+}
+
+.comment{
+	
+	background-color: #FFF;
+	overflow: hidden;
+	word-wrap: break-word;
+	border-bottom: solid #A9D0F5 1px;
+	padding: 7px 5px;
+}
+
+
+#interaction-options{
+	
+	height:50px;
+	margin-bottom: 12px;
+}
+

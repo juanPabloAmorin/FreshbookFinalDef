@@ -25,4 +25,19 @@ object DAOFabrica {
          
           new NotificacionDAO_SQL
       }
+      
+      def getContenidoMultimediaDAO(): ContenidoMultimediaDAO = {
+         
+          new ContenidoMultimediaDAO_SQL
+      }
+      
+      def getComentarioDAO(): ComentarioDAO = {
+         
+          new ComentarioDAO_SQL
+      }
+      
+      def getLikeDAO(): LikeDAO = {
+         
+          new LikeDAO_SQL
+      }
 }

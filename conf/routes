@@ -1,13 +1,13 @@
 # Routes
-# This file defines all application routes (Higher priority routes first)
+# This file defines all application routes (Higher priority #routes first)
 # ~~~~
 
 
 # Home page
-GET   /                                                                                                                controllers.Application.index
+GET   /                         controllers.Application.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET   /assets/*file                                                                                                    controllers.Assets.at(path="/public", file)
+GET   /assets/*file                            controllers.Assets.at(path="/public", file)
 
 #pagina de inicio
 GET   /principal                                                                                                       controllers.Application.showPrincipalPage
@@ -34,7 +34,7 @@ GET   /albumesPag                                                               
 GET   /amigosPag                                                                                                       controllers.Application.showAmigosPag
 
 #pagina de contenido de album
-GET   /albumContentPag                                                                                                 controllers.Application.showAlbumContentPag
+GET   /carrusel                                                                                                controllers.Application.showCarrusel
 
 #crear nuevo album page
 GET   /crearAlbum                                                                                                      controllers.Application.createAlbum
@@ -49,7 +49,7 @@ GET   /userUpdate/:option/*attribute/:userId                                    
 GET   /deleteAlbum/:albumId                                                                                            controllers.Application.deleteAlbum(albumId: Long)
 
 #crear nuevo album persistencia
-GET   /insertAlbum/:albumName/:albumDescription/:albumPrivacy/:albumImgRoute                                           controllers.Application.insertAlbum(albumName: String,albumDescription: String,albumPrivacy: Int, albumImgRoute: String)
+POST   /insertAlbum                 controllers.Application.insertAlbum()
 
 #pagina de registro de usuario. paso 1
 GET   /registroPaso1Pag                                                                                                controllers.Application.showRegistroPaso1Pag()
@@ -98,3 +98,19 @@ GET   /perfilPublic/:userId                                                     
 
 #pagina de perfil de usuario
 GET   /perfilPublicPag                                                                                                       controllers.Application.showPerfilPublicPag
+
+#pagina de contenido de album
+GET   /showAlbumContent                                                                                            controllers.Application.showAlbumContentPage()
+
+#Crear nuevo comentario
+POST   /nuevoComentario                                                                   controllers.Application.createNewComment()
+
+#Crear nuevo like
+POST   /nuevoLike                                                                  controllers.Application.createNewLike()
+
+#Crear nuevo unlike
+POST   /nuevoUnlike                                                                  controllers.Application.createNewUnlike()
+
+#borrar comentario
+GET   /deleteComment/:commentId                 controllers.Application.deleteComment(commentId: Long) 
+

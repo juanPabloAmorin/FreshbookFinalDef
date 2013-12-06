@@ -395,29 +395,43 @@ function createAlbum() {
 	var privacy;
 	// modificar esta variable con el valor de la ruta
 	var imageRoute = "folder.jpg";
+	
+	var arrayPosition = 0;
 
 	if (document.newAlbumForm.optionsRadios[0].checked)
 		privacy = 0;
 	else
 		privacy = 1;
-
-	var jqxhr = $.ajax(
-			"/insertAlbum/" + name + "/" + description + "/" + privacy + "/"
-					+ imageRoute)
+	
+	var photos = [];
+	var tumbs = [];
+	
+	$("input[name=checkB]:checked").each(function() {
+	    photos.push(this.id);
+	});
+	
+	$("input[name=checkB]:checked").each(function() {
+	    tumbs.push(this.title);
+	});
+	
+	var jqxhr = $.post("/insertAlbum",{ name: name, description: description, privacy: privacy,
+		                                imageRoute: imageRoute,'photos[]':photos,'tumbs[]':tumbs})
 
 	.done(function(jqXHR) {
+	  
+		
 		if (jqXHR == "true") {
-
+            
 			location.href = "/albumesPag"
 		} else {
-
+           
 			// mensaje de error en campos
 		}
 	}).fail(function(jqXHR) {
-
+		
 		// mensaje de error en conexion
 	})
-
+	
 }
 
 function validateUserPersonalData() {
@@ -842,5 +856,267 @@ function fadeWindows()
 {
 	
 	$("#div-friendship-sol").fadeOut(100);
+	
+}
+
+function getInstagramPhotos()
+{
+	var tag = $('#multi-input-search').val();
+	var count = "20";
+	var acces_token = "190007719.5b9e1e6.74388794c5e54e4498623088e702536d";
+	var access_parameters = {"access_token":"190007719.5b9e1e6.74388794c5e54e4498623088e702536d"};
+	var instagramUrl = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?callback=?&count='+count;
+	var photoId = 0;
+	
+	$('#instagram-div').html('');
+	
+
+	var jqxhr = $.getJSON( instagramUrl,access_parameters)
+	       .done(function(json) {
+		
+	    	if(json.meta.code == 200) 
+	    	{
+	    		var photos = json.data;
+	    		
+	    		 if(photos.length > 0) {
+	    			 
+	    			 for (var key in photos ){
+	    				 
+	    				 var photo = photos[key];
+	    				 $('#instagram-div').append('<div class="left firstImgCel"><img src="' + photo.images.thumbnail.url 
+	    						                      + '" /><input type="checkbox" name="checkB" id="'+ photo.images.standard_resolution.url
+	    						                      +'" class="checkMultimedia" title="'+photo.images.thumbnail.url+'" /></div>');
+	    				 
+	    			 }
+	    			 
+	    		 }
+	    		 else 
+	    		 {
+	    		     
+	    		      $("#instagram-div").append("Hmm.  I couldnt find anything!");
+	    		 }
+	    
+	         }
+	    	 else  
+	    	 {
+	    		  
+	    		      var error = json.data.meta.error_message;
+	    		      $('#multimedia-div').append('Something happened, Instagram said: ' + error);
+	    	 }
+	     
+	    	  
+	    	   
+	    	   
+	    	   
+	})
+		  
+	
+}
+
+function mostrarAreaComent()
+{ 
+	 $('#input-coment').slideDown(250);
+}
+
+
+function checkKeyAlbum(key,currentUserId,selectedUserId)
+{
+ 
+    var unicode
+    
+    if(key.charCode)
+    {
+    	unicode=key.charCode;
+    }
+    else
+    {
+    	unicode=key.keyCode;
+    }
+ 
+    if (unicode == 13)
+    {
+    	$('#input-coment').slideUp(200);
+    	
+    	var albumId = $("#albumId").val();
+    	var contenido = $('#input-coment').val();
+   
+    	
+    	var jqxhr = $.post("/nuevoComentario",{elementId: albumId,contenido: contenido,
+    		                                   tipo: 'ALBUM'})
+		.done(function(jqXHR) {
+					
+			var contenido = '<div class="comment" id="'+jqXHR+'">'+$('#input-coment').val()+
+	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
+	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
+	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
+	          '<label class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
+	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
+	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
+	         
+			if(currentUserId == selectedUserId ){
+             	contenido = contenido + '<button class="right" onclick=eliminarComentario('+jqXHR+')>Eliminar</button>';
+             }
+			
+			contenido = contenido + '</div></div>'+
+			                        '<textarea id="text'+jqXHR+'" class="input-coment"'+
+			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+currentUserId+','+selectedUserId+',this.id)">'+
+			                        '</textarea>';
+		
+			$('#comentarios').html(contenido + $('#comentarios').html());
+			
+			$('#input-coment').val("");
+			
+		}).fail(function(jqXHR) {
+
+			// programar manejo de errores 
+		})
+    	
+    }
+    
+}
+
+
+function meGustaAlbum()
+{
+	var albumId = $("#albumId").val();
+	
+	var jqxhr = $.post("/nuevoLike",{elementId: albumId, element: 'ALBUM'})
+
+    .done(function(jqXHR) {
+            
+    	   $("#likeCount").html(parseInt($("#likeCount").html())+1);
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
+	
+}
+
+function noMeGustaAlbum()
+{
+	var albumId = $("#albumId").val();
+	
+	var jqxhr = $.post("/nuevoUnlike",{elementId: albumId, element: 'ALBUM'})
+
+    .done(function(jqXHR) {
+    	$("#unlikeCount").html(parseInt($("#unlikeCount").html())+1);
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
+	
+}
+
+function eliminarComentario(commentId)
+{
+	var jqxhr = $.ajax("/deleteComment/" + commentId)
+	.done(function(jqXHR) {
+		   $("#"+commentId).slideUp(300);
+	}).fail(function(jqXHR) {
+
+		// programar manejo de errores
+	})
+}
+
+function commentReply(areaNumber)
+{
+	$('#text'+areaNumber).slideDown(250);
+}
+
+function checkKeyComment(key,userId,selectedUserId,textCommentId)
+{
+ 
+    var unicode
+    
+    if(key.charCode)
+    {
+    	unicode=key.charCode;
+    }
+    else
+    {
+    	unicode=key.keyCode;
+    }
+ 
+    if (unicode == 13)
+    {
+    	$('#'+textCommentId).slideUp(200);
+        
+    	
+    	var commentId = textCommentId.substring(4,textCommentId.length);
+    	var contenido = $('#'+textCommentId).val();
+    	
+    	
+    	var jqxhr = $.post("/nuevoComentario",{elementId: commentId,contenido: contenido,
+    		                                   tipo: 'COMENTARIO'})
+		.done(function(jqXHR) {
+					
+			
+			var contenido = '<div class="comment" id="'+jqXHR+'">'+$('#'+textCommentId).val()+
+	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
+	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
+	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
+	          '<label class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
+	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
+	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
+	         
+			
+			if(userId == selectedUserId ){
+             	contenido = contenido + '<button class="right" onclick=eliminarComentario('+jqXHR+')>Eliminar</button>';
+             }
+			
+			
+			contenido = contenido + '</div></div>'+
+			                        '<textarea id="text'+jqXHR+'" class="input-coment"'+
+			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+userId+','+selectedUserId+',this.id)">'+
+			                        '</textarea>';
+		
+		
+			$('#'+commentId).html($('#'+commentId).html()+contenido);
+			
+			$('#'+textCommentId).val(""); 
+			
+		}).fail(function(jqXHR) {
+
+			 alert("fail");
+		})
+    	
+    }
+    
+}
+
+
+function meGustaComment(commentId)
+{
+	var albumId = $("#"+commentId).val();
+	
+	var jqxhr = $.post("/nuevoLike",{elementId: commentId, element: 'COMENTARIO'})
+
+    .done(function(jqXHR) {
+            
+        $("#likeCount"+commentId).html(parseInt($("#likeCount"+commentId).html())+1);
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
+	
+}
+
+function noMeGustaComment(commentId)
+{
+	var albumId = $("#"+commentId).val();
+	
+	var jqxhr = $.post("/nuevoUnlike",{elementId: commentId, element: 'COMENTARIO'})
+
+    .done(function(jqXHR) {
+   
+    	$("#unlikeCount"+commentId).html(parseInt($("#unlikeCount"+commentId).html())+1);
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
 	
 }

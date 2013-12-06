@@ -32,5 +32,21 @@ trait AlbumDAO
   /*El metodo deleteAlbumById permite borrar un album de la base de datos dado su id*/
       
   def deleteAlbumById(albumId: Long)
+  
+  /* El metodo getNewAlbumLastIdFromSequence permite obtener el id del ultimo album  *
+   * insertado en la base de datos                                                   */
+   
+  def getNewAlbumLastIdFromSequence(): Long
+  
+  /*el metodo getContenidoByAlbum permite obtener una lista de contenidos multimedia de 
+   * un album dado su id*/
+     
+  def getContenidoByAlbum(albumId: Long): List[ContenidoMultimedia];
+  
+  
+  /*El findAlbumById permite obtener un objeto de la clase Album dado su id*/
+  
+  def findAlbumById(id: Long): Option[Album];
+          
       
 }

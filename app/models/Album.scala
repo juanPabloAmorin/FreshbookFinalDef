@@ -17,6 +17,11 @@ case class Album(private var id: Long,
 		private var fechaCreacion: Date,
 		private var descripcion: Option[String],
 		private var ownerId: Long) {
+  
+    private var contenido: List[ContenidoMultimedia] = null;
+    private var comentarios: List[Comentario] = null;
+    private var likes: Long = 0;
+    private var unlikes: Long = 0;
 
 	def this() = this(0, "", 0, "", null, null, 0)
 	def this(nombre: String, privacidad: Int, caratula: String, descripcion: Option[String], ownerId: Long) = this(0, nombre, privacidad, caratula, null, descripcion, ownerId)
@@ -28,6 +33,10 @@ case class Album(private var id: Long,
 	def getFechaCreacion() = this.fechaCreacion;
 	def getDescripcion() = this.descripcion;
 	def getOwnerId() = this.ownerId;
+	def getContenidoMultimedia() = this contenido
+	def getComentarios() = this comentarios
+	def getLikes() = this likes
+	def getUnlikes() = this unlikes
 
 	def setId(id: Long) = this.id = id;
 	def setNombre(nombre: String) = this.nombre = nombre;
@@ -36,5 +45,8 @@ case class Album(private var id: Long,
 	def setFechaCreacion(fechaCreacion: Date) = this.fechaCreacion = fechaCreacion;
 	def setDescripcion(descripcion: Option[String]) = this.descripcion = descripcion;
 	def setOwnerId(ownerId: Long) = this.ownerId = ownerId;
-
+	def setContenidoMultimedia(contenido: List[ContenidoMultimedia]) = {this.contenido = contenido}
+    def setComentarios(comentarios: List[Comentario]) = {this.comentarios = comentarios}
+    def setLikes(likes: Long) = {this.likes = likes}
+    def setUnlikes(unlikes: Long) = {this.unlikes = unlikes}
 }

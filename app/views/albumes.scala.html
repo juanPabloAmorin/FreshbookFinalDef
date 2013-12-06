@@ -1,4 +1,5 @@
-@(listaAlbumes: List[Album],selectedUser: Usuario,dao: AlbumDAO,currentUser: Usuario)
+@(listaAlbumes: List[Album],selectedUser: Usuario,dao: AlbumDAO,currentUser: Usuario,
+	isFriend: Boolean,friendshipStatus: Int)
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,8 +112,10 @@
 					
 						 @listaAlbumes.map { 
                     case (album) => {
+                    	
+                    	@if(selectedUser.getId == currentUser.getId || (isFriend == 1 && friendshipStatus == 1)){
                     	<div class="left firstImgCel">
-                    	 	 <a href="/albumContent/0"> <img class="friendImg  relative"
+                    	 	 <a href="/albumContent/@album.getId"> <img class="friendImg  relative"
 								src= @album.getCaratula />
 							</a>
 							<div class="divAlbumTemp">
@@ -130,6 +133,8 @@
 							</div> 
 							}
                         </div>
+                        
+                        }
                     } 
                 }
 
