@@ -22,4 +22,9 @@ trait ContenidoMultimediaDAO
    /*Metodo getParser devuelve el parser para contenido multimedia obtenido de la base de datos*/
    
    def getParser(): RowParser[ContenidoMultimedia]
+   
+   /*El metodo deleteContenidoMultimedia permite eliminar Contenido Multimedia de la base de
+    * datos */
+   
+   def deleteContenidoMultimedia(contentId: Long)
 }

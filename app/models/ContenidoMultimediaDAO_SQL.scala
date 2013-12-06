@@ -48,6 +48,16 @@ class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
 	  
 	     return this.parser;
 	}
+	
+	def deleteContenidoMultimedia(contentId: Long) = {
+	  
+	  DB.withConnection { implicit connection =>
+		SQL("delete from contenido_multimedia where id = {contentId}").on(
+						'contentId -> contentId).executeUpdate()
+						
+		}
+	  
+	}
     
 	
 }

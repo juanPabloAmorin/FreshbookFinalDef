@@ -1004,5 +1004,101 @@ object Application extends Controller {
     return commentList
     
   }
+  
+  def albumAddContent() = Action { implicit request =>
+    
+      var user: Usuario = new Usuario();
+      user = currentUserBuild(request,user)
+      
+      var albumId: Long = 0
+      request.session.get("albumId").map { id => albumId = id.toLong }
+      
+      var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+      var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }
+
+       
+       Ok(views.html.albumAddContent(user,albumActual))
+    
+  }
+  
+  def albumDeleteContent() = Action { implicit request =>
+    
+      var user: Usuario = new Usuario();
+      user = currentUserBuild(request,user)
+      
+      var albumId: Long = 0
+      request.session.get("albumId").map { id => albumId = id.toLong }
+      
+      var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+      var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }
+      albumActual.setContenidoMultimedia(albumDao.getContenidoByAlbum(albumActual.getId))
+
+       
+       Ok(views.html.albumDeleteContent(user,albumActual))
+    
+  }
+  
+  def addContentToAlbum() = Action { implicit request =>
+   
+     val photos = request.body.asFormUrlEncoded.get("photos[]");
+     val tumbnails = request.body.asFormUrlEncoded.get("tumbs[]");
+   
+     var user: Usuario = new Usuario();
+     user = currentUserBuild(request,user)
+     
+     var albumId: Long = 0
+     request.session.get("albumId").map { id => albumId = id.toLong }      
+     var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+     var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }
+     
+     var idAlbum: Long = albumActual.getId
+     var contenidoDao: ContenidoMultimediaDAO = DAOFabrica.getContenidoMultimediaDAO
+     var contenidoMultimedia: ContenidoMultimedia = new ContenidoMultimedia();
+  
+     var tumbnailPosition = 0;
+   
+     for(ruta <- photos ){
+     
+        contenidoMultimedia.setRuta(ruta)
+        contenidoMultimedia.setRedSocial("INSTAGRAM")
+        contenidoMultimedia.setInAlbumId(idAlbum)
+        contenidoMultimedia.setRutaTumbnail(tumbnails(tumbnailPosition))
+      
+        contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
+      
+        tumbnailPosition += 1
+  
+     }
+ 
+   
+      Ok("true");
+  }
+  
+  def deleteContentInAlbum() = Action { implicit request =>
+    
+    val photos = request.body.asFormUrlEncoded.get("photos[]");
+    
+    var user: Usuario = new Usuario();
+    user = currentUserBuild(request,user)
+    
+    var albumId: Long = 0
+    request.session.get("albumId").map { id => albumId = id.toLong }   
+    
+    var contenidoDao: ContenidoMultimediaDAO = DAOFabrica.getContenidoMultimediaDAO
+    
+     var tumbnailPosition = 0;
+   
+     for(photo <- photos ){
+     
+        contenidoDao.deleteContenidoMultimedia(photo.toLong)
+      
+        tumbnailPosition += 1
+  
+     }
+   
+    Ok("true");
+    
+  }
+  
 
 }

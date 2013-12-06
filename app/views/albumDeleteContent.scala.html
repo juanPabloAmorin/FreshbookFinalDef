@@ -1,31 +1,4 @@
-@(selectedUser: Usuario,currentUser: Usuario, currentAlbum: Album)
-
-@display(commentList: List[Comentario]) = {
-  
-    @commentList.map{
-     case (respuesta) => {
-        <div class="comment" id="@respuesta.getId">@respuesta.getContenido
-		  <div id="interaction-options" style="height:50px;zoom:0.7">
-	        <button class="btn btn-info left like-button" onclick = "meGustaComment(@respuesta.getId)" >Me Gusta</button>
-	        <button class="btn btn-info left no-like-button" onclick = "noMeGustaComment(@respuesta.getId)">No Me Gusta</button>
-			<label class="label-coment" onclick="commentReply(@respuesta.getId)">Responder</label>
-			<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount@respuesta.getId">@respuesta.getLikes</span></span>
-			<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount@respuesta.getId">@respuesta.getUnlikes</span></span>
-			@if(currentUser.getId == selectedUser.getId ){
-			    <button class="right" onclick="eliminarComentario(@respuesta.getId)">Eliminar</button>
-            }
-		  </div>
-			    
-			    @display(respuesta.getRespuestas)        
-		</div>
-	    <textarea id="text@respuesta.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id)"></textarea>
-		
-			           	        
-	 }
-			           	   
-    }
-}
-
+@(currentUser: Usuario, currentAlbum: Album)
 <!DOCTYPE html>
 <html>
 <head>
@@ -130,98 +103,34 @@
 
 			<div class="panel4 right">
 			  
-			  <div class="divDataAlbum2 cfix left ">
+	         <div class="divDataAlbum2 cfix left ">
 			     <div class="divTitle pvl" style="height:20px;padding-top:10px;">T&iacute;tulo:  @currentAlbum.getNombre
-			        @if(currentUser.getId == selectedUser.getId){
-			       	   <img class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" />
-			       }
+			         <button class="btn btn-primary right" style="border-radius:0px;height:30px; margin-right: 5px; padding-top:3px" onclick="deleteContentInAlbum()">Guardar</button>		        
 			     </div>
 			     <div class="divTitle pvl" style="height:20px;padding-top:10px;border-top:solid 1px white">Descripci&oacute;n:  @currentAlbum.getDescripcion
-			        @if(currentUser.getId == selectedUser.getId){
-			       	   <img class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" />
-			       }
+			      
 			     </div>
-			    	   
-			     @if(currentUser.getId == selectedUser.getId){
-			       	   <a href="/albumAddContent"><button class="btn-info" style="margin:20px 0 10px 5px;height:30px;font-size:12px">Agregar Contenido</button></a>
-			           <a href="/albumDeleteContent"><button class="btn-warning left" style="margin:20px 0 10px 0;height:30px;font-size:12px">Eliminar Contenido</button></a>
-			          
-			     }
-					
-			    
+			
 			  </div>
-			 <!-- <img class="tumbnail left" src="assets/images/folder.jpg" style="margin-left:20px" /> -->
-			 
-			 
-			  <div id="instagram-div" class="cfix" style="overflow:scroll">
-			  
-			  
-			  
-			   @currentAlbum.getContenidoMultimedia.map { 
+			
+			  <div id="multimedia-div" class="divBuscador cfix" style="overflow:scroll">
+			   
+			       @currentAlbum.getContenidoMultimedia.map { 
                     case (contenido) => {
                     	
                      <div class="left firstImgCel">
-			            <a href="/carrusel"><img src="@contenido.getRutaTumbnail" /></a>
+			            <img src="@contenido.getRutaTumbnail" />
+			            <input type="checkbox" name="checkB" id="@contenido.getId" class="checkMultimedia" />
 	                 </div>	
                     	
                     } 
                 }
-			 		   
+			  
 			  </div>
 			  
-    		  <div id="interaction-options">
-			     <button class="btn btn-info left like-button" onclick="meGustaAlbum()">Me Gusta</button>
-			     <button class="btn btn-info left no-like-button" onclick="noMeGustaAlbum()">No Me Gusta</button>
-			     <label class="label-coment" onclick="mostrarAreaComent()">Comentar</label>
-			     <span style="margin: 20px 8px 0 300px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount">@currentAlbum.getLikes</span></span>
-			     <span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount">@currentAlbum.getUnlikes</span></span>
-			  </div>			  
-			  <textarea id="input-coment" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyAlbum(event,@currentUser.getId,@selectedUser.getId)"></textarea>
-			 
-			 
-			 
-			  <div id="comentarios">
-			   @currentAlbum.getComentarios.map { 
-                    case (comentario) => {
-                    	
-			     <div class="comment" id="@comentario.getId">@comentario.getContenido
-			           <div id="interaction-options" style="height:50px;zoom:0.7">
-			             <button class="btn btn-info left like-button" onclick = "meGustaComment(@comentario.getId)" >Me Gusta</button>
-			             <button class="btn btn-info left no-like-button" onclick = "noMeGustaComment(@comentario.getId)">No Me Gusta</button>
-			             <label class="label-coment" onclick="commentReply(@comentario.getId)">Responder</label>
-			              <span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount@comentario.getId">@comentario.getLikes</span></span>
-			             <span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount@comentario.getId">@comentario.getUnlikes</span></span>
-			             @if(currentUser.getId == selectedUser.getId ){
-			             	<button class="right" onclick="eliminarComentario(@comentario.getId)">Eliminar</button>
-			             }
-			                 
-			           </div>
-			        
-			        
-			        
-			        
-			       
-			       @display(comentario.getRespuestas)      
-			             
-			        
-			        
-			        
-			           
-			     </div>
-			     <textarea id="text@comentario.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id)"></textarea>
-			     
-			     }
-			   }
-			  </div>
-			
-			
-			
 			</div>
-		</div> 
+		</div>
 		<!-- Panel derecho -->
-		
-		<input type="hidden" id="albumId" value="@currentAlbum.getId" />
-
 	</div>
 
 	

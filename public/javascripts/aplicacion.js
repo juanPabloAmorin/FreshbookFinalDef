@@ -1120,3 +1120,61 @@ function noMeGustaComment(commentId)
     })
 	
 }
+
+function addContentToAlbum()
+{
+	var arrayPosition = 0;
+
+	var photos = [];
+    var tumbs = [];
+  	
+  	$("input[name=checkB]:checked").each(function() {
+  	    photos.push(this.id);
+  	});
+  	
+  	$("input[name=checkB]:checked").each(function() {
+  	    tumbs.push(this.title);
+  	});
+  	
+  	var jqxhr = $.post("/addContentToAlbum",{'photos[]':photos,'tumbs[]':tumbs})
+  	
+  	.done(function(jqXHR) {
+	  
+		
+		if (jqXHR == "true") {
+            
+			location.href = "/showAlbumContent";
+		} 
+		
+	}).fail(function(jqXHR) {
+		
+		// mensaje de error en conexion
+	})
+}
+
+function deleteContentInAlbum()
+{
+	var photos = [];
+	
+
+	$("input[name=checkB]:checked").each(function() {
+	    photos.push(this.id);
+	});
+
+    var jqxhr = $.post("/deleteContentInAlbum",{'photos[]':photos})
+  	
+  	.done(function(jqXHR) {
+	  
+		
+		if (jqXHR == "true") {
+            
+			location.href = "/showAlbumContent";
+		} 
+		
+	}).fail(function(jqXHR) {
+		
+		
+		// mensaje de error en conexion
+	})
+ 
+}

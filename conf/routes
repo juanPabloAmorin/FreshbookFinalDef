@@ -114,3 +114,14 @@ POST   /nuevoUnlike                                                             
 #borrar comentario
 GET   /deleteComment/:commentId                 controllers.Application.deleteComment(commentId: Long) 
 
+#agregar contenido adicional al album
+GET  /albumAddContent     controllers.Application.albumAddContent()
+
+#envio de contenido nuevo al album
+POST /addContentToAlbum    controllers.Application.addContentToAlbum()
+
+#eliminar contenido del album
+GET  /albumDeleteContent     controllers.Application.albumDeleteContent()
+
+#eliminar contenido del album
+POST  /deleteContentInAlbum     controllers.Application.deleteContentInAlbum()
