@@ -36,8 +36,14 @@ object Application extends Controller {
   def userAutentication(userEmail: String, link: String, 
       firstName: String, middleName: String, lastName: String,facebookId: String) = Action {
 
+    Logger.info("Se han recibido los fatos de FB: email="+userEmail+" enlace="+link+ 
+                "primer nombre="+firstName + "segundo nombre =" +middleName+
+                "primer Apellido="+lastName+"facebook Id="+facebookId)
+    
     newUser = new Usuario(firstName, middleName, lastName, null, userEmail, link, "",facebookId);
 
+    try
+    {
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
     var currentUser = userDao.findUserByEmail(userEmail).getOrElse { null }
 
@@ -62,6 +68,19 @@ object Application extends Controller {
                                            "FBId" -> currentUser.getFacebookId,
                                            "lastFriendVisitedId" -> "0")
     }
+    }catch{
+      
+      case e: DAOException => 
+                  Logger.error("El usuario "+userEmail+ "no pudo ser encontrado")
+                  throw BusinessException.create("El usuario no pudo ser encontrado",e)
+      case e: NullPointerException => 
+                  Logger.error("Los datos de usuario estan incompletos. Se han recibido los fatos de FB: email="+userEmail+" enlace="+link+ 
+                "primer nombre="+firstName + "segundo nombre =" +middleName+
+                "primer Apellido="+lastName+"facebook Id="+facebookId)
+
+                  throw new Exception("Se debe conta con nombre, apellido, mail y username en la cuenta de facebook")
+    }
+    
     
 
   }
@@ -70,6 +89,7 @@ object Application extends Controller {
   
   def showRegistroPaso1Pag = Action {
 
+    Logger.debug("AL registro paso 1 con exito")
     Ok(html.registroPaso1(newUser))
   }
 
@@ -103,7 +123,11 @@ object Application extends Controller {
 
     newUser.setFechaNacimiento(birthDay)
     
-
+    Logger.info("Se guardaron los datos de nuevo usuario: primer nombre="+firstName+" segundonombre="+
+                secondName+" primerApellido="+firstLastName+" segundoApellido="+secondLastName +
+                "username="+username+"fecha naciemiento="+dia+"/"+mes+"/"+anio+" privacdad="+privacy+
+                " ruta foto="+photo+" idFB="+id)
+    
     Redirect("/registroPaso2Pag")
   }
 
@@ -111,6 +135,7 @@ object Application extends Controller {
   
   def showRegistroPaso2Pag = Action {
 
+    Logger.debug("Al registro paso 2 con exito")
     Ok(html.registroPaso2())
   }
 
@@ -118,12 +143,17 @@ object Application extends Controller {
   
   def addingNewUser(country: String, state: String, city: String, latitud: String, 
                     longitud: String) = Action {
+    
+    Logger.info("Se recibieron los siguientes datos de localizacion: pais="+country+
+                " estado="+state+" ciudad="+city+" latitud="+latitud+" longitud="+longitud)
 
     var userLocation = Util.getUserLocation(country, state, city)
     newUser.setUbicacion(userLocation)
     newUser.setLatitud(latitud)
     newUser.setLongitud(longitud)
-
+    
+    try
+    {
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
     userDao.insertUser(newUser)
     newUser.setId(userDao.getNewUserLastIdFromSequence)
@@ -147,6 +177,15 @@ object Application extends Controller {
                                            "FBId" -> currentUser.getFacebookId,
                                            "lastFriendVisitedId" -> "0")
 
+    }
+    catch{
+      
+      case e: DAOException => 
+                  Logger.error("El usuario "+newUser.getPrimerNombre + " " +newUser.getPrimerApellido +
+                              newUser.getEmail + "no pudo ser creado")
+                  throw BusinessException.create("El usuario "+newUser.getPrimerNombre + " " +newUser.getPrimerApellido +
+                              newUser.getEmail + "no pudo ser creado",e)
+    }
   }
 
   
@@ -192,8 +231,14 @@ object Application extends Controller {
       var user: Usuario = new Usuario();
       user = currentUserBuild(request,user)
       var friendshipStatus = -1
+      
+      try
+      {
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
       var userSelected = userDao.findUserById(lastFriendVisitedId).getOrElse { null }
+      
+      Logger.debug("Perfil.UserSelected = "+ userSelected.getPrimerNombre + " " + userSelected.getPrimerApellido)
+      
       var isFriendUserSelected = userDao.isThisUserAFriend(user.getId, lastFriendVisitedId)
       
       if (isFriendUserSelected) {
@@ -204,9 +249,17 @@ object Application extends Controller {
       }
 
       Ok(views.html.perfil(userSelected, user, isFriendUserSelected, friendshipStatus))
+      } catch{
+        
+        case e: DAOException => 
+                  Logger.error("Acceso negado al perfil del usuario "+lastFriendVisitedId + "error:"+e.getMessage())
+                  throw BusinessException.create("No es posible acceder al perfil del usuario solicitado" ,e)
+        
+      }
     }.getOrElse {
       Ok(views.html.index()).withNewSession
     }
+    
 
   }
 
@@ -239,10 +292,16 @@ object Application extends Controller {
       }
         
         var friendshipStatus = -1
+        
+        try
+        {
         var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO;
         var albumes = albumDao.findAlbumsByUser(lastFriendVisitedId)
         var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
         var userSelected = userDao.findUserById(lastFriendVisitedId).getOrElse { null }
+        
+        Logger.debug("Albumes.UserSelected = "+ userSelected.getPrimerNombre + " " + userSelected.getPrimerApellido)
+     
         var isFriendUserSelected = userDao.isThisUserAFriend(user.getId, lastFriendVisitedId)
       
         if (isFriendUserSelected) {
@@ -253,6 +312,13 @@ object Application extends Controller {
         }
         
         Ok(views.html.albumes(albumes, userSelected, albumDao, user,isFriendUserSelected, friendshipStatus))
+        }catch{
+        
+        case e: DAOException => 
+                  Logger.error("No es posible el acceso los albumes del usuario "+lastFriendVisitedId + "error:"+e.getMessage())
+                  throw BusinessException.create("No es posible acceder a la lista de albumes solicitada" ,e)
+        
+      }
       }.getOrElse {
         Ok(views.html.index()).withNewSession
       }
@@ -286,11 +352,23 @@ object Application extends Controller {
              lastFriendVisitedId = value.toLong;
       }
       
+      try
+      {
       var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
       var userSelected = userDao.findUserById(lastFriendVisitedId).getOrElse { null }
+      
+      Logger.debug("Albumes.UserSelected = "+ userSelected.getPrimerNombre + " " + userSelected.getPrimerApellido)
+    
       userSelected.setAmistades(userDao.findFriendsByUser(userSelected.getId))
       
       Ok(views.html.amigos(userSelected, user))
+      }catch{
+        
+        case e: DAOException => 
+                  Logger.error("No es posible el acceso a la lista de amigos de "+lastFriendVisitedId + "error:"+e.getMessage())
+                  throw BusinessException.create("No es posible acceder a la lista de amigos solicitada" ,e)
+        
+      }
     }.getOrElse {
       Ok(views.html.index()).withNewSession
     }
@@ -307,8 +385,10 @@ object Application extends Controller {
     
        implicit request =>
 
+     
        request.session.get("albumId").map { albumId =>
          
+       try{
         var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
         var comentarioDao: ComentarioDAO = DAOFabrica.getComentarioDAO
         var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
@@ -320,8 +400,12 @@ object Application extends Controller {
         var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }    
         albumActual.setContenidoMultimedia(albumDao.getContenidoByAlbum(albumActual.getId))
         
+        Logger.debug("AlbumContent.album: nombre:"+albumActual.getNombre)
+        
         var comments: List[Comentario] = comentarioDao.getCommentsForAlbum(albumActual.getId)
         albumActual.setComentarios(getCommentsForComments(comments,user.getId))
+        
+        Logger.debug("Se obtuvo la lista de comentarios")
                
         var likes: Long = likeDao.getLikesForAlbum(albumActual.getId)
         var unlikes: Long = likeDao.getUnlikesForAlbum(albumActual.getId)
@@ -330,6 +414,8 @@ object Application extends Controller {
         albumActual.setUnlikes(unlikes)
         albumActual.setIsLiked(likeDao.iLikeAlbum(albumActual.getId,user.getId))
         albumActual.setIsUnliked(likeDao.iDontLikeAlbum(albumActual.getId,user.getId))
+        
+        Logger.debug("Se cargaron los like y unlike del album")
         
         var numeroComentario = 0
         for(comment <- comments)
@@ -340,6 +426,7 @@ object Application extends Controller {
              comments(numeroComentario).setIsUnLiked(likeDao.iDontLikeComment(comment.getId,user.getId))
 
              numeroComentario = numeroComentario+1
+             
         }
         
         
@@ -353,6 +440,13 @@ object Application extends Controller {
         
         
         Ok(views.html.contenidoAlbum(userSelected,user,albumActual));
+       }catch{
+        
+        case e: DAOException => 
+                  Logger.error("No es posible el acceso al contenido del album"+e.getMessage())
+                  throw BusinessException.create("No es posible acceder al contenido del album solicitado" ,e)
+        
+      }
       
       }.getOrElse {
         Ok(views.html.index()).withNewSession
@@ -394,6 +488,7 @@ object Application extends Controller {
         
         var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
         
+        try{
         if (option == 1) {
           userDao.updateUserFirstName(attribute, userId)
           
@@ -412,6 +507,8 @@ object Application extends Controller {
         } else if (option == 9) {
           userDao.updateUserGoogle(attribute, userId)
         }
+        
+        Logger.info("Se ha modificado el "+attribute+" del usuario "+userId+" "+user.getPrimerNombre+" "+user.getPrimerApellido)
         
         var currentUser = userDao.findUserById(user.getId).getOrElse { null }
 
@@ -432,6 +529,13 @@ object Application extends Controller {
                                            "longitud" -> currentUser.getLongitud,
                                            "FBId" -> currentUser.getFacebookId,
                                            "lastFriendVisitedId" -> "0")
+        }catch{
+          case e: DAOException => 
+                   Logger.info("No es posible modificar el "+attribute+" del usuario "+userId+" "+user.getPrimerNombre+" "+user.getPrimerApellido)
+                   throw BusinessException.create("No es posible modificar su "+attribute ,e)
+
+       }
+        
       }.getOrElse {
         Ok(views.html.index()).withNewSession
       }
@@ -458,11 +562,21 @@ object Application extends Controller {
 
     request.session.get("usuarioEmail").map { userEmail =>
       
+      try{
       var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
       albumDao.deleteAlbumById(albumId)
       
+      Logger.info("Se ha eliminado el album "+albumId)
+      
       Redirect("/albumesPag")
-    
+      
+      }catch{
+        case e: DAOException => 
+      
+                   Logger.info("No es posible eliminar el album "+albumId)
+                   throw BusinessException.create("No es posible eliminar el album" ,e)
+
+      }
     }.getOrElse {
       Ok(views.html.index()).withNewSession
     }
@@ -478,14 +592,20 @@ object Application extends Controller {
    val photos = request.body.asFormUrlEncoded.get("photos[]");
    val tumbnails = request.body.asFormUrlEncoded.get("tumbs[]");
    
+   Logger.debug("Se reibieron los datos para el album: "+albumName+" "+albumDescription)
+   
    var user: Usuario = new Usuario();
    user = currentUserBuild(request,user)
    
+   try{
    var album: Album = new Album(albumName, albumPrivacy, "assets/images/" + albumImgRoute, Some(albumDescription), user.getId)
    var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
    albumDao.insertAlbum(album)
    
    var idAlbum: Long = albumDao.getNewAlbumLastIdFromSequence
+   
+   Logger.info("Se ha creado el album "+ albumName +" id = "+idAlbum)
+   
    var contenidoDao: ContenidoMultimediaDAO = DAOFabrica.getContenidoMultimediaDAO
    var contenidoMultimedia: ContenidoMultimedia = new ContenidoMultimedia();
   
@@ -500,6 +620,8 @@ object Application extends Controller {
       
       contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
       
+      Logger.info("Se agrego la foto "+ruta+" al album "+albumName)
+      
       tumbnailPosition += 1
   
    }
@@ -508,6 +630,11 @@ object Application extends Controller {
    createNewAlbumNotification(request)
    
     Ok("true");
+   }catch{
+     case e: DAOException =>
+            Logger.error("No se ha creado el album "+albumName)
+            throw BusinessException.create("No ha sido posible crear el album "+albumName,e)
+   }
   }
 
   def searchForFriends(nameUserPattern: String) = Action {
@@ -578,11 +705,16 @@ object Application extends Controller {
     user = currentUserBuild(request,user)
 
     var userLocation = Util.getUserLocation(country, state, city)
-
+    
+    try
+    {
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
     userDao.updateUserLatitud(latitud, user.getId)
     userDao.updateUserLongitud(longitud, user.getId)
     userDao.updateUserLocation(userLocation.getId, user.getId)
+    
+    Logger.info("Se ha actualizado la localizacion del usuario " + user.getPrimerNombre + " " + user.getPrimerApellido +
+                "localizacion = " +country + " " + state + " " + city)
 
     var currentUser = userDao.findUserById(user.getId).getOrElse { null }
     
@@ -603,6 +735,13 @@ object Application extends Controller {
                                            "longitud" -> currentUser.getLongitud,
                                            "FBId" -> currentUser.getFacebookId,
                                            "lastFriendVisitedId" -> "0")
+    }catch{
+      
+        case e: DAOException =>
+            Logger.error("No se ha podido actualizar la ubicacion de " + user.getPrimerNombre + " " + user.getPrimerApellido +
+                "localizacion = " +country + " " + state + " " + city)
+            throw BusinessException.create("No ha sido posible actualizar la localizacion",e)
+    }
   }
 
   
@@ -888,10 +1027,18 @@ object Application extends Controller {
       
       var comentarioDao: ComentarioDAO = DAOFabrica.getComentarioDAO
       
+      try
+      {
       var commentId = comentarioDao.insertComentario(comentario);
       
-     
+      Logger.info("Se ha creado el comentario para el "+tipo+" "+elementId)
+      
         Ok(commentId.toString);
+      }catch{
+        case e: DAOException =>
+                 Logger.error("No ha sido posible crear el comentario para "+tipo+" seleccionado")
+                 throw BusinessException.create("No ha sido posible crear el coentario para "+tipo+" seleccionado",e)
+      }
     }
    
    
@@ -927,10 +1074,17 @@ object Application extends Controller {
       
       var likeDao: LikeDAO = DAOFabrica.getLikeDAO
       
+      try{
       likeDao.insertLike(like); 
       
-     
+      Logger.info("Se ha creado el nevo like del usuario"+user.getPrimerNombre+" "+user.getPrimerApellido)
+      
         Ok("true");
+      }catch{
+        case e: DAOException =>
+                 Logger.error("No ha sido posible crear el like para "+element+" seleccionado")
+                 throw BusinessException.create("No ha sido posible crear el like para "+element+" seleccionado",e)
+      }
     }
 
     
@@ -965,10 +1119,19 @@ object Application extends Controller {
       
       var likeDao: LikeDAO = DAOFabrica.getLikeDAO
       
+      try
+      {
       likeDao.insertLike(like); 
+      
+      Logger.info("Se ha creado el nevo unlike del usuario"+user.getPrimerNombre+" "+user.getPrimerApellido)
       
      
         Ok("true");
+      }catch{
+        case e: DAOException =>
+                 Logger.error("No ha sido posible crear el unlike para "+element+" seleccionado")
+                 throw BusinessException.create("No ha sido posible crear el unlike para "+element+" seleccionado",e)
+      }
     }
     
     def deleteComment(commentId: Long) = Action {
@@ -980,13 +1143,13 @@ object Application extends Controller {
     
   def currentUserBuild(request: Request[AnyContent], user: Usuario): Usuario = {
 
+   
     request.session.get("userId").map { id => user.setId(id.toLong) }
     request.session.get("userFirstName").map { primerNombre => user.setPrimerNombre(primerNombre) }
     request.session.get("userSecondName").map { segundoNombre => user.setSegundoNombre(Some(segundoNombre)) }
     request.session.get("userFirstLastname").map { primerApellido => user.setPrimerApellido(primerApellido) }
     request.session.get("userSecondLastname").map { segundoApellido => user.setSegundoApellido(Some(segundoApellido)) }
     request.session.get("usuarioEmail").map { email => user.setEmail(email) }
-    // request.session.get("birthday").map{ birthday =>user.setFechaNacimiento()}  TO_DATE
     request.session.get("userFacebook").map { facebook => user.setFacebook(Some(facebook)) }
     request.session.get("userTwitter").map { twitter => user.setTwitter(Some(twitter)) }
     request.session.get("userGmail").map { gmail => user.setGmail(Some(gmail)) }
@@ -994,7 +1157,7 @@ object Application extends Controller {
     request.session.get("latitud").map { latitud => user.setLatitud(latitud) }
     request.session.get("longitud").map { longitud => user.setLongitud(longitud) }
     request.session.get("FBId").map { FBId => user.setFacebookId(FBId) }
-    
+   
     return user;
 
   }
@@ -1067,12 +1230,17 @@ object Application extends Controller {
    
      val photos = request.body.asFormUrlEncoded.get("photos[]");
      val tumbnails = request.body.asFormUrlEncoded.get("tumbs[]");
+     
+     Logger.debug("Photos y Tumbnails recibidos via POST")
    
      var user: Usuario = new Usuario();
      user = currentUserBuild(request,user)
      
      var albumId: Long = 0
      request.session.get("albumId").map { id => albumId = id.toLong }      
+     
+     try
+     {
      var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
      var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }
      
@@ -1089,7 +1257,15 @@ object Application extends Controller {
         contenidoMultimedia.setInAlbumId(idAlbum)
         contenidoMultimedia.setRutaTumbnail(tumbnails(tumbnailPosition))
       
+        try
+        {
         contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
+        }
+        catch{
+        case e:DAOException => 
+                Logger.error("La foto con ruta" + ruta + "no pudo ser agregada al album "+albumId)
+                throw BusinessException.create("La foto "+ruta+ " no pudo ser agregada al album",e)
+        }
       
         tumbnailPosition += 1
   
@@ -1097,11 +1273,20 @@ object Application extends Controller {
  
    
       Ok("true");
+      }
+     catch{
+       case e:DAOException => 
+                Logger.error("El album "+albumId+ "no pudo ser encontrado")
+                throw BusinessException.create("El album no pudo ser encontrado",e)
+     }
+     
   }
   
   def deleteContentInAlbum() = Action { implicit request =>
     
     val photos = request.body.asFormUrlEncoded.get("photos[]");
+    
+    Logger.debug("Id's de fotos recibidos via POST")
     
     var user: Usuario = new Usuario();
     user = currentUserBuild(request,user)
@@ -1115,10 +1300,21 @@ object Application extends Controller {
    
      for(photo <- photos ){
      
+       try
+       {
         contenidoDao.deleteContenidoMultimedia(photo.toLong)
+       
       
         tumbnailPosition += 1
-  
+        
+        Logger.info("Se ha eliminado la foto " + photo +" del album " + albumId + " de " + user.getPrimerNombre + " " + user.getPrimerApellido)
+       }catch{
+      
+      case e: DAOException => 
+                  Logger.error("La foto "+photo+ "del album" +albumId+  "no pudo ser eliminada")
+                  throw BusinessException.create("El like no pudo ser eliminado",e)
+     
+       }
      }
    
     Ok("true");
@@ -1127,17 +1323,27 @@ object Application extends Controller {
   
   def deleteLikeFromAlbum() = Action { implicit request =>
   
+      val albumId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+
+      try{
       var user: Usuario = new Usuario();
       user = currentUserBuild(request,user)
-      
-      val albumId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
-      
+            
       var likeDao: LikeDAO = DAOFabrica.getLikeDAO
       
       likeDao.deleteAlbumLike(user.getId,albumId); 
       
      
         Ok("true");
+      }catch{
+      
+      case e: DAOException => 
+                  Logger.error("El like del album "+albumId+ "no pudo ser eliminado")
+                  throw BusinessException.create("El like no pudo ser eliminado",e)
+      case e: NullPointerException => 
+                  Logger.error("Usuario no ha iniciado sesion")
+                  throw new Exception("Se ha cerrado la sesion del usuario")
+    }
     }
   
   def deleteUnlikeFromAlbum() = Action { implicit request =>

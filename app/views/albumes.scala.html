@@ -113,7 +113,7 @@
 						 @listaAlbumes.map { 
                     case (album) => {
                     	
-                    	@if(selectedUser.getId == currentUser.getId || (isFriend == 1 && friendshipStatus == 1)){
+                    	@if(  (selectedUser.getId == currentUser.getId) || (album.getPrivacidad == 0) ||  (isFriend && friendshipStatus == 1)){
                     	<div class="left firstImgCel">
                     	 	 <a href="/albumContent/@album.getId"> <img class="friendImg  relative"
 								src= @album.getCaratula />
