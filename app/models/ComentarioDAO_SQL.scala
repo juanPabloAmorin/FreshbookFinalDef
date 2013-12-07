@@ -11,6 +11,9 @@ import anorm._
 import anorm.SqlParser._
 import models._
 
+import org.h2.jdbc.JdbcSQLException
+
+
 class ComentarioDAO_SQL extends ComentarioDAO {
 
 	val parser = {
@@ -72,6 +75,7 @@ class ComentarioDAO_SQL extends ComentarioDAO {
 	  
         var commentId:Long = 0
         
+        try{
 		DB.withConnection { implicit connection =>
 		SQL(
 				"""
@@ -86,31 +90,43 @@ class ComentarioDAO_SQL extends ComentarioDAO {
 		}
 		
 		return commentId
+        } catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 		
 	}
 
 	override def getCommentsForAlbum(albumId: Long): List[Comentario] =
    {
+	  try{
 	  DB.withConnection { implicit connection =>
 	    
          SQL("select * from COMENTARIO where fk_album = {albumId} order by fecha desc")
          .on('albumId -> albumId).as(this.parser *)
       }
+	  }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
    }
 	
 
 	override def deleteCommentById(commentId: Long) {
 	   
+	  try{
 	    DB.withConnection { implicit connection =>
 		SQL("delete from comentario where comentario.id = {commentId}"
 		    ).on('commentId -> commentId).executeUpdate()
 
 		}
+	  }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 	  
 	}
 	
 	override def commentCountResponses(commentId: Long): Long = {
 	  
+	  try{
 	    DB.withConnection { implicit connection =>
 	    
          SQL("""
@@ -120,16 +136,23 @@ class ComentarioDAO_SQL extends ComentarioDAO {
              )
          .on('commentId -> commentId).as(scalar[Long].single)
       }
+	  }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 	}
 	
 	
     def getResponsesForComment(commentId: Long): List[Comentario] =
     {
+      try{
 	  DB.withConnection { implicit connection =>
 	    
          SQL("select * from COMENTARIO where fk_comentario = {commentId} order by fecha desc")
          .on('commentId -> commentId).as(this.parser *)
       }
+      }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
    }
 
 	

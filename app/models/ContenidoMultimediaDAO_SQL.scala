@@ -11,6 +11,9 @@ import anorm._
 import anorm.SqlParser._
 import models._
 
+import org.h2.jdbc.JdbcSQLException
+
+
 class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
 
 	val parser = {
@@ -29,6 +32,7 @@ class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
 	
 	override def insertContenidoMultimedia(newContenidoMultimedia: ContenidoMultimedia) {
 
+	  try{
 		DB.withConnection { implicit connection =>
 		SQL(
 				"""
@@ -41,6 +45,9 @@ class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
 						'inAlbumId -> newContenidoMultimedia.getInAlbumId).executeUpdate()
 						
 		}
+	}catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 		
 	}
 	
@@ -51,11 +58,15 @@ class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
 	
 	def deleteContenidoMultimedia(contentId: Long) = {
 	  
+	  try{
 	  DB.withConnection { implicit connection =>
 		SQL("delete from contenido_multimedia where id = {contentId}").on(
 						'contentId -> contentId).executeUpdate()
 						
 		}
+	  }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 	  
 	}
     

@@ -11,6 +11,9 @@ import anorm._
 import anorm.SqlParser._
 import models._
 
+import org.h2.jdbc.JdbcSQLException
+
+
 class LikeDAO_SQL extends LikeDAO {
 
 	val parser = {
@@ -70,6 +73,8 @@ class LikeDAO_SQL extends LikeDAO {
 
         }
 	  
+        try
+        {
 		DB.withConnection { implicit connection =>
 		SQL(
 				"""
@@ -81,12 +86,17 @@ class LikeDAO_SQL extends LikeDAO {
 				).executeUpdate()
 
 		}
+        }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
+        
 		
 		
 	}
 
 	override def getLikesForAlbum(albumId: Long): Long =
    {
+	  try{
 	  DB.withConnection { implicit connection =>
 	    
          SQL("""
@@ -96,10 +106,14 @@ class LikeDAO_SQL extends LikeDAO {
              )
          .on('albumId -> albumId).as(scalar[Long].single)
       }
+	  }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
    }
 	
    override def getUnlikesForAlbum(albumId: Long): Long =
    {
+     try{
 	  DB.withConnection { implicit connection =>
 	    
          SQL("""
@@ -109,11 +123,16 @@ class LikeDAO_SQL extends LikeDAO {
              )
          .on('albumId -> albumId).as(scalar[Long].single)
       }
+     }
+     catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
    }
    
    
    override def getLikesForComment(commentId: Long): Long =
    {
+     try{
 	  DB.withConnection { implicit connection =>
 	    
          SQL("""
@@ -123,10 +142,14 @@ class LikeDAO_SQL extends LikeDAO {
              )
          .on('commentId -> commentId).as(scalar[Long].single)
       }
+     }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
    }
 	
    override def getUnlikesForComment(commentId: Long): Long =
    {
+     try{
 	  DB.withConnection { implicit connection =>
 	    
          SQL("""
@@ -136,6 +159,9 @@ class LikeDAO_SQL extends LikeDAO {
              )
          .on('commentId -> commentId).as(scalar[Long].single)
       }
+     }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
    }
    
    
@@ -143,6 +169,8 @@ class LikeDAO_SQL extends LikeDAO {
     
        var like: Long = 0
        
+       try
+       {
        DB.withConnection { implicit connection =>
 
 	   like = SQL("""
@@ -160,6 +188,11 @@ class LikeDAO_SQL extends LikeDAO {
        }
          
        return 1
+       
+       }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
+       
     
   }
   
@@ -168,6 +201,7 @@ class LikeDAO_SQL extends LikeDAO {
     
        var unlike: Long = 0
        
+       try{
        DB.withConnection { implicit connection =>
 
 	    unlike = SQL("""
@@ -187,11 +221,16 @@ class LikeDAO_SQL extends LikeDAO {
          
        return 1
        
+       }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
+       
     
   }
   
   override def deleteAlbumLike(idUsuario: Long,idAlbum: Long) {
     
+    try{
     DB.withConnection { implicit connection =>
 		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_album = {idAlbum} and tipo = 'L' "
 		    ).on('idUsuario -> idUsuario,
@@ -200,11 +239,16 @@ class LikeDAO_SQL extends LikeDAO {
 				).executeUpdate()
 
 		}
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
     
   }
   
   override def deleteAlbumUnlike(idUsuario: Long,idAlbum: Long) {
     
+    try{
+      
     DB.withConnection { implicit connection =>
 		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_album = {idAlbum} and tipo = 'U' "
 		    ).on('idUsuario -> idUsuario,
@@ -213,11 +257,15 @@ class LikeDAO_SQL extends LikeDAO {
 				).executeUpdate()
 
 		}
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
     
   }
   
   override def deleteCommentLike(idUsuario: Long,idComment: Long) {
     
+    try{
     DB.withConnection { implicit connection =>
 		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_comentario = {idComment} and tipo = 'L' "
 		    ).on('idUsuario -> idUsuario,
@@ -226,11 +274,15 @@ class LikeDAO_SQL extends LikeDAO {
 				).executeUpdate()
 
 		}
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
     
   }
   
   override def deleteCommentUnlike(idUsuario: Long,idComment: Long) {
     
+    try{
     DB.withConnection { implicit connection =>
 		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_comentario = {idComment} and tipo = 'U' "
 		    ).on('idUsuario -> idUsuario,
@@ -239,11 +291,15 @@ class LikeDAO_SQL extends LikeDAO {
 				).executeUpdate()
 
 		}
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
     
   }
    
   override def iLikeComment(idComment: Long, idUsuario: Long): Long = {
     
+    try{
        var like: Long = 0
        
        DB.withConnection { implicit connection =>
@@ -263,12 +319,17 @@ class LikeDAO_SQL extends LikeDAO {
        }
          
        return 1
+       
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
     
   }
   
 
   override def iDontLikeComment(idComment: Long, idUsuario: Long): Long = {
     
+    try{
        var unlike: Long = 0
        
        DB.withConnection { implicit connection =>
@@ -289,6 +350,10 @@ class LikeDAO_SQL extends LikeDAO {
        }
          
        return 1
+       
+    } catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
        
     
   }
