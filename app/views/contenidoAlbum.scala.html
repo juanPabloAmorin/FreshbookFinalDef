@@ -5,6 +5,8 @@
     @commentList.map{
      case (respuesta) => {
      	
+     		    <textarea id="text@respuesta.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id,'@respuesta.getOwner.getFacebookId','@respuesta.getOwner.getPrimerNombre','@respuesta.getOwner.getPrimerApellido')"></textarea>
+     	
         <div class="comment" id="@respuesta.getId">
         
         <div style="height:55px">
@@ -230,6 +232,7 @@
 			  <div id="comentarios">
 			   @currentAlbum.getComentarios.map { 
                     case (comentario) => {
+               <textarea id="text@comentario.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,'text@comentario.getId','@comentario.getOwner.getFacebookId','@comentario.getOwner.getPrimerNombre','@comentario.getOwner.getPrimerApellido')"></textarea>
                     	
 			     <div class="comment" id="@comentario.getId">
 			     
@@ -240,9 +243,8 @@
 			</div>
 			     
 			     @comentario.getContenido
-			           <div id="interaction-options" style="height:50px;zoom:0.7">
-			             
-			             <span id="like-boton@comentario.getId">			             
+		  <div id="interaction-options" style="height:50px;zoom:0.7">
+	        <span id="like-boton@comentario.getId">			             
 			             @if(comentario.getIsLiked == 0) {
 			               <button class="btn btn-info left like-button" onclick = "meGustaComment(@comentario.getId)" >Me Gusta</button>
 			               <input id="isLike@comentario.getId" type="hidden" value="0" />
@@ -263,29 +265,17 @@
 			                 <input id="isUnlike@comentario.getId" type="hidden" value="1" />
 			             }
 			             </span>
-			             
-			             <label class="label-coment" onclick="commentReply(@comentario.getId)">Responder</label>
-			              <span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount@comentario.getId">@comentario.getLikes</span></span>
-			             <span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount@comentario.getId">@comentario.getUnlikes</span></span>
-			             @if(currentUser.getId == selectedUser.getId ){
-			             	<button class="right" onclick="eliminarComentario(@comentario.getId)">Eliminar</button>
-			             }
-			                 
-			           </div>
-			        
-			        
-			        
-			        
-			       
-			       @display(comentario.getRespuestas)      
-			             
-			        
-			        
-			        
-			           
-			     </div>
-			     <textarea id="text@comentario.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id,'@comentario.getOwner.getFacebookId','@comentario.getOwner.getPrimerNombre','@comentario.getOwner.getPrimerApellido')"></textarea>
-			     
+			<label class="label-coment" onclick="commentReply(@comentario.getId)">Responder</label>
+			<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount@comentario.getId">@comentario.getLikes</span></span>
+			<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount@comentario.getId">@comentario.getUnlikes</span></span>
+			@if(currentUser.getId == selectedUser.getId ){
+			    <button class="right" onclick="eliminarComentario(@comentario.getId)">Eliminar</button>
+            }
+		  </div>
+			    
+			    @display(comentario.getRespuestas)        
+		</div>
+		
 			     }
 			   }
 			  </div>

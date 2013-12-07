@@ -13,7 +13,6 @@ import models._
 
 import org.h2.jdbc.JdbcSQLException
 
-
 class NotificacionDAO_SQL extends NotificacionDAO {
 
   var lastNotificationSequenceNumber: Long = 0;
@@ -25,8 +24,7 @@ class NotificacionDAO_SQL extends NotificacionDAO {
       get[Date]("notificacion.fecha_creacion") ~
       get[Long]("notificacion.id_usuario_generador") ~
       get[Option[Long]]("notificacion.fk_amigo") map {
-        case id ~ contenido ~ fechaCreacion ~ tipo ~ usuarioGenerador ~ idAmigo 
-        => Notificacion(id, contenido, tipo, fechaCreacion, usuarioGenerador, idAmigo)
+        case id ~ contenido ~ fechaCreacion ~ tipo ~ usuarioGenerador ~ idAmigo => Notificacion(id, contenido, tipo, fechaCreacion, usuarioGenerador, idAmigo)
       }
   }
 
@@ -45,59 +43,54 @@ class NotificacionDAO_SQL extends NotificacionDAO {
 
     }
 
-    try
-    {
-    DB.withConnection { implicit connection =>
-      SQL(
-        """
+    try {
+      DB.withConnection { implicit connection =>
+        SQL(
+          """
 		INSERT INTO NOTIFICACION VALUES( nextval('seq_notificacion'),{contenido},
 		NOW(),""" + fkAmigo.get + """,{currentUserId},{tipo})
 		""").on(
-          'contenido -> newNotification.getContenido,
-          'tipo -> newNotification.getTipo,
-          'currentUserId -> newNotification.getIdUsuarioGenerador).executeUpdate()
+            'contenido -> newNotification.getContenido,
+            'tipo -> newNotification.getTipo,
+            'currentUserId -> newNotification.getIdUsuarioGenerador).executeUpdate()
 
-      lastNotificationSequenceNumber = SQL("select currval('seq_notificacion')").as(scalar[Long].single)
+        lastNotificationSequenceNumber = SQL("select currval('seq_notificacion')").as(scalar[Long].single)
 
-      SQL(
-        """
+        SQL(
+          """
 	   INSERT INTO NOTIFICACION_USUARIO VALUES({notificatedUserId} ,currval('seq_notificacion'))
 						""").on(
-          'notificatedUserId -> notificatedUserId).executeUpdate()
-    }
-    }catch {
+            'notificatedUserId -> notificatedUserId).executeUpdate()
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
   }
 
-  
-  
   override def getTypeNotificationNumberFormat(typeNotification: String): Int = {
 
-    try{
-    DB.withConnection { implicit connection =>
-      SQL("""
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("""
 				select tipo_notificacion.id 
 				from TIPO_NOTIFICACION
 				where nombre = {nombre} 
 
 				""").on('nombre -> typeNotification).as(scalar[Int].single)
-    }
-    }catch {
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 
   }
 
-  
-  
   override def getNotificationsByUserAndType(userId: Long, typex: String): List[Notificacion] = {
 
-    try{
-    DB.withConnection { implicit connection =>
+    try {
+      DB.withConnection { implicit connection =>
 
-      val notifications = SQL(
-        """
+        val notifications = SQL(
+          """
 				select * from NOTIFICACION, TIPO_NOTIFICACION,NOTIFICACION_USUARIO 
 				where notificacion.fk_tipo = tipo_notificacion.id 
 				and NOTIFICACION_USUARIO.fk_notificacion = NOTIFICACION.id
@@ -105,73 +98,66 @@ class NotificacionDAO_SQL extends NotificacionDAO {
 				and tipo_notificacion.nombre = {typex}
 
 				""").on(
-          'userId -> userId, 'typex -> typex).as(this.parser *)
+            'userId -> userId, 'typex -> typex).as(this.parser *)
 
-      notifications
+        notifications
 
-    }
-    }
-
-  }
-
-  
-  
-  override def deleteFriendshipRequestNotifications(userId: Long, notificationId: Long) {
-    try{
-    DB.withConnection { implicit connection =>
-      SQL("delete from notificacion_usuario where fk_usuario = {userId} and fk_notificacion = {notificationId}").on(
-        'userId -> userId,
-        'notificationId -> notificationId).executeUpdate()
-    }
-    }
-  }
-
-  
-  
-  override def insertNotificationMulticast(users: List[Usuario], notificationId: Long) {
-
-    try{
-    DB.withConnection { implicit connection =>
-
-      for (usuario <- users) {
-        SQL(
-
-          "INSERT INTO NOTIFICACION_USUARIO VALUES(" + usuario.getId + ",{notificationId})").on(
-            'notificationId -> notificationId).executeUpdate()
       }
     }
-    }catch {
+
+  }
+
+  override def deleteFriendshipRequestNotifications(userId: Long, notificationId: Long) {
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("delete from notificacion_usuario where fk_usuario = {userId} and fk_notificacion = {notificationId}").on(
+          'userId -> userId,
+          'notificationId -> notificationId).executeUpdate()
+      }
+    }
+  }
+
+  override def insertNotificationMulticast(users: List[Usuario], notificationId: Long) {
+
+    try {
+      DB.withConnection { implicit connection =>
+
+        for (usuario <- users) {
+          SQL(
+
+            "INSERT INTO NOTIFICACION_USUARIO VALUES(" + usuario.getId + ",{notificationId})").on(
+              'notificationId -> notificationId).executeUpdate()
+        }
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 
   }
 
-  
-  
   override def getNewNotificationLastIdFromSequence(): Long = {
 
     return lastNotificationSequenceNumber
   }
-  
-  
+
   override def getNotificationsByUser(userId: Long): List[Notificacion] = {
 
-    try{
-    DB.withConnection { implicit connection =>
+    try {
+      DB.withConnection { implicit connection =>
 
-      val notifications = SQL(
-        """
+        val notifications = SQL(
+          """
 				select * from NOTIFICACION,NOTIFICACION_USUARIO 
 				where NOTIFICACION_USUARIO.fk_notificacion = NOTIFICACION.id
 				and NOTIFICACION_USUARIO.fk_usuario = {userId}
 		
 				""").on(
-          'userId -> userId).as(this.parser *)
+            'userId -> userId).as(this.parser *)
 
-      notifications
+        notifications
 
-    }
-    }catch {
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 

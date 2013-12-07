@@ -465,14 +465,12 @@
 	padding-bottom: 15px;
 }
 
-#instagram-div{
-	
+#instagram-div {
 	margin-top: 50px;
 	width: 100%;
 	background-color: white;
 	display: block;
 	padding: 10px;
-	
 }
 
 .divBuscadorPrincipal {
@@ -667,21 +665,21 @@ span.buttonText {
 	padding-bottom: 20px;
 }
 
-.firstImgCel .checkMultimedia{
-	position:absolute;
+.firstImgCel .checkMultimedia {
+	position: absolute;
 	margin: 5px 0 0 -145px;
 }
 
-.firstImgCel .btnImage{
-	position:absolute;
+.firstImgCel .btnImage {
+	position: absolute;
 	margin: 5px 0 0 -155px;
 	display: none;
 }
 
-
-.like-button{
+.like-button {
 	font-size: 10px;
-	width:60px;height:30px;
+	width: 60px;
+	height: 30px;
 	padding: 0;
 	margin: 10px 0 10px 2px;
 	border-radius: 0;
@@ -689,31 +687,32 @@ span.buttonText {
 
 .no-like-button {
 	font-size: 10px;
-	width:90px;height:30px;
+	width: 90px;
+	height: 30px;
 	padding: 0;
 	margin: 10px 3px 10px 5px;
-	border-radius:0;
+	border-radius: 0;
 }
 
-.label-coment{
+.label-coment {
 	color: #35A;
 	margin: 10px 0 0 5px;
 	cursor: pointer;
 }
 
-.input-coment{
+.input-coment {
 	margin: 2px 0 10px 2px;
-	width: 95%;height:50px;
+	width: 95%;
+	height: 50px;
 	line-height: 1.28;
 	overflow: hidden;
 	resize: none;
 	max-width: 100%;
-    font: -webkit-small-control;
-    -webkit-writing-mode: horizontal-tb;
+	font: -webkit-small-control;
+	-webkit-writing-mode: horizontal-tb;
 }
 
-.comment{
-	
+.comment {
 	background-color: #FFF;
 	overflow: hidden;
 	word-wrap: break-word;
@@ -721,10 +720,7 @@ span.buttonText {
 	padding: 7px 5px;
 }
 
-
-#interaction-options{
-	
-	height:50px;
+#interaction-options {
+	height: 50px;
 	margin-bottom: 12px;
 }
-

@@ -1,6 +1,6 @@
 package models
 
-import java.util.{Date}
+import java.util.{ Date }
 
 import play.api._
 import play.api.mvc._
@@ -11,20 +11,18 @@ import anorm._
 import anorm.SqlParser._
 import models._
 
+trait ContenidoMultimediaDAO {
 
-trait ContenidoMultimediaDAO
-{
- 
   /*El metodo insertContenidoMultimedia permite insertar contenido multimedia asociado a un 
    * album */
-   def insertContenidoMultimedia(newContenidoMultimedia: ContenidoMultimedia)
-   
-   /*Metodo getParser devuelve el parser para contenido multimedia obtenido de la base de datos*/
-   
-   def getParser(): RowParser[ContenidoMultimedia]
-   
-   /*El metodo deleteContenidoMultimedia permite eliminar Contenido Multimedia de la base de
+  def insertContenidoMultimedia(newContenidoMultimedia: ContenidoMultimedia)
+
+  /*Metodo getParser devuelve el parser para contenido multimedia obtenido de la base de datos*/
+
+  def getParser(): RowParser[ContenidoMultimedia]
+
+  /*El metodo deleteContenidoMultimedia permite eliminar Contenido Multimedia de la base de
     * datos */
-   
-   def deleteContenidoMultimedia(contentId: Long)
+
+  def deleteContenidoMultimedia(contentId: Long)
 }

@@ -7,12 +7,12 @@ var id;
 
 window.fbAsyncInit = function() {
 FB.init({
-  //appId      : '672888336062808', // FreshbookApp ID
+  appId      : '672888336062808', // FreshbookApp ID
   //appId      : '1422966607919695', //localhost
-  appId      : '596938223701048',  //amazon
+  //appId      : '596938223701048',  //amazon
   //channelUrl : 'http://localhost:9000', // Channel Local
-  //channelUrl : 'http://agile-sands-9357.herokuapp.com', // Channel Heroku
-  channelUrl : 'http://54.200.53.226:9000', //Amazon
+  channelUrl : 'http://agile-sands-9357.herokuapp.com', // Channel Heroku
+  //channelUrl : 'http://54.200.53.226:9000', //Amazon
   status     : true, // check login status
   cookie     : true, // enable cookies to allow the server to access the session
   xfbml      : true  // parse XFBML
@@ -39,12 +39,12 @@ FB.Event.subscribe('auth.authResponseChange', function(response) {
 
 
 //var uri = encodeURI('http://localhost:9000');  //localhost
-//var uri = encodeURI('http://agile-sands-9357.herokuapp.com');  //heroku
-var uri = encodeURI('http://54.200.53.226:9000'); //amazon
+var uri = encodeURI('http://agile-sands-9357.herokuapp.com');  //heroku
+//var uri = encodeURI('http://54.200.53.226:9000'); //amazon
 
       function login() {
                 
-              window.location = encodeURI("https://www.facebook.com/dialog/oauth?client_id=596938223701048&redirect_uri="+uri+"&response_type=token&scope=email,user_birthday");
+              window.location = encodeURI("https://www.facebook.com/dialog/oauth?client_id=672888336062808&redirect_uri="+uri+"&response_type=token&scope=email,user_birthday");
           }
 
 function fectchUserInformation() {
@@ -60,6 +60,9 @@ function fectchUserInformation() {
               lastName = response.last_name;
               email = response.email;
               linkFacebook = response.link;
+              
+              if(linkFacebook == null || linkFacebook == "")
+            	  linkFacebook = "link";
               
               window.location = encodeURI("/userAutentication/"+email+"/"+linkFacebook+"/"+firstName+"/"+middleName+"/"+lastName+"/"+id);
           });

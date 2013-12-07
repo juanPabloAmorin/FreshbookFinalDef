@@ -7,7 +7,6 @@ import models._
 
 object Util {
 
-  
   def getUserLocation(country: String, state: String, city: String): Lugar = {
 
     var userLugar: Lugar = null

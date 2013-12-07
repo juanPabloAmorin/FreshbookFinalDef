@@ -1,18 +1,22 @@
 function updateUser(opcion, atributo, id) {
 
-
-	var jqxhr = $.post("/userUpdate",{ opcion: opcion,atributo: atributo ,id:id})
-			.done(function(jqXHR) {
-				// programar manejo de errores de update
-			})
+	var jqxhr = $.post("/userUpdate", {
+		opcion : opcion,
+		atributo : atributo,
+		id : id
+	}).done(function(jqXHR) {
+		// programar manejo de errores de update
+	})
 
 }
 
-function updateAlbum(opcion,atributo,id)
-{
-	var jqxhr = $.post("/albumUpdate",{ opcion: opcion,atributo: atributo ,id:id})
-	.done(function(jqXHR) {
-		
+function updateAlbum(opcion, atributo, id) {
+	var jqxhr = $.post("/albumUpdate", {
+		opcion : opcion,
+		atributo : atributo,
+		id : id
+	}).done(function(jqXHR) {
+
 		// programar manejo de errores de update
 	})
 }
@@ -396,48 +400,57 @@ function editGoogle(id) {
 }
 
 function createAlbum() {
-	var name = document.getElementById("input-name").value;
+	var name = "";
+	name = document.getElementById("input-name").value;
 	var description = document.getElementById("input-description").value;
 	var privacy;
 	// modificar esta variable con el valor de la ruta
 	var imageRoute = "folder.jpg";
-	
+
 	var arrayPosition = 0;
 
 	if (document.newAlbumForm.optionsRadios[0].checked)
 		privacy = 0;
 	else
 		privacy = 1;
-	
+
 	var photos = [];
 	var tumbs = [];
-	
-	$("input[name=checkB]:checked").each(function() {
-	    photos.push(this.id);
-	});
-	
-	$("input[name=checkB]:checked").each(function() {
-	    tumbs.push(this.title);
-	});
-	
-	var jqxhr = $.post("/insertAlbum",{ name: name, description: description, privacy: privacy,
-		                                imageRoute: imageRoute,'photos[]':photos,'tumbs[]':tumbs})
 
-	.done(function(jqXHR) {
-	  
-		
-		if (jqXHR == "true") {
-            
-			location.href = "/albumesPag"
-		} else {
-           
-			// mensaje de error en campos
-		}
-	}).fail(function(jqXHR) {
-		
-		// mensaje de error en conexion
-	})
-	
+	$("input[name=checkB]:checked").each(function() {
+		photos.push(this.id);
+	});
+
+	$("input[name=checkB]:checked").each(function() {
+		tumbs.push(this.title);
+	});
+
+	if (name != "") {
+
+		var jqxhr = $.post("/insertAlbum", {
+			name : name,
+			description : description,
+			privacy : privacy,
+			imageRoute : imageRoute,
+			'photos[]' : photos,
+			'tumbs[]' : tumbs
+		})
+
+		.done(function(jqXHR) {
+
+			if (jqXHR == "true") {
+
+				location.href = "/albumesPag"
+			} else {
+
+				// mensaje de error en campos
+			}
+		}).fail(function(jqXHR) {
+
+			// mensaje de error en conexion
+		})
+	}
+
 }
 
 function validateUserPersonalData() {
@@ -462,7 +475,7 @@ function validateUserPersonalData() {
 	if (firstName == "") {
 
 		$("#div-first-name").addClass("has-error");
-		$( "#first-name" ).attr( "placeholder", "Indique un nombre" )
+		$("#first-name").attr("placeholder", "Indique un nombre")
 		validUserData = false;
 	}
 	if (secondName == "") {
@@ -472,7 +485,7 @@ function validateUserPersonalData() {
 	if (firstLastName == "") {
 
 		$("#div-first-lastname").addClass("has-error");
-		$( "#first-lastname" ).attr( "placeholder", "Indique un apellido" )
+		$("#first-lastname").attr("placeholder", "Indique un apellido")
 		validUserData = false;
 	}
 	if (secondLastName == "") {
@@ -482,7 +495,7 @@ function validateUserPersonalData() {
 	if (username == "") {
 
 		$("#div-username").addClass("has-error");
-		$( "#username" ).attr( "placeholder", "Debe indicar un nombre de usuario" )
+		$("#username").attr("placeholder", "Debe indicar un nombre de usuario")
 		validUserData = false;
 	}
 	if (dia == 0 || mes == 0 || anio == 0) {
@@ -493,16 +506,17 @@ function validateUserPersonalData() {
 	if (validUserData) {
 		location.href = "/registroPaso2/" + firstName + "/" + secondName + "/"
 				+ firstLastName + "/" + secondLastName + "/" + username + "/"
-				+ dia + "/" + mes + "/" + anio + "/" + privacy + "/" + photo+"/"+id;
+				+ dia + "/" + mes + "/" + anio + "/" + privacy + "/" + photo
+				+ "/" + id;
 	}
 
 }
 
-function removeError(object,object2,valor) {
+function removeError(object, object2, valor) {
 
 	$("#" + object).removeClass("has-error");
-	$("#" + object2 ).attr( "placeholder", valor );
-	
+	$("#" + object2).attr("placeholder", valor);
+
 }
 
 function goUserRegisterStep3() {
@@ -538,7 +552,9 @@ function searchForFriends() {
 													+ '<div class="founded-user-next" style="border-bottom:solid 1px black;background-color:#DCC">'
 													+ '<a href="perfil/'
 													+ this.id
-													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '"><img src="http://graph.facebook.com/'
+													+ this.facebookid
+													+ '/picture?type=large" /></a>'
 													+ '<div id="div-user-fullname" style="margin-left:55px;"><a href="perfil/'
 													+ this.id
 													+ '"><span>'
@@ -581,7 +597,9 @@ function searchForFriends2() {
 													+ '<div class="founded-user-next" style="border-bottom:solid 1px black;background-color:#DCC">'
 													+ '<a href="perfil/'
 													+ this.id
-													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '"><img src="http://graph.facebook.com/'
+													+ this.facebookid
+													+ '/picture?type=large" /></a>'
 													+ '<div id="div-user-fullname" style="margin-left:75px;"><a href="perfil/'
 													+ this.id
 													+ '"><span>'
@@ -658,7 +676,9 @@ function mostrarSolicitudesAmistad(userId) {
 													+ '" class="friendship-next" style="border-bottom:solid 1px black;background-color:#DCC">'
 													+ '<a href="perfil/'
 													+ this.id
-													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '"><img src="http://graph.facebook.com/'
+													+ this.facebookid
+													+ '/picture?type=large" /></a>'
 													+ '<div id="div-user-fullname" align="center" style="margin-left:55px;"><a href="perfil/'
 													+ this.id
 													+ '"><span>'
@@ -698,7 +718,7 @@ function confirmFriendship(idAmigo, idNotificacion) {
 			.done(function(jqXHR) {
 				fadeWindows();
 			}).fail(function(jqXHR) {
-				//errores
+				// errores
 
 			})
 }
@@ -736,7 +756,9 @@ function busquedaDeAmigos() {
 													+ '<div class= "div-userFriend marginTM marginBM cfix" style="border: 1px solid black">'
 													+ '<a href="/perfil/'
 													+ this.id
-													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '"><img src="http://graph.facebook.com/'
+													+ this.facebookid
+													+ '/picture?type=large" /></a>'
 													+ '<div id="div-user-fullname" align="center"><a href="/perfil/'
 													+ this.id
 													+ '"><span>'
@@ -747,21 +769,21 @@ function busquedaDeAmigos() {
 													+ '<div id="div-username" align="center" style="margin-top:18px"><span>'
 													+ this.username
 													+ '</span></div>'
-													
+
 													+ '</div>';
 										})
 
-						//programar manejo de errores de get json
+						// programar manejo de errores de get json
 					})
 			.fail(
 					function(jqXHR) {
 
 						document.getElementById('search-container').innerHTML = "No se encontraron resultados para la busqueda"
-						//document.getElementById('div-friendship-sol').innerHTML = "No hay solicitudes de amistad pendientes";
-						//programar manejo de errores de get json
+						// document.getElementById('div-friendship-sol').innerHTML
+						// = "No hay solicitudes de amistad pendientes";
+						// programar manejo de errores de get json
 					})
 }
-
 
 function searchForFriends3() {
 	var nameUserPattern = $("#input-search-input").val();
@@ -781,7 +803,9 @@ function searchForFriends3() {
 													+ '<div class="founded-user-next" style="border-bottom:solid 1px black;background-color:#DCC">'
 													+ '<a href="perfilPublic/'
 													+ this.id
-													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '"><img src="http://graph.facebook.com/'
+													+ this.facebookid
+													+ '/picture?type=large" /></a>'
 													+ '<div id="div-user-fullname" style="margin-left:75px;"><a href="perfilPublic/'
 													+ this.id
 													+ '"><span>'
@@ -808,7 +832,6 @@ function searchForFriends3() {
 					})
 }
 
-
 function busquedaDeAmigosPublic() {
 
 	var namePart = $("#input-search-input").val();
@@ -831,7 +854,9 @@ function busquedaDeAmigosPublic() {
 													+ '<div class= "div-userFriend marginTM marginBM cfix" style="border: 1px solid black">'
 													+ '<a href="/perfilPublic/'
 													+ this.id
-													+ '"><img src="http://graph.facebook.com/'+this.facebookid+'/picture?type=large" /></a>'
+													+ '"><img src="http://graph.facebook.com/'
+													+ this.facebookid
+													+ '/picture?type=large" /></a>'
 													+ '<div id="div-user-fullname" align="center"><a href="/perfilPublic/'
 													+ this.id
 													+ '"><span>'
@@ -842,476 +867,580 @@ function busquedaDeAmigosPublic() {
 													+ '<div id="div-username" align="center" style="margin-top:18px"><span>'
 													+ this.username
 													+ '</span></div>'
-													
+
 													+ '</div>';
 										})
 
-						//programar manejo de errores de get json
+						// programar manejo de errores de get json
 					})
 			.fail(
 					function(jqXHR) {
 
 						document.getElementById('search-container').innerHTML = "No se encontraron resultados para la busqueda"
-						//document.getElementById('div-friendship-sol').innerHTML = "No hay solicitudes de amistad pendientes";
-						//programar manejo de errores de get json
+						// document.getElementById('div-friendship-sol').innerHTML
+						// = "No hay solicitudes de amistad pendientes";
+						// programar manejo de errores de get json
 					})
 }
 
+function fadeWindows() {
 
-function fadeWindows()
-{
-	
 	$("#div-friendship-sol").fadeOut(100);
-	
+
 }
 
-function getInstagramPhotos()
-{
+function getInstagramPhotos() {
 	var tag = $('#multi-input-search').val();
 	var count = "20";
 	var acces_token = "190007719.5b9e1e6.74388794c5e54e4498623088e702536d";
-	var access_parameters = {"access_token":"190007719.5b9e1e6.74388794c5e54e4498623088e702536d"};
-	var instagramUrl = 'https://api.instagram.com/v1/tags/' + tag + '/media/recent?callback=?&count='+count;
+	var access_parameters = {
+		"access_token" : "190007719.5b9e1e6.74388794c5e54e4498623088e702536d"
+	};
+	var instagramUrl = 'https://api.instagram.com/v1/tags/' + tag
+			+ '/media/recent?callback=?&count=' + count;
 	var photoId = 0;
-	
+
 	$('#instagram-div').html('');
-	
 
-	var jqxhr = $.getJSON( instagramUrl,access_parameters)
-	       .done(function(json) {
-		
-	    	if(json.meta.code == 200) 
-	    	{
-	    		var photos = json.data;
-	    		
-	    		 if(photos.length > 0) {
-	    			 
-	    			 for (var key in photos ){
-	    				 
-	    				 var photo = photos[key];
-	    				 $('#instagram-div').append('<div class="left firstImgCel"><img src="' + photo.images.thumbnail.url 
-	    						                      + '" /><input type="checkbox" name="checkB" id="'+ photo.images.standard_resolution.url
-	    						                      +'" class="checkMultimedia" title="'+photo.images.thumbnail.url+'" /></div>');
-	    				 
-	    			 }
-	    			 
-	    		 }
-	    		 else 
-	    		 {
-	    		     
-	    		      $("#instagram-div").append("Hmm.  I couldnt find anything!");
-	    		 }
-	    
-	         }
-	    	 else  
-	    	 {
-	    		  
-	    		      var error = json.data.meta.error_message;
-	    		      $('#multimedia-div').append('Something happened, Instagram said: ' + error);
-	    	 }
-	     
-	    	  
-	    	   
-	    	   
-	    	   
-	})
-		  
-	
+	var jqxhr = $
+			.getJSON(instagramUrl, access_parameters)
+			.done(
+					function(json) {
+
+						if (json.meta.code == 200) {
+							var photos = json.data;
+
+							if (photos.length > 0) {
+
+								for ( var key in photos) {
+
+									var photo = photos[key];
+									$('#instagram-div')
+											.append(
+													'<div class="left firstImgCel"><img src="'
+															+ photo.images.thumbnail.url
+															+ '" /><input type="checkbox" name="checkB" id="'
+															+ photo.images.standard_resolution.url
+															+ '" class="checkMultimedia" title="'
+															+ photo.images.thumbnail.url
+															+ '" /></div>');
+
+								}
+
+							} else {
+
+								$("#instagram-div")
+										.append(
+												"No hay resultados para la busqueda solicitada");
+							}
+
+						} else {
+
+							var error = json.data.meta.error_message;
+							$('#multimedia-div').append(
+									'Algo pasa! Error en la conexion con instagram: '
+											+ error);
+						}
+
+					})
+
 }
 
-function mostrarAreaComent()
-{ 
-	 $('#input-coment').slideDown(250);
+function mostrarAreaComent() {
+	$('.input-coment').slideUp(150);
+	$('#input-coment').slideDown(250);
 }
 
+function checkKeyAlbum(key, currentUserId, selectedUserId, currentUserFB,
+		currentUserFirstName, currentUserLastname) {
 
-function checkKeyAlbum(key,currentUserId,selectedUserId,currentUserFB,currentUserFirstName,currentUserLastname)
-{
+	var unicode
 
-    var unicode
-    
-    if(key.charCode)
-    {
-    	unicode=key.charCode;
-    }
-    else
-    {
-    	unicode=key.keyCode;
-    }
- 
-    if (unicode == 13)
-    {
-    	$('#input-coment').slideUp(200);
-    	
-    	var albumId = $("#albumId").val();
-    	var contenido = $('#input-coment').val();
-   
-    	
-    	var jqxhr = $.post("/nuevoComentario",{elementId: albumId,contenido: contenido,
-    		                                   tipo: 'ALBUM'})
-		.done(function(jqXHR) {
-					
-			var contenido = '<div class="comment" id="'+jqXHR+'">'+
-			
-			'<div style="height:55px">'+
-			'<a class="imga left" href="perfil/'+currentUserId+'"> <img class="imgi"' +
-			 'src=http://graph.facebook.com/'+currentUserFB+'/picture />'+
-			'</a>'+
-			'<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/'+currentUserId+'">'+currentUserFirstName+" " +currentUserLastname +' dice: </a></div>'+
-			'</div>'+
-			$('#input-coment').val()+
-			
-	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
-	          
-		       '<span id="like-boton'+jqXHR+'">'+			             
+	if (key.charCode) {
+		unicode = key.charCode;
+	} else {
+		unicode = key.keyCode;
+	}
 
-	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
-              '<input id="isLike'+jqXHR+'" type="hidden" value="0" />'+
-              
-              '</span>'+
-              
-              '<span id="unlike-boton'+jqXHR+'">'+
-              '<input id="isUnlike'+jqXHR+'" type="hidden" value="0" />'+
-	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
-	          '</span>'+
-	          
-	          '<abel class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
-	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
-	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
-	         
-			if(currentUserId == selectedUserId ){
-             	contenido = contenido + '<button class="right" onclick=eliminarComentario('+jqXHR+')>Eliminar</button>';
-             }
-			
-			contenido = contenido + '</div></div>'+
-			                        '<textarea id="text'+jqXHR+'" class="input-coment"'+
-			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+currentUserId+','+selectedUserId+',this.id,\''+currentUserFB+'\',\''+currentUserFirstName+'\',\''+currentUserLastname+'\')">'+
-			                        '</textarea>';
-		
-			$('#comentarios').html(contenido + $('#comentarios').html());
-			
-			$('#input-coment').val("");
-			
-		}).fail(function(jqXHR) {
+	if (unicode == 13) {
+		$('#input-coment').slideUp(200);
 
-			// programar manejo de errores 
-		})
-    	
-    }
-    
+		var albumId = $("#albumId").val();
+		var contenido = $('#input-coment').val();
+
+		var jqxhr = $
+				.post("/nuevoComentario", {
+					elementId : albumId,
+					contenido : contenido,
+					tipo : 'ALBUM'
+				})
+				.done(
+						function(jqXHR) {
+
+							var contenido = '<div class="comment" id="'
+									+ jqXHR
+									+ '">'
+									+
+
+									'<div style="height:55px">'
+									+ '<a class="imga left" href="perfil/'
+									+ currentUserId
+									+ '"> <img class="imgi"'
+									+ 'src=http://graph.facebook.com/'
+									+ currentUserFB
+									+ '/picture />'
+									+ '</a>'
+									+ '<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/'
+									+ currentUserId
+									+ '">'
+									+ currentUserFirstName
+									+ " "
+									+ currentUserLastname
+									+ ' dice: </a></div>'
+									+ '</div>'
+									+ $('#input-coment').val()
+									+
+
+									'<div id="interaction-options" style="height:50px;zoom:0.7">'
+									+
+
+									'<span id="like-boton'
+									+ jqXHR
+									+ '">'
+									+
+
+									'<button class="btn btn-info left like-button" onclick = "meGustaComment('
+									+ jqXHR
+									+ ')">Me Gusta</button>'
+									+ '<input id="isLike'
+									+ jqXHR
+									+ '" type="hidden" value="0" />'
+									+
+
+									'</span>'
+									+
+
+									'<span id="unlike-boton'
+									+ jqXHR
+									+ '">'
+									+ '<input id="isUnlike'
+									+ jqXHR
+									+ '" type="hidden" value="0" />'
+									+ '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('
+									+ jqXHR
+									+ ')">No Me Gusta</button>'
+									+ '</span>'
+									+
+
+									'<abel class="label-coment" onclick="commentReply('
+									+ jqXHR
+									+ ')">Responder</label>'
+									+ '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'
+									+ jqXHR
+									+ '">0</span></span>'
+									+ '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'
+									+ jqXHR + '">0</span></span>';
+
+							if (currentUserId == selectedUserId) {
+								contenido = contenido
+										+ '<button class="right" onclick=eliminarComentario('
+										+ jqXHR + ')>Eliminar</button>';
+							}
+
+							contenido = contenido
+									+ '</div></div>'
+									+ '<textarea id="text'
+									+ jqXHR
+									+ '" class="input-coment"'
+									+ 'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'
+									+ currentUserId + ',' + selectedUserId
+									+ ',this.id,\'' + currentUserFB + '\',\''
+									+ currentUserFirstName + '\',\''
+									+ currentUserLastname + '\')">'
+									+ '</textarea>';
+
+							$('#comentarios').html(
+									contenido + $('#comentarios').html());
+
+							$('#input-coment').val("");
+
+						}).fail(function(jqXHR) {
+
+					// programar manejo de errores
+				})
+
+	}
+
 }
 
-
-function meGustaAlbum()
-{
+function meGustaAlbum() {
 	var albumId = $("#albumId").val();
 	var isUnlike = $("#isUnlike").val();
-	
-	if(isUnlike == 1)
-	    podriaGustarmeAlbum();
-	
-	var jqxhr = $.post("/nuevoLike",{elementId: albumId, element: 'ALBUM'})
 
-    .done(function(jqXHR) {
-            
-    	var contenido = '<button class="btn btn-danger left like-button"'+
-                       'onclick="yaNoMeGustaAlbum()" style="width:90px">Ya no me gusta</button>'+		       
-                       '<input id="isLike" type="hidden" value="1" />';
+	if (isUnlike == 1)
+		podriaGustarmeAlbum();
 
-        $("#like-boton").html(contenido);
-    	$("#likeCount").html(parseInt($("#likeCount").html())+1);
-   
-    }).fail(function(jqXHR) {
+	var jqxhr = $
+			.post("/nuevoLike", {
+				elementId : albumId,
+				element : 'ALBUM'
+			})
 
-        // programar manejo de errores 
-    })
-	
+			.done(
+					function(jqXHR) {
+
+						var contenido = '<button class="btn btn-danger left like-button"'
+								+ 'onclick="yaNoMeGustaAlbum()" style="width:90px">Ya no me gusta</button>'
+								+ '<input id="isLike" type="hidden" value="1" />';
+
+						$("#like-boton").html(contenido);
+						$("#likeCount").html(
+								parseInt($("#likeCount").html()) + 1);
+
+					}).fail(function(jqXHR) {
+
+				// programar manejo de errores
+			})
+
 }
 
-function noMeGustaAlbum()
-{
+function noMeGustaAlbum() {
 	var albumId = $("#albumId").val();
-    var isLike = $("#isLike").val();
-	
-    if(isLike == 1)
-	   yaNoMeGustaAlbum();
-	
-	var jqxhr = $.post("/nuevoUnlike",{elementId: albumId, element: 'ALBUM'})
+	var isLike = $("#isLike").val();
 
-    .done(function(jqXHR) {
-    	
-    	var contenido = '<button class="btn btn-primary left like-button"'+
-        'onclick="podriaGustarmeAlbum()" style="width:90px">Podria Gustarme</button>'+		       
-        '<input id="isUnlike" type="hidden" value="1" />';
-    	
-        $("#unlike-boton").html(contenido);
+	if (isLike == 1)
+		yaNoMeGustaAlbum();
 
-    	$("#unlikeCount").html(parseInt($("#unlikeCount").html())+1);
-   
-    }).fail(function(jqXHR) {
+	var jqxhr = $
+			.post("/nuevoUnlike", {
+				elementId : albumId,
+				element : 'ALBUM'
+			})
 
-        // programar manejo de errores 
-    })
-	
+			.done(
+					function(jqXHR) {
+
+						var contenido = '<button class="btn btn-primary left like-button"'
+								+ 'onclick="podriaGustarmeAlbum()" style="width:90px">Podria Gustarme</button>'
+								+ '<input id="isUnlike" type="hidden" value="1" />';
+
+						$("#unlike-boton").html(contenido);
+
+						$("#unlikeCount").html(
+								parseInt($("#unlikeCount").html()) + 1);
+
+					}).fail(function(jqXHR) {
+
+				// programar manejo de errores
+			})
+
 }
 
-function eliminarComentario(commentId)
-{
-	var jqxhr = $.ajax("/deleteComment/" + commentId)
-	.done(function(jqXHR) {
-		   $("#"+commentId).slideUp(300);
+function eliminarComentario(commentId) {
+	var jqxhr = $.ajax("/deleteComment/" + commentId).done(function(jqXHR) {
+		$("#" + commentId).slideUp(300);
 	}).fail(function(jqXHR) {
 
 		// programar manejo de errores
 	})
 }
 
-function commentReply(areaNumber)
-{
-	$('#text'+areaNumber).slideDown(250);
+function commentReply(areaNumber) {
+	$('.input-coment').slideUp(150);
+	$('#text' + areaNumber).slideDown(250);
 }
 
-function checkKeyComment(key,userId,selectedUserId,textCommentId,currentUserFB,currentUserFirstName,currentUserLastname)
-{
-	
-    var unicode
-    
-    if(key.charCode)
-    {
-    	unicode=key.charCode;
-    }
-    else
-    {
-    	unicode=key.keyCode;
-    }
- 
-    if (unicode == 13)
-    {
-    
-    	$('#'+textCommentId).slideUp(200);
-        
-    	
-    	var commentId = textCommentId.substring(4,textCommentId.length);
-    	var contenido = $('#'+textCommentId).val();
-    	
-    	
-    	var jqxhr = $.post("/nuevoComentario",{elementId: commentId,contenido: contenido,
-    		                                   tipo: 'COMENTARIO'})
-		.done(function(jqXHR) {
-					
-			var contenido = '<div class="comment" id="'+jqXHR+'">'+
-			
-			'<div style="height:55px">'+
-			'<a class="imga left" href="perfil/'+userId+'"> <img class="imgi"'+
-			'src=http://graph.facebook.com/'+currentUserFB+'/picture />'+
-			'</a>'+
-			'<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/'+userId+'">'+currentUserFirstName+" " +currentUserLastname +' dice: </a></div>'+
-			'</div>'+ $('#'+textCommentId).val()+
-			
-	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
-	          
-		      '<span id="like-boton'+jqXHR+'">'+			             
+function checkKeyComment(key, userId, selectedUserId, textCommentId,
+		currentUserFB, currentUserFirstName, currentUserLastname) {
 
-	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
-	          '<input id="isLike'+jqXHR+'" type="hidden" value="0" />'+
-	          
-	          '</span>'+
-	          
-		      '<span id="unlike-boton'+jqXHR+'">'+			             
+	var unicode
 
-	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
-              '<input id="isUnlike'+jqXHR+'" type="hidden" value="0" />'+
-	          
-              '</span>'+
-              
-	          '<label class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
-	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
-	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
-	         
-	         
-			if(userId == selectedUserId ){
-             	contenido = contenido + '<button class="right" onclick=eliminarComentario('+jqXHR+')>Eliminar</button>';
-             }
-			
-			
-			contenido = contenido + '</div></div>'+
-			                        '<textarea id="text'+jqXHR+'" class="input-coment"'+
-			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+userId+','+selectedUserId+',this.id,\''+currentUserFB+'\',\''+currentUserFirstName+'\',\''+currentUserLastname+'\')">'+
-			                        '</textarea>';
-		
-		
-			$('#'+commentId).html($('#'+commentId).html()+contenido);
-			
-			$('#'+textCommentId).val(""); 
-			
-		}).fail(function(jqXHR) {
+	if (key.charCode) {
+		unicode = key.charCode;
+	} else {
+		unicode = key.keyCode;
+	}
 
-			 //errores
-		})
-    	
-    }
-    
+	if (unicode == 13) {
+
+		$('#' + textCommentId).hide(200);
+
+		var commentId = textCommentId.substring(4, textCommentId.length);
+		var contenido = $('#' + textCommentId).val();
+
+		var jqxhr = $
+				.post("/nuevoComentario", {
+					elementId : commentId,
+					contenido : contenido,
+					tipo : 'COMENTARIO'
+				})
+				.done(
+						function(jqXHR) {
+
+							var contenido = '<div class="comment" id="'
+									+ jqXHR
+									+ '">'
+									+
+
+									'<div style="height:55px">'
+									+ '<a class="imga left" href="perfil/'
+									+ userId
+									+ '"> <img class="imgi"'
+									+ 'src=http://graph.facebook.com/'
+									+ currentUserFB
+									+ '/picture />'
+									+ '</a>'
+									+ '<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/'
+									+ userId
+									+ '">'
+									+ currentUserFirstName
+									+ " "
+									+ currentUserLastname
+									+ ' dice: </a></div>'
+									+ '</div>'
+									+ $('#' + textCommentId).val()
+									+
+
+									'<div id="interaction-options" style="height:50px;zoom:0.7">'
+									+
+
+									'<span id="like-boton'
+									+ jqXHR
+									+ '">'
+									+
+
+									'<button class="btn btn-info left like-button" onclick = "meGustaComment('
+									+ jqXHR
+									+ ')">Me Gusta</button>'
+									+ '<input id="isLike'
+									+ jqXHR
+									+ '" type="hidden" value="0" />'
+									+
+
+									'</span>'
+									+
+
+									'<span id="unlike-boton'
+									+ jqXHR
+									+ '">'
+									+
+
+									'<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('
+									+ jqXHR
+									+ ')">No Me Gusta</button>'
+									+ '<input id="isUnlike'
+									+ jqXHR
+									+ '" type="hidden" value="0" />'
+									+
+
+									'</span>'
+									+
+
+									'<label class="label-coment" onclick="commentReply('
+									+ jqXHR
+									+ ')">Responder</label>'
+									+ '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'
+									+ jqXHR
+									+ '">0</span></span>'
+									+ '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'
+									+ jqXHR + '">0</span></span>';
+
+							if (userId == selectedUserId) {
+								contenido = contenido
+										+ '<button class="right" onclick=eliminarComentario('
+										+ jqXHR + ')>Eliminar</button>';
+							}
+
+							contenido = contenido
+									+ '</div></div>'
+									+ '<textarea id="text'
+									+ jqXHR
+									+ '" class="input-coment"'
+									+ 'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'
+									+ userId + ',' + selectedUserId
+									+ ',this.id,\'' + currentUserFB + '\',\''
+									+ currentUserFirstName + '\',\''
+									+ currentUserLastname + '\')">'
+									+ '</textarea>';
+
+							$('#' + commentId).html(
+									$('#' + commentId).html() + contenido);
+
+							$('#' + textCommentId).val("");
+
+						}).fail(function(jqXHR) {
+
+					// errores
+				})
+
+	}
+
 }
 
+function meGustaComment(commentId) {
 
-function meGustaComment(commentId)
-{
-	
-    var isUnlike = $("#isUnlike"+commentId).val();
-	
-    if(isUnlike == 1)
-	   podriaGustarmeComment(commentId);
-	
-	var jqxhr = $.post("/nuevoLike",{elementId: commentId, element: 'COMENTARIO'})
+	var isUnlike = $("#isUnlike" + commentId).val();
 
-    .done(function(jqXHR) {
-            
-    	var contenido = '<button class="btn btn-danger left like-button"'+
-        'onclick="yaNoMeGustaComment('+commentId+')" style="width:90px">Ya no me gusta</button>'+		       
-        '<input id="isLike'+commentId+'" type="hidden" value="1" />';
+	if (isUnlike == 1)
+		podriaGustarmeComment(commentId);
 
-        $("#like-boton"+commentId).html(contenido);
+	var jqxhr = $
+			.post("/nuevoLike", {
+				elementId : commentId,
+				element : 'COMENTARIO'
+			})
 
-        $("#likeCount"+commentId).html(parseInt($("#likeCount"+commentId).html())+1);
-     
-   
-    }).fail(function(jqXHR) {
+			.done(
+					function(jqXHR) {
 
-        // programar manejo de errores 
-    })
-	
+						var contenido = '<button class="btn btn-danger left like-button"'
+								+ 'onclick="yaNoMeGustaComment('
+								+ commentId
+								+ ')" style="width:90px">Ya no me gusta</button>'
+								+ '<input id="isLike'
+								+ commentId
+								+ '" type="hidden" value="1" />';
+
+						$("#like-boton" + commentId).html(contenido);
+
+						$("#likeCount" + commentId)
+								.html(
+										parseInt($("#likeCount" + commentId)
+												.html()) + 1);
+
+					}).fail(function(jqXHR) {
+
+				// programar manejo de errores
+			})
+
 }
 
-function noMeGustaComment(commentId)
-{
-    var isLike = $("#isLike"+commentId).val();
-	
-    if(isLike == 1)
-	   yaNoMeGustaComment(commentId);
-	
-	var jqxhr = $.post("/nuevoUnlike",{elementId: commentId, element: 'COMENTARIO'})
+function noMeGustaComment(commentId) {
+	var isLike = $("#isLike" + commentId).val();
 
-    .done(function(jqXHR) {
-    	
-    	var contenido = '<button class="btn btn-primary left like-button"'+
-        'onclick="podriaGustarmeComment('+commentId+')" style="width:90px">Podria Gustarme</button>'+		       
-        '<input id="isUnlike'+commentId+'" type="hidden" value="1" />';
-    	
-        $("#unlike-boton"+commentId).html(contenido);
-   
-    	$("#unlikeCount"+commentId).html(parseInt($("#unlikeCount"+commentId).html())+1);
-   
-    }).fail(function(jqXHR) {
+	if (isLike == 1)
+		yaNoMeGustaComment(commentId);
 
-        // programar manejo de errores 
-    })
-	
+	var jqxhr = $
+			.post("/nuevoUnlike", {
+				elementId : commentId,
+				element : 'COMENTARIO'
+			})
+
+			.done(
+					function(jqXHR) {
+
+						var contenido = '<button class="btn btn-primary left like-button"'
+								+ 'onclick="podriaGustarmeComment('
+								+ commentId
+								+ ')" style="width:90px">Podria Gustarme</button>'
+								+ '<input id="isUnlike'
+								+ commentId
+								+ '" type="hidden" value="1" />';
+
+						$("#unlike-boton" + commentId).html(contenido);
+
+						$("#unlikeCount" + commentId)
+								.html(
+										parseInt($("#unlikeCount" + commentId)
+												.html()) + 1);
+
+					}).fail(function(jqXHR) {
+
+				// programar manejo de errores
+			})
+
 }
 
-function addContentToAlbum()
-{
+function addContentToAlbum() {
 	var arrayPosition = 0;
 
 	var photos = [];
-    var tumbs = [];
-  	
-  	$("input[name=checkB]:checked").each(function() {
-  	    photos.push(this.id);
-  	});
-  	
-  	$("input[name=checkB]:checked").each(function() {
-  	    tumbs.push(this.title);
-  	});
-  	
-  	if(photos.length > 0)
-  	{
-  	   var jqxhr = $.post("/addContentToAlbum",{'photos[]':photos,'tumbs[]':tumbs})
-  	
-  	   .done(function(jqXHR) {
-	  
-		
-	   	   if (jqXHR == "true") {
-            
-			   location.href = "/showAlbumContent";
-		   } 
-		
-	   }).fail(function(jqXHR) {
-		
-		   // mensaje de error en conexion
-	   })
-  	}
-  	else
-  	{
-  		location.href = "/showAlbumContent";
-  	}
-}
-
-function deleteContentInAlbum()
-{
-	var photos = [];
-	
+	var tumbs = [];
 
 	$("input[name=checkB]:checked").each(function() {
-	    photos.push(this.id);
+		photos.push(this.id);
 	});
 
-	if(photos.length > 0)
-	{
-       var jqxhr = $.post("/deleteContentInAlbum",{'photos[]':photos})
-  	
-  	   .done(function(jqXHR) {
-	  
-		
-		   if (jqXHR == "true") {
-            
-			   location.href = "/showAlbumContent";
-		   } 
-		
-	   }).fail(function(jqXHR) {
-		
-		
-		   // mensaje de error en conexion
-	   })
-	}
-	else
-	{
+	$("input[name=checkB]:checked").each(function() {
+		tumbs.push(this.title);
+	});
+
+	if (photos.length > 0) {
+		var jqxhr = $.post("/addContentToAlbum", {
+			'photos[]' : photos,
+			'tumbs[]' : tumbs
+		})
+
+		.done(function(jqXHR) {
+
+			if (jqXHR == "true") {
+
+				location.href = "/showAlbumContent";
+			}
+
+		}).fail(function(jqXHR) {
+
+			// mensaje de error en conexion
+		})
+	} else {
 		location.href = "/showAlbumContent";
 	}
- 
 }
 
+function deleteContentInAlbum() {
+	var photos = [];
 
+	$("input[name=checkB]:checked").each(function() {
+		photos.push(this.id);
+	});
 
+	if (photos.length > 0) {
+		var jqxhr = $.post("/deleteContentInAlbum", {
+			'photos[]' : photos
+		})
 
+		.done(function(jqXHR) {
+
+			if (jqXHR == "true") {
+
+				location.href = "/showAlbumContent";
+			}
+
+		}).fail(function(jqXHR) {
+
+			// mensaje de error en conexion
+		})
+	} else {
+		location.href = "/showAlbumContent";
+	}
+
+}
 
 function editAlbumTitle(id) {
 
-	
 	if ($("#modify").attr("value") == 0) {
 		$("#span-titulo")
 				.html(
 						"<input type='text' id='title-input' name='title-input' maxlength='30' placeholder='Ingresar Titulo' value='"
 								+ $("#span-titulo").html() + "' />");
-		
+
 		$("#description-edit-button").slideUp(150);
-		$("#title-edit-button").attr("src",
-				"assets/images/save_icon.png");
+		$("#title-edit-button").attr("src", "assets/images/save_icon.png");
 		$('#title-edit-button').attr("title", "guardar");
 		$("#modify").attr("value", "1");
-	} 
-	else if ($("#modify").attr("value") == 1) {
+	} else if ($("#modify").attr("value") == 1) {
 		if ($("#title-input").attr("value") == "") {
 
 		} else {
-			
+
 			// programar manejo de errores de update en bd
 			updateAlbum(1, $("#title-input").val(), id);
-		
+
 			$("#description-edit-button").slideDown(150);
 			$("#span-titulo").html($("#title-input").attr("value"));
-			
-			$("#title-edit-button").attr("src",
-					"assets/images/edit_icon.png");
+
+			$("#title-edit-button").attr("src", "assets/images/edit_icon.png");
 			$('#title-edit-button').attr("title", "editar");
 			$("#modify").attr("value", "0");
 
@@ -1327,24 +1456,23 @@ function editAlbumDescription(id) {
 				.html(
 						"<input type='text' id='description-input' name='description-input' maxlength='50' placeholder='Ingresar Titulo' value='"
 								+ $("#span-description").html() + "' />");
-		
+
 		$("#title-edit-button").slideUp(150);
-		$("#description-edit-button").attr("src",
-				"assets/images/save_icon.png");
+		$("#description-edit-button")
+				.attr("src", "assets/images/save_icon.png");
 		$('#description-edit-button').attr("title", "guardar");
 		$("#modify").attr("value", "1");
-	} 
-	else if ($("#modify").attr("value") == 1) {
+	} else if ($("#modify").attr("value") == 1) {
 		if ($("#description-input").attr("value") == "") {
 
 		} else {
-			
+
 			// programar manejo de errores de update en bd
-		    updateAlbum(2, $("#description-input").val(), id);
-		
+			updateAlbum(2, $("#description-input").val(), id);
+
 			$("#title-edit-button").slideDown(150);
 			$("#span-description").html($("#description-input").attr("value"));
-			
+
 			$("#description-edit-button").attr("src",
 					"assets/images/edit_icon.png");
 			$('#description-edit-button').attr("title", "editar");
@@ -1355,128 +1483,135 @@ function editAlbumDescription(id) {
 	}
 }
 
-function yaNoMeGustaAlbum()
-{
-    var albumId = $("#albumId").val();
-	
-	var jqxhr = $.post("/deleteLikeAlbum",{elementId: albumId})
+function yaNoMeGustaAlbum() {
+	var albumId = $("#albumId").val();
 
-    .done(function(jqXHR) {
-            
-    	   var contenido = '<button class="btn btn-info left like-button"'+ 
-    		               'onclick="meGustaAlbum()">Me Gusta</button>'+
-	                       '<input id="isLike" type="hidden" value="0" />';
-    	   
-    	   $("#likeCount").html(parseInt($("#likeCount").html())-1);
-    	   $("#like-boton").html(contenido);
-   
-    }).fail(function(jqXHR) {
+	var jqxhr = $.post("/deleteLikeAlbum", {
+		elementId : albumId
+	})
 
-        // programar manejo de errores 
-    })
-	
-}
+	.done(
+			function(jqXHR) {
 
-function podriaGustarmeAlbum()
-{
-    var albumId = $("#albumId").val();
-	
-	var jqxhr = $.post("/deleteUnlikeAlbum",{elementId: albumId})
+				var contenido = '<button class="btn btn-info left like-button"'
+						+ 'onclick="meGustaAlbum()">Me Gusta</button>'
+						+ '<input id="isLike" type="hidden" value="0" />';
 
-    .done(function(jqXHR) {
-            
-    	   var contenido = '<button class="btn btn-info left no-like-button"'+
-    		               'onclick="noMeGustaAlbum()">No Me Gusta</button>'+
-	                       '<input id="isUnlike" type="hidden" value="0" />';
-    	   
-    	   $("#unlikeCount").html(parseInt($("#unlikeCount").html())-1);
-    	   $("#unlike-boton").html(contenido);
-   
-    }).fail(function(jqXHR) {
+				$("#likeCount").html(parseInt($("#likeCount").html()) - 1);
+				$("#like-boton").html(contenido);
 
-        // programar manejo de errores 
-    })
-}
+			}).fail(function(jqXHR) {
 
-
-function yaNoMeGustaComment(commentId)
-{
-
-	var jqxhr = $.post("/deleteLikeComment",{elementId: commentId})
-
-    .done(function(jqXHR) {
-            
-    	var contenido = '<button class="btn btn-info left like-button"'+ 
-        'onclick="meGustaComment('+commentId+')">Me Gusta</button>'+
-        '<input id="isLike'+commentId+'" type="hidden" value="0" />';
-    	
-        $("#likeCount"+commentId).html(parseInt($("#likeCount"+commentId).html())-1);
-        
- 	   $("#like-boton"+commentId).html(contenido);
-
-     
-   
-    }).fail(function(jqXHR) {
-
-        // programar manejo de errores 
-    })
-	
-}
-
-function podriaGustarmeComment(commentId)
-{
-	
-	var jqxhr = $.post("/deleteUnlikeComment",{elementId: commentId})
-
-    .done(function(jqXHR) {
-   
-    	var contenido = '<button class="btn btn-info left no-like-button"'+
-        'onclick="noMeGustaComment('+commentId+')">No Me Gusta</button>'+
-        '<input id="isUnlike'+commentId+'" type="hidden" value="0" />';
-    	
-    	$("#unlikeCount"+commentId).html(parseInt($("#unlikeCount"+commentId).html())-1);
-    	
-  	   $("#unlike-boton"+commentId).html(contenido);
-
-   
-    }).fail(function(jqXHR) {
-
-        // programar manejo de errores 
-    })
-	
-}
-
-function mostrarBoton(albumId)
-{
-  $("#firstImgCel"+albumId ).hover(
-		  function() {
-		    $("#btnImage"+albumId).show();
-		  }, function() {
-		    $("#btnImage"+albumId).hide();
-		  }
-		);
+		// programar manejo de errores
+	})
 
 }
 
+function podriaGustarmeAlbum() {
+	var albumId = $("#albumId").val();
 
-function modifyAlbumPhoto(albumId)
-{
-     location.href="/editPortadaAlbum/"+albumId;	
+	var jqxhr = $
+			.post("/deleteUnlikeAlbum", {
+				elementId : albumId
+			})
+
+			.done(
+					function(jqXHR) {
+
+						var contenido = '<button class="btn btn-info left no-like-button"'
+								+ 'onclick="noMeGustaAlbum()">No Me Gusta</button>'
+								+ '<input id="isUnlike" type="hidden" value="0" />';
+
+						$("#unlikeCount").html(
+								parseInt($("#unlikeCount").html()) - 1);
+						$("#unlike-boton").html(contenido);
+
+					}).fail(function(jqXHR) {
+
+				// programar manejo de errores
+			})
 }
 
-function updateAlbumCaratula(albumId,numeroFotos)
-{
-	for (var cuentaFotos = 0;cuentaFotos<numeroFotos;cuentaFotos++)
-	{
-		if (document.formFoto.radioB[cuentaFotos].checked)
-		{
-			updateAlbum(3,document.formFoto.radioB[cuentaFotos].value, albumId);		
+function yaNoMeGustaComment(commentId) {
+
+	var jqxhr = $.post("/deleteLikeComment", {
+		elementId : commentId
+	})
+
+	.done(
+			function(jqXHR) {
+
+				var contenido = '<button class="btn btn-info left like-button"'
+						+ 'onclick="meGustaComment(' + commentId
+						+ ')">Me Gusta</button>' + '<input id="isLike'
+						+ commentId + '" type="hidden" value="0" />';
+
+				$("#likeCount" + commentId).html(
+						parseInt($("#likeCount" + commentId).html()) - 1);
+
+				$("#like-boton" + commentId).html(contenido);
+
+			}).fail(function(jqXHR) {
+
+		// programar manejo de errores
+	})
+
+}
+
+function podriaGustarmeComment(commentId) {
+
+	var jqxhr = $
+			.post("/deleteUnlikeComment", {
+				elementId : commentId
+			})
+
+			.done(
+					function(jqXHR) {
+
+						var contenido = '<button class="btn btn-info left no-like-button"'
+								+ 'onclick="noMeGustaComment('
+								+ commentId
+								+ ')">No Me Gusta</button>'
+								+ '<input id="isUnlike'
+								+ commentId
+								+ '" type="hidden" value="0" />';
+
+						$("#unlikeCount" + commentId)
+								.html(
+										parseInt($("#unlikeCount" + commentId)
+												.html()) - 1);
+
+						$("#unlike-boton" + commentId).html(contenido);
+
+					}).fail(function(jqXHR) {
+
+				// programar manejo de errores
+			})
+
+}
+
+function mostrarBoton(albumId) {
+	$("#firstImgCel" + albumId).hover(function() {
+		$("#btnImage" + albumId).show();
+	}, function() {
+		$("#btnImage" + albumId).hide();
+	});
+
+}
+
+function modifyAlbumPhoto(albumId) {
+	location.href = "/editPortadaAlbum/" + albumId;
+}
+
+function updateAlbumCaratula(albumId, numeroFotos) {
+	for (var cuentaFotos = 0; cuentaFotos < numeroFotos; cuentaFotos++) {
+		if (document.formFoto.radioB[cuentaFotos].checked) {
+			updateAlbum(3, document.formFoto.radioB[cuentaFotos].value, albumId);
 			break;
 		}
-			
-		
+
 	}
-	
+
 	location.href = "/albumesPag";
-	
+
 }

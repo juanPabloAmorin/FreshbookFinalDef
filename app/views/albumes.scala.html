@@ -119,8 +119,9 @@
 								src= @album.getCaratula />
 							</a>
 							
+							@if(selectedUser.getId == currentUser.getId){
 							<img src="assets/images/edit_icon.png" id="btnImage@album.getId" class="btnImage" title="Edit Photo" style="cursor:pointer" onclick="modifyAlbumPhoto(@album.getId)"/>
-							
+							}
 							<div class="divAlbumTemp">
 								<div>
 									<span class="albumName">@album.getNombre</span>

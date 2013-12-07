@@ -544,22 +544,20 @@ object Application extends Controller {
     var albumImgRoute = ""
     var photos = Seq("")
     var tumbnails = Seq("")
-   
-    try
-    {
+
+    try {
       albumDescription = request.body.asFormUrlEncoded.get("description").head;
       albumPrivacy = request.body.asFormUrlEncoded.get("privacy").head.toInt;
       albumImgRoute = request.body.asFormUrlEncoded.get("imageRoute").head;
       photos = request.body.asFormUrlEncoded.get("photos[]");
       tumbnails = request.body.asFormUrlEncoded.get("tumbs[]");
-    }
-    catch{
+    } catch {
       case e: NoSuchElementException =>
-              Logger.info("Se va a crear el album "+albumName+ "vacio")
-        
+        Logger.info("Se va a crear el album " + albumName + "vacio")
+
     }
-    
-    if(tumbnails(0) != "")
+
+    if (tumbnails(0) != "")
       albumImgRoute = tumbnails(0)
     else
       albumImgRoute = "assets/images/folder.jpg"
@@ -570,7 +568,7 @@ object Application extends Controller {
     user = currentUserBuild(request, user)
 
     try {
-      var album: Album = new Album(albumName, albumPrivacy,albumImgRoute, Some(albumDescription), user.getId)
+      var album: Album = new Album(albumName, albumPrivacy, albumImgRoute, Some(albumDescription), user.getId)
       var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
       albumDao.insertAlbum(album)
 
@@ -584,9 +582,8 @@ object Application extends Controller {
       var tumbnailPosition = 0;
 
       for (ruta <- photos) {
-        
-        if(ruta != "")
-        {
+
+        if (ruta != "") {
           contenidoMultimedia.setRuta(ruta)
           contenidoMultimedia.setRedSocial("INSTAGRAM")
           contenidoMultimedia.setInAlbumId(idAlbum)
@@ -1343,38 +1340,34 @@ object Application extends Controller {
         throw new Exception("Se ha cerrado la sesion del usuario")
     }
   }
-  
-  def editPortadaAlbum(albumId: Long) = Action { implicit request =>
- 
-      Redirect("/editPortadaAlbumPage").withSession(session + ("albumId" -> albumId.toString))
-  }
-  
-  def editPortadaAlbumPage() = Action { implicit request =>
-    
-      request.session.get("albumId").map { albumId =>
 
-        var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
-        var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }
-        albumActual.setContenidoMultimedia(albumDao.getContenidoByAlbum(albumActual.getId))
-   
-        var user: Usuario = new Usuario();
-        user = currentUserBuild(request, user)
-     
-        Ok(views.html.portadaAlbum(user,albumActual))
-      }.getOrElse {
+  def editPortadaAlbum(albumId: Long) = Action { implicit request =>
+
+    Redirect("/editPortadaAlbumPage").withSession(session + ("albumId" -> albumId.toString))
+  }
+
+  def editPortadaAlbumPage() = Action { implicit request =>
+
+    request.session.get("albumId").map { albumId =>
+
+      var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+      var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }
+      albumActual.setContenidoMultimedia(albumDao.getContenidoByAlbum(albumActual.getId))
+
+      var user: Usuario = new Usuario();
+      user = currentUserBuild(request, user)
+
+      Ok(views.html.portadaAlbum(user, albumActual))
+    }.getOrElse {
       Ok(views.html.index()).withNewSession
     }
   }
-  
-  def updateCaratulaAlbum() = Action{
-    
-    
+
+  def updateCaratulaAlbum() = Action {
+
     Ok("true")
   }
-  
-  
-  
-  
+
   def updateAlbum() = Action {
     request =>
 
@@ -1397,13 +1390,12 @@ object Application extends Controller {
             albumDao.updateAlbumDescription(attribute, albumActual.getId)
           } else if (option == 3) {
             albumDao.updateAlbumCaratula(attribute, albumActual.getId)
-          } 
+          }
 
           Logger.info("Se ha modificado el " + attribute + " del album " + albumActual.getId + " " + albumActual.getNombre)
 
-         
           Ok("true")
-          
+
         } catch {
           case e: DAOException =>
             Logger.info("No es posible modificar el " + attribute + " del album " + albumActual.getId + " " + albumActual.getNombre)
@@ -1415,9 +1407,5 @@ object Application extends Controller {
         Ok(views.html.index()).withNewSession
       }
   }
-  
-  
-  
-  
 
 }

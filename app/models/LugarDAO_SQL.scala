@@ -11,7 +11,6 @@ import models._
 
 import org.h2.jdbc.JdbcSQLException
 
-
 class LugarDAO_SQL extends LugarDAO {
 
   val parser = {
@@ -25,11 +24,11 @@ class LugarDAO_SQL extends LugarDAO {
   var lastLugarSequenceNumber: Long = 0
 
   override def getLugarById(id: Long): Option[Lugar] = {
-    try{
-    DB.withConnection { implicit connection =>
-      SQL("select * from LUGAR where id = {id} ").on('id -> id).as(this.parser.singleOpt)
-    }
-    }catch {
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("select * from LUGAR where id = {id} ").on('id -> id).as(this.parser.singleOpt)
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 
@@ -49,26 +48,26 @@ class LugarDAO_SQL extends LugarDAO {
         fkLugar = Some("null");
 
     }
-    
-    try{
-    DB.withConnection { implicit connection =>
-      SQL("INSERT INTO LUGAR VALUES(nextval('seq_lugar'),{nombre},{tipo}," + fkLugar.get + ")").on(
-        'nombre -> newLugar.getNombre,
-        'tipo -> newLugar.getTipo).executeUpdate()
 
-      lastLugarSequenceNumber = SQL("select currval('seq_lugar')").as(scalar[Long].single)
-    }
-    }catch {
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("INSERT INTO LUGAR VALUES(nextval('seq_lugar'),{nombre},{tipo}," + fkLugar.get + ")").on(
+          'nombre -> newLugar.getNombre,
+          'tipo -> newLugar.getTipo).executeUpdate()
+
+        lastLugarSequenceNumber = SQL("select currval('seq_lugar')").as(scalar[Long].single)
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
   }
 
   override def getLugarByNameAndType(name: String, typo: String): Option[Lugar] = {
-    try{
-    DB.withConnection { implicit connection =>
-      SQL("select * from LUGAR where nombre = {name} and tipo = {typo} ").on('name -> name, 'typo -> typo).as(this.parser.singleOpt)
-    }
-    }catch {
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("select * from LUGAR where nombre = {name} and tipo = {typo} ").on('name -> name, 'typo -> typo).as(this.parser.singleOpt)
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
   }
@@ -79,11 +78,11 @@ class LugarDAO_SQL extends LugarDAO {
   }
 
   override def getLugarByNameAndTypeAndZone(name: String, typo: String, zone: Long): Option[Lugar] = {
-    try{
-    DB.withConnection { implicit connection =>
-      SQL("select * from LUGAR where nombre = {name} and tipo = {typo} and fk_lugar = {zone}").on('name -> name, 'typo -> typo, 'zone -> zone).as(this.parser.singleOpt)
-    }
-    }catch {
+    try {
+      DB.withConnection { implicit connection =>
+        SQL("select * from LUGAR where nombre = {name} and tipo = {typo} and fk_lugar = {zone}").on('name -> name, 'typo -> typo, 'zone -> zone).as(this.parser.singleOpt)
+      }
+    } catch {
       case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
   }
