@@ -131,14 +131,14 @@
 			<div class="panel4 right">
 			  
 			  <div class="divDataAlbum2 cfix left ">
-			     <div class="divTitle pvl" style="height:20px;padding-top:10px;">T&iacute;tulo:  @currentAlbum.getNombre
+			     <div class="divTitle pvl" style="height:20px;padding-top:10px;">T&iacute;tulo:<span id="span-titulo" style="margin-left: 5px;">  @currentAlbum.getNombre</span>
 			        @if(currentUser.getId == selectedUser.getId){
-			       	   <img class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" />
+			       	   <img id="title-edit-button" class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" onclick="editAlbumTitle()" />
 			       }
 			     </div>
-			     <div class="divTitle pvl" style="height:20px;padding-top:10px;border-top:solid 1px white">Descripci&oacute;n:  @currentAlbum.getDescripcion
+			     <div class="divTitle pvl" style="height:20px;padding-top:10px;border-top:solid 1px white">Descripci&oacute;n:<span id="span-description" style="margin-left: 5px;">  @currentAlbum.getDescripcion</span>
 			        @if(currentUser.getId == selectedUser.getId){
-			       	   <img class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" />
+			       	   <img id="description-edit-button" class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" onclick="editAlbumDescription()"/>
 			       }
 			     </div>
 			    	   
@@ -176,7 +176,7 @@
 			     <span style="margin: 20px 8px 0 300px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount">@currentAlbum.getLikes</span></span>
 			     <span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount">@currentAlbum.getUnlikes</span></span>
 			  </div>			  
-			  <textarea id="input-coment" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyAlbum(event,@currentUser.getId,@selectedUser.getId)"></textarea>
+			  <textarea id="input-coment" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyAlbum(event,@currentUser.getId,@selectedUser.getId,'@currentUser.getFacebookId','@currentUser.getPrimerNombre','@currentUser.getPrimerApellido')"></textarea>
 			 
 			 
 			 
@@ -224,6 +224,8 @@
 
 	</div>
 
+    <input type="hidden" id="modify" name="modify" value="0" />
+	
 	
 	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
 	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>

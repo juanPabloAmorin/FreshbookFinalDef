@@ -919,9 +919,9 @@ function mostrarAreaComent()
 }
 
 
-function checkKeyAlbum(key,currentUserId,selectedUserId)
+function checkKeyAlbum(key,currentUserId,selectedUserId,currentUserFB,currentUserFirstName,currentUserLastname)
 {
- 
+
     var unicode
     
     if(key.charCode)
@@ -945,11 +945,20 @@ function checkKeyAlbum(key,currentUserId,selectedUserId)
     		                                   tipo: 'ALBUM'})
 		.done(function(jqXHR) {
 					
-			var contenido = '<div class="comment" id="'+jqXHR+'">'+$('#input-coment').val()+
+			var contenido = '<div class="comment" id="'+jqXHR+'">'+
+			
+			'<div style="height:55px">'+
+			'<a class="imga left" href="perfil/'+currentUserId+'"> <img class="imgi"' +
+			 'src=http://graph.facebook.com/'+currentUserFB+'/picture />'+
+			'</a>'+
+			'<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/'+currentUserId+'">'+currentUserFirstName+" " +currentUserLastname +' dice: </a></div>'+
+			'</div>'+
+			$('#input-coment').val()+
+			
 	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
 	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
 	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
-	          '<label class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
+	          '<abel class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
 	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
 	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
 	         
@@ -959,7 +968,7 @@ function checkKeyAlbum(key,currentUserId,selectedUserId)
 			
 			contenido = contenido + '</div></div>'+
 			                        '<textarea id="text'+jqXHR+'" class="input-coment"'+
-			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+currentUserId+','+selectedUserId+',this.id)">'+
+			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+currentUserId+','+selectedUserId+',this.id,\''+currentUserFB+'\',\''+currentUserFirstName+'\',\''+currentUserLastname+'\')">'+
 			                        '</textarea>';
 		
 			$('#comentarios').html(contenido + $('#comentarios').html());
@@ -1025,7 +1034,7 @@ function commentReply(areaNumber)
 	$('#text'+areaNumber).slideDown(250);
 }
 
-function checkKeyComment(key,userId,selectedUserId,textCommentId)
+function checkKeyComment(key,userId,selectedUserId,textCommentId,currentUserFB,currentUserFirstName,currentUserLastname)
 {
  
     var unicode
@@ -1052,8 +1061,15 @@ function checkKeyComment(key,userId,selectedUserId,textCommentId)
     		                                   tipo: 'COMENTARIO'})
 		.done(function(jqXHR) {
 					
+			var contenido = '<div class="comment" id="'+jqXHR+'">'+
 			
-			var contenido = '<div class="comment" id="'+jqXHR+'">'+$('#'+textCommentId).val()+
+			'<div style="height:55px">'+
+			'<a class="imga left" href="perfil/'+userId+'"> <img class="imgi"'+
+			'src=http://graph.facebook.com/'+currentUserFB+'/picture />'+
+			'</a>'+
+			'<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/'+userId+'">'+currentUserFirstName+" " +currentUserLastname +' dice: </a></div>'+
+			'</div>'+ $('#'+textCommentId).val()+
+			
 	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
 	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
 	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
@@ -1061,7 +1077,7 @@ function checkKeyComment(key,userId,selectedUserId,textCommentId)
 	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
 	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
 	         
-			
+	         
 			if(userId == selectedUserId ){
              	contenido = contenido + '<button class="right" onclick=eliminarComentario('+jqXHR+')>Eliminar</button>';
              }
@@ -1069,7 +1085,7 @@ function checkKeyComment(key,userId,selectedUserId,textCommentId)
 			
 			contenido = contenido + '</div></div>'+
 			                        '<textarea id="text'+jqXHR+'" class="input-coment"'+
-			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+userId+','+selectedUserId+',this.id)">'+
+			                        'maxlength="255" style="display:none" onkeypress="checkKeyComment(event,'+userId+','+selectedUserId+',this.id,\''+currentUserFB+'\',\''+currentUserFirstName+'\',\''+currentUserLastname+'\')">'+
 			                        '</textarea>';
 		
 		
@@ -1136,20 +1152,27 @@ function addContentToAlbum()
   	    tumbs.push(this.title);
   	});
   	
-  	var jqxhr = $.post("/addContentToAlbum",{'photos[]':photos,'tumbs[]':tumbs})
+  	if(photos.length > 0)
+  	{
+  	   var jqxhr = $.post("/addContentToAlbum",{'photos[]':photos,'tumbs[]':tumbs})
   	
-  	.done(function(jqXHR) {
+  	   .done(function(jqXHR) {
 	  
 		
-		if (jqXHR == "true") {
+	   	   if (jqXHR == "true") {
             
-			location.href = "/showAlbumContent";
-		} 
+			   location.href = "/showAlbumContent";
+		   } 
 		
-	}).fail(function(jqXHR) {
+	   }).fail(function(jqXHR) {
 		
-		// mensaje de error en conexion
-	})
+		   // mensaje de error en conexion
+	   })
+  	}
+  	else
+  	{
+  		location.href = "/showAlbumContent";
+  	}
 }
 
 function deleteContentInAlbum()
@@ -1161,20 +1184,99 @@ function deleteContentInAlbum()
 	    photos.push(this.id);
 	});
 
-    var jqxhr = $.post("/deleteContentInAlbum",{'photos[]':photos})
+	if(photos.length > 0)
+	{
+       var jqxhr = $.post("/deleteContentInAlbum",{'photos[]':photos})
   	
-  	.done(function(jqXHR) {
+  	   .done(function(jqXHR) {
 	  
 		
-		if (jqXHR == "true") {
+		   if (jqXHR == "true") {
             
-			location.href = "/showAlbumContent";
-		} 
+			   location.href = "/showAlbumContent";
+		   } 
 		
-	}).fail(function(jqXHR) {
+	   }).fail(function(jqXHR) {
 		
 		
-		// mensaje de error en conexion
-	})
+		   // mensaje de error en conexion
+	   })
+	}
+	else
+	{
+		location.href = "/showAlbumContent";
+	}
  
+}
+
+
+
+
+
+function editAlbumTitle(id) {
+
+	if ($("#modify").attr("value") == 0) {
+		$("#span-titulo")
+				.html(
+						"<input type='text' id='title-input' name='title-input' maxlength='30' placeholder='Ingresar Titulo' value='"
+								+ $("#span-titulo").html() + "' />");
+		
+		$("#description-edit-button").slideUp(150);
+		$("#title-edit-button").attr("src",
+				"assets/images/save_icon.png");
+		$('#title-edit-button').attr("title", "guardar");
+		$("#modify").attr("value", "1");
+	} 
+	else if ($("#modify").attr("value") == 1) {
+		if ($("#title-input").attr("value") == "") {
+
+		} else {
+			// programar manejo de errores de update en bd
+			//updateUser(1, $("#title-input").val(), id);
+		
+			$("#description-edit-button").slideDown(150);
+			$("#span-titulo").html($("#title-input").attr("value"));
+			
+			$("#title-edit-button").attr("src",
+					"assets/images/edit_icon.png");
+			$('#title-edit-button').attr("title", "editar");
+			$("#modify").attr("value", "0");
+
+		}
+
+	}
+}
+
+function editAlbumDescription(id) {
+
+	if ($("#modify").attr("value") == 0) {
+		$("#span-description")
+				.html(
+						"<input type='text' id='description-input' name='description-input' maxlength='50' placeholder='Ingresar Titulo' value='"
+								+ $("#span-description").html() + "' />");
+		
+		$("#title-edit-button").slideUp(150);
+		$("#description-edit-button").attr("src",
+				"assets/images/save_icon.png");
+		$('#description-edit-button').attr("title", "guardar");
+		$("#modify").attr("value", "1");
+	} 
+	else if ($("#modify").attr("value") == 1) {
+		if ($("#description-input").attr("value") == "") {
+
+		} else {
+			// programar manejo de errores de update en bd
+			//updateUser(1, $("#description-input").val(), id);
+		
+			$("#description-edit-button").slideDown(150);
+			$("#span-description").html($("#description-input").attr("value"));
+			
+			$("#description-edit-button").attr("src",
+					"assets/images/edit_icon.png");
+			$('#description-edit-button').attr("title", "editar");
+			$("#modify").attr("value", "0");
+
+		}
+
+	}
 }
