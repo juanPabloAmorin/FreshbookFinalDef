@@ -54,7 +54,6 @@ object Application extends Controller {
             "userFirstLastname" -> currentUser.getPrimerApellido,
             "userSecondLastname" -> (currentUser.getSegundoApellido match { case Some(value) => value case _ => "" }),
             "username" -> currentUser.getUsername,
-            "birthday" -> currentUser.getFechaNacimiento.toString(),
             "picture" -> (currentUser.getFoto match { case Some(value) => value case _ => "" }),
             "twitter" -> (currentUser.getTwitter match { case Some(value) => value case _ => "" }),
             "facebook" -> (currentUser.getFacebook match { case Some(value) => value case _ => "" }),
@@ -151,7 +150,6 @@ object Application extends Controller {
         "userFirstLastname" -> currentUser.getPrimerApellido,
         "userSecondLastname" -> (currentUser.getSegundoApellido match { case Some(value) => value case _ => "" }),
         "username" -> currentUser.getUsername,
-        "birthday" -> currentUser.getFechaNacimiento.toString(),
         "picture" -> (currentUser.getFoto match { case Some(value) => value case _ => "" }),
         "twitter" -> (currentUser.getTwitter match { case Some(value) => value case _ => "" }),
         "facebook" -> (currentUser.getFacebook match { case Some(value) => value case _ => "" }),
@@ -477,7 +475,6 @@ object Application extends Controller {
             "userFirstLastname" -> currentUser.getPrimerApellido,
             "userSecondLastname" -> (currentUser.getSegundoApellido match { case Some(value) => value case _ => "" }),
             "username" -> currentUser.getUsername,
-            "birthday" -> currentUser.getFechaNacimiento.toString(),
             "picture" -> (currentUser.getFoto match { case Some(value) => value case _ => "" }),
             "twitter" -> (currentUser.getTwitter match { case Some(value) => value case _ => "" }),
             "facebook" -> (currentUser.getFacebook match { case Some(value) => value case _ => "" }),
@@ -683,23 +680,8 @@ object Application extends Controller {
 
         var currentUser = userDao.findUserById(user.getId).getOrElse { null }
 
-        Redirect("/perfilPag").withSession("usuarioEmail" -> currentUser.getEmail,
-          "userId" -> currentUser.getId.toString,
-          "userFirstName" -> currentUser.getPrimerNombre,
-          "userSecondName" -> (currentUser.getSegundoNombre match { case Some(value) => value case _ => "" }),
-          "userFirstLastname" -> currentUser.getPrimerApellido,
-          "userSecondLastname" -> (currentUser.getSegundoApellido match { case Some(value) => value case _ => "" }),
-          "username" -> currentUser.getUsername,
-          "birthday" -> currentUser.getFechaNacimiento.toString(),
-          "picture" -> (currentUser.getFoto match { case Some(value) => value case _ => "" }),
-          "twitter" -> (currentUser.getTwitter match { case Some(value) => value case _ => "" }),
-          "facebook" -> (currentUser.getFacebook match { case Some(value) => value case _ => "" }),
-          "gmail" -> (currentUser.getGmail match { case Some(value) => value case _ => "" }),
-          "privacidad" -> currentUser.getPrivacidad.toString,
-          "latitud" -> currentUser.getLatitud,
-          "longitud" -> currentUser.getLongitud,
-          "FBId" -> currentUser.getFacebookId,
-          "lastFriendVisitedId" -> "0")
+        Redirect("/perfilPag")
+        
       } catch {
 
         case e: DAOException =>
