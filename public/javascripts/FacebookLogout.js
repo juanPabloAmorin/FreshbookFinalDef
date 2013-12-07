@@ -1,11 +1,11 @@
 window.fbAsyncInit = function() {
 FB.init({
-  appId      : '672888336062808', // FreshbookApp ID
+  //appId      : '672888336062808', // FreshbookApp ID
   //appId      : '1422966607919695', //localhost
-  //appId      : '596938223701048',  //amazon
+  appId      : '596938223701048',  //amazon
   //channelUrl : 'http://localhost:9000', // Channel Local
-  channelUrl : 'http://agile-sands-9357.herokuapp.com', // Channel Heroku
-  //channelUrl : 'http://54.200.53.226:9000', //Amazon
+  //channelUrl : 'http://agile-sands-9357.herokuapp.com', // Channel Heroku
+  channelUrl : 'http://54.200.53.226:9000', //Amazon
   status     : true, // check login status
   cookie     : true, // enable cookies to allow the server to access the session
   xfbml      : true  // parse XFBML
