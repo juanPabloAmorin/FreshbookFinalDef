@@ -161,12 +161,12 @@
 			  <div class="divDataAlbum2 cfix left ">
 			     <div class="divTitle pvl" style="height:20px;padding-top:10px;">T&iacute;tulo:<span id="span-titulo" style="margin-left: 5px;">  @currentAlbum.getNombre</span>
 			        @if(currentUser.getId == selectedUser.getId){
-			       	   <img id="title-edit-button" class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" onclick="editAlbumTitle()" />
+			       	   <img id="title-edit-button" class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" onclick="editAlbumTitle(@currentAlbum.getId)" />
 			       }
 			     </div>
 			     <div class="divTitle pvl" style="height:20px;padding-top:10px;border-top:solid 1px white">Descripci&oacute;n:<span id="span-description" style="margin-left: 5px;">  @currentAlbum.getDescripcion</span>
 			        @if(currentUser.getId == selectedUser.getId){
-			       	   <img id="description-edit-button" class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" onclick="editAlbumDescription()"/>
+			       	   <img id="description-edit-button" class="right" src="assets/images/edit_icon.png" title="editar" style="cursor:pointer;margin-right:5px;" onclick="editAlbumDescription(@currentAlbum.getId)"/>
 			       }
 			     </div>
 			    	   

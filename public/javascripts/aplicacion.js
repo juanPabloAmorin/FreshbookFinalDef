@@ -4,11 +4,17 @@ function updateUser(opcion, atributo, id) {
 	var jqxhr = $.post("/userUpdate",{ opcion: opcion,atributo: atributo ,id:id})
 			.done(function(jqXHR) {
 				// programar manejo de errores de update
-			}).fail(function(jqXHR) {
-
-				// programar manejo de errores de update
 			})
 
+}
+
+function updateAlbum(opcion,atributo,id)
+{
+	var jqxhr = $.post("/albumUpdate",{ opcion: opcion,atributo: atributo ,id:id})
+	.done(function(jqXHR) {
+		
+		// programar manejo de errores de update
+	})
 }
 
 function fadeError() {
@@ -1280,6 +1286,7 @@ function deleteContentInAlbum()
 
 function editAlbumTitle(id) {
 
+	
 	if ($("#modify").attr("value") == 0) {
 		$("#span-titulo")
 				.html(
@@ -1296,8 +1303,9 @@ function editAlbumTitle(id) {
 		if ($("#title-input").attr("value") == "") {
 
 		} else {
+			
 			// programar manejo de errores de update en bd
-			//updateUser(1, $("#title-input").val(), id);
+			updateAlbum(1, $("#title-input").val(), id);
 		
 			$("#description-edit-button").slideDown(150);
 			$("#span-titulo").html($("#title-input").attr("value"));
@@ -1330,10 +1338,11 @@ function editAlbumDescription(id) {
 		if ($("#description-input").attr("value") == "") {
 
 		} else {
+			
 			// programar manejo de errores de update en bd
-			//updateUser(1, $("#description-input").val(), id);
+		    updateAlbum(2, $("#description-input").val(), id);
 		
-			$("#description-edit-button").slideDown(150);
+			$("#title-edit-button").slideDown(150);
 			$("#span-description").html($("#description-input").attr("value"));
 			
 			$("#description-edit-button").attr("src",
@@ -1461,14 +1470,7 @@ function updateAlbumCaratula(albumId,numeroFotos)
 	{
 		if (document.formFoto.radioB[cuentaFotos].checked)
 		{
-			var jqxhr = $.post("/caratulaUpdate",{ ruta: document.formFoto.radioB[cuentaFotos].value })
-			.done(function(jqXHR) {
-				// programar manejo de errores de update
-			}).fail(function(jqXHR) {
-
-				// programar manejo de errores de update
-			})
-			
+			updateAlbum(3,document.formFoto.radioB[cuentaFotos].value, albumId);		
 			break;
 		}
 			

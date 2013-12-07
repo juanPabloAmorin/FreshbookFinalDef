@@ -160,6 +160,59 @@ class AlbumDAO_SQL extends AlbumDAO {
 
   }
   
+  def updateAlbumName(name: String, albumId: Long) {
+    try{
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+			  update album
+			  set nombre = {name}
+			  where id = {albumId}
+			  """).on(
+          'albumId -> albumId,
+          'name -> name).executeUpdate()
+    }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
+  }
+  
+     
+  def updateAlbumDescription(description: String, albumId: Long){
+    try{
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+			  update album
+			  set descripcion = {description}
+			  where id = {albumId}
+			  """).on(
+          'albumId -> albumId,
+          'description -> description).executeUpdate()
+    }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
+  }
+  
+     
+  def updateAlbumCaratula(ruta: String, albumId: Long){
+    try{
+    DB.withConnection { implicit connection =>
+      SQL(
+        """
+			  update album
+			  set caratula = {caratula}
+			  where id = {id}
+			  """).on(
+          'id -> albumId,
+          'caratula -> ruta).executeUpdate()
+    }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
+  }
+  
  
 	
 }

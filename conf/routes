@@ -147,3 +147,6 @@ GET   /editPortadaAlbumPage                                                     
 
 #peticion ajax actualizacion de portada de album
 POST   /caratulaUpdate                                                                          controllers.Application.updateCaratulaAlbum()
+
+#peticion ajax actualizacion de usuariosearchForFriendsPage
+POST   /albumUpdate                                                                          controllers.Application.updateAlbum()

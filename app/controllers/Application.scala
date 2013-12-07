@@ -1371,5 +1371,53 @@ object Application extends Controller {
     
     Ok("true")
   }
+  
+  
+  
+  
+  def updateAlbum() = Action {
+    request =>
+
+      val option = request.body.asFormUrlEncoded.get("opcion").head.toLong;
+      val attribute = request.body.asFormUrlEncoded.get("atributo").head;
+
+      Logger.debug("Datos para modificacion de album: opcion=" + option + " attribute=" + attribute)
+
+      request.session.get("albumId").map { albumId =>
+
+        var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+        var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }
+        albumActual.setContenidoMultimedia(albumDao.getContenidoByAlbum(albumActual.getId))
+
+        try {
+          if (option == 1) {
+            albumDao.updateAlbumName(attribute, albumActual.getId)
+
+          } else if (option == 2) {
+            albumDao.updateAlbumDescription(attribute, albumActual.getId)
+          } else if (option == 3) {
+            albumDao.updateAlbumCaratula(attribute, albumActual.getId)
+          } 
+
+          Logger.info("Se ha modificado el " + attribute + " del album " + albumActual.getId + " " + albumActual.getNombre)
+
+         
+          Ok("true")
+          
+        } catch {
+          case e: DAOException =>
+            Logger.info("No es posible modificar el " + attribute + " del album " + albumActual.getId + " " + albumActual.getNombre)
+            throw BusinessException.create("No es posible modificar el  " + attribute + "del album", e)
+
+        }
+
+      }.getOrElse {
+        Ok(views.html.index()).withNewSession
+      }
+  }
+  
+  
+  
+  
 
 }
