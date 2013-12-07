@@ -43,7 +43,7 @@ GET   /crearAlbum                                                               
 GET   /userAutentication/:userEmail/*link/:firstName/:middleName/:lastName/:facebookId                                             controllers.Application.userAutentication(userEmail: String,link: String,firstName: String,middleName: String, lastName: String, facebookId: String)
 
 #peticion ajax actualizacion de usuariosearchForFriendsPage
-GET   /userUpdate/:option/*attribute/:userId                                                                           controllers.Application.updateRegisteredUser(option: Int,attribute: String,userId: Long)
+POST   /userUpdate                                                                          controllers.Application.updateRegisteredUser()
 
 #borrar album
 GET   /deleteAlbum/:albumId                                                                                            controllers.Application.deleteAlbum(albumId: Long)
@@ -138,3 +138,12 @@ POST   /deleteLikeComment                                                       
 
 #eliminar un unlike de comentario
 POST   /deleteUnlikeComment                                                                  controllers.Application.deleteUnlikeFromComment()
+
+#editar portada de album
+GET   /editPortadaAlbum/:albumId                                                                  controllers.Application.editPortadaAlbum(albumId: Long)
+
+#pagina editar portada de album
+GET   /editPortadaAlbumPage                                                                  controllers.Application.editPortadaAlbumPage()
+
+#peticion ajax actualizacion de portada de album
+POST   /caratulaUpdate                                                                          controllers.Application.updateCaratulaAlbum()

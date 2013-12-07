@@ -47,6 +47,18 @@ trait AlbumDAO
   /*El metodo findAlbumById permite obtener un objeto de la clase Album dado su id*/
   
   def findAlbumById(id: Long): Option[Album];
+  
+   /*El metodo updateAlbumName permite actualizar el nombre de un album*/
+     
+  def updateAlbumName(name: String, albumId: Long);
+  
+  /*El metodo updateAlbumDescription permite actualizar la descripcion de un album*/
+     
+  def updateAlbumDescription(description: String, albumId: Long);
+  
+  /*El metodo updateAlbumCaractula permite actualizar la caratula de un album*/
+     
+  def updateAlbumCaratula(ruta: String, albumId: Long);
           
       
 }

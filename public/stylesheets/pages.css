@@ -672,6 +672,13 @@ span.buttonText {
 	margin: 5px 0 0 -145px;
 }
 
+.firstImgCel .btnImage{
+	position:absolute;
+	margin: 5px 0 0 -155px;
+	display: none;
+}
+
+
 .like-button{
 	font-size: 10px;
 	width:60px;height:30px;

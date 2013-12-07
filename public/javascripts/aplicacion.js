@@ -1,7 +1,7 @@
 function updateUser(opcion, atributo, id) {
 
-	
-	var jqxhr = $.ajax("/userUpdate/" + opcion + "/" + atributo + "/" + id)
+
+	var jqxhr = $.post("/userUpdate",{ opcion: opcion,atributo: atributo ,id:id})
 			.done(function(jqXHR) {
 				// programar manejo de errores de update
 			}).fail(function(jqXHR) {
@@ -1434,5 +1434,47 @@ function podriaGustarmeComment(commentId)
 
         // programar manejo de errores 
     })
+	
+}
+
+function mostrarBoton(albumId)
+{
+  $("#firstImgCel"+albumId ).hover(
+		  function() {
+		    $("#btnImage"+albumId).show();
+		  }, function() {
+		    $("#btnImage"+albumId).hide();
+		  }
+		);
+
+}
+
+
+function modifyAlbumPhoto(albumId)
+{
+     location.href="/editPortadaAlbum/"+albumId;	
+}
+
+function updateAlbumCaratula(albumId,numeroFotos)
+{
+	for (var cuentaFotos = 0;cuentaFotos<numeroFotos;cuentaFotos++)
+	{
+		if (document.formFoto.radioB[cuentaFotos].checked)
+		{
+			var jqxhr = $.post("/caratulaUpdate",{ ruta: document.formFoto.radioB[cuentaFotos].value })
+			.done(function(jqXHR) {
+				// programar manejo de errores de update
+			}).fail(function(jqXHR) {
+
+				// programar manejo de errores de update
+			})
+			
+			break;
+		}
+			
+		
+	}
+	
+	location.href = "/albumesPag";
 	
 }

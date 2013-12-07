@@ -1,5 +1,4 @@
-@(listaAlbumes: List[Album],selectedUser: Usuario,dao: AlbumDAO,currentUser: Usuario,
-	isFriend: Boolean,friendshipStatus: Int)
+@(currentUser: Usuario, currentAlbum: Album)
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +16,9 @@
 <link rel="shortcut icon" href="assets/images/favicon.png">
 <link href="assets/stylesheets/pages.css" rel="stylesheet">
 
+
 </head>
+
 <body>
 	<div class="header cfix">
 		<div class="cfix log_bar">
@@ -63,36 +64,35 @@
 		</div>
 	</div>
 	<!-- Header -->
-
-
+	
 	<div class="contenedorGlobal cfix">
 		<div class="clearfix">
 			<div class="left">
 				<div class="panel3">
 					<div class="pvm divTitle">
 						<div>
-							<span style="font-size: 22px">@(selectedUser.getPrimerNombre + " " + (selectedUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + selectedUser.getPrimerApellido + " " + (selectedUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
+							<span style="font-size: 22px">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
 						</div>
 					</div>
 					<div id="div-photo-panel" class="photoPanel" style="width:225px;height:250px;display:block;margin-top: 15px; margin-bottom:15px;margin-left:4px">
-				         <img src="http://graph.facebook.com/@selectedUser.getFacebookId/picture?type=large" style="width: 99%; height: 100%;"/>
+				         <img src="http://graph.facebook.com/@currentUser.getFacebookId/picture?type=large" style="width: 99%; height: 100%;"/>
 				      </div>
 					<a class="cfix" href="/principal">
 						<div class="pvm topBorder divButton">
 							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
 						</div>
 					</a> 
-					<a class="cfix" href="/perfil/@selectedUser.getId">
+					<a class="cfix" href="/perfil/@currentUser.getId">
 						<div class="pvm divButton">
 							<span style="font-size: 18px"><b>PERFIL</b></span>
 						</div>
 					</a> 
-					<a class="cfix" href="/amigos/@selectedUser.getId">
+					<a class="cfix" href="/amigos/@currentUser.getId">
 						<div class="pvm divButton">
 							<span style="font-size: 18px"><b>AMIGOS</b></span>
 						</div>
 					</a> 
-					<a class="cfix" href="/albumes/@selectedUser.getId">
+					<a class="cfix" href="/albumes/@currentUser.getId">
 						<div class="pvm divButton">
 							<span style="font-size: 18px"><b>ALBUMES</b></span>
 						</div>
@@ -101,73 +101,57 @@
 				<!-- Panel izquierdo -->
 			</div>
 
+            <input type="hidden" value="0" id="photoCounter" />
+            
 			<div class="panel4 right">
-				<div class="cajitaPerfil">
-					<div class="divTitle pvl">Albumes de @(selectedUser.getPrimerNombre + " " + (selectedUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + selectedUser.getPrimerApellido + " " + (selectedUser.getSegundoApellido match {case Some(value) => value case _ => ""}))
-					   @if(selectedUser.getId == currentUser.getId){
-					   
-					  <a href="/crearAlbum"><button class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Nuevo Album</button></a>
-					}
-					</div>
-					
-						 @listaAlbumes.map { 
-                    case (album) => {
+			  
+	         <div class="divDataAlbum2 cfix left ">
+			     <div class="divTitle pvl" style="height:20px;padding-top:10px;">T&iacute;tulo:  @currentAlbum.getNombre
+			         <button class="btn btn-primary right" style="border-radius:0px;height:30px; margin-right: 5px; padding-top:3px" onclick="updateAlbumCaratula(@currentAlbum.getId,@currentAlbum.getContenidoMultimedia.length)">Continuar</button>		        
+			     </div>
+			     <div class="divTitle pvl" style="height:20px;padding-top:10px;border-top:solid 1px white">Descripci&oacute;n:  @currentAlbum.getDescripcion
+			      
+			     </div>
+			
+			  </div>
+			
+			  <form name="formFoto">
+			    <div id="multimedia-div" class="divBuscador cfix" style="overflow:scroll">
+			         <div>Seleccione una imagen como caratula del album</div>
+			   
+			         @currentAlbum.getContenidoMultimedia.map { 
+                      case (contenido) => {
                     	
-                    	@if(  (selectedUser.getId == currentUser.getId) || (album.getPrivacidad == 0) ||  (isFriend && friendshipStatus == 1)){
-                    	<div class="left firstImgCel" id="firstImgCel@album.getId" onmouseover="mostrarBoton(@album.getId)" >
-                    	 	 <a href="/albumContent/@album.getId"> <img class="friendImg  relative"
-								src= @album.getCaratula />
-							</a>
-							
-							<img src="assets/images/edit_icon.png" id="btnImage@album.getId" class="btnImage" title="Edit Photo" style="cursor:pointer" onclick="modifyAlbumPhoto(@album.getId)"/>
-							
-							<div class="divAlbumTemp">
-								<div>
-									<span class="albumName">@album.getNombre</span>
-								</div>
-								<div>
-									<span class="albumName">@dao.getNumberOfFilesInAlbum(album.getId) Archivos Multimedia</span>
-								</div>
-							</div>
-							@if(selectedUser.getId == currentUser.getId){
-							<div align="center" class="pvs">
-								<a href="/deleteAlbum/@album.getId"><img title="Eliminar album" class="discardButton"
-									src="assets/images/trash.png"  /></a>
-							</div> 
-							}
-                        </div>
-                        
-                        }
-                        
-                    } 
-                }
-
-						
-					
-				</div>
+                       <div class="left firstImgCel">
+			              <img src="@contenido.getRutaTumbnail" />
+			              <input type="radio" name="radioB" value="@contenido.getRutaTumbnail" class="checkMultimedia" />
+	                   </div>	
+	                   
+                      } 
+                  }
+			  
+			    </div>
+			  </form>
+			  
 			</div>
 		</div>
 		<!-- Panel derecho -->
 	</div>
 
 	
-	<script src="assets/javascripts/jquery-1.8.3.min.js"
-		type="text/javascript"></script>
-	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"
-		type="text/javascript"></script>
-	<script src="assets/javascripts/jquery.ui.touch-punch.min.js"
-		type="text/javascript"></script>
-	<script src="assets/javascripts/bootstrap.min.js"
-		type="text/javascript"></script>
-	<script src="assets/javascripts/jquery.tagsinput.js"
-		type="text/javascript"></script>
-	<script src="assets/javascripts/jquery.placeholder.js"
-		type="text/javascript"></script>
-	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"
-		type="text/javascript"></script>
-	<script src="assets/javascripts/application.js" type="text/javascript"></script>
-	<script src="assets/javascripts/aplicacion.js" type="text/javascript"></script>
+	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
+	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="assets/javascripts/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/javascripts/bootstrap.min.js"></script>
+	<script src="assets/javascripts/bootstrap-select.js"></script>
+	<script src="assets/javascripts/bootstrap-switch.js"></script>
+	<script src="assets/javascripts/flatui-checkbox.js"></script>
+	<script src="assets/javascripts/flatui-radio.js"></script>
+	<script src="assets/javascripts/jquery.tagsinput.js"></script>
+	<script src="assets/javascripts/jquery.placeholder.js"></script>
+	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
+	<script src="assets/javascripts/application.js"></script>
+	<script src="assets/javascripts/aplicacion.js"></script>
 	<script src="assets/javascripts/FacebookLogout.js"></script>
 	
 </body>
-</html>
