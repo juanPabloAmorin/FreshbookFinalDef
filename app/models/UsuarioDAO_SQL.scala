@@ -8,6 +8,9 @@ import anorm.SqlParser._
 import scala.language.postfixOps
 import models._
 
+import org.h2.jdbc.JdbcSQLException
+
+
 class UsuarioDAO_SQL() extends UsuarioDAO {
 
   var lastUserSequenceNumber: Long = 0;
@@ -43,13 +46,21 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
   }
 
   override def findUserByEmail(email: String): Option[Usuario] = {
+    
+    try
+    {
     DB.withConnection { implicit connection =>
       SQL("select * from USUARIO where email = {email} ").on('email -> email).as(this.parser.singleOpt)
+    }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 
   }
 
   override def updateUserFirstName(firstName: String, userId: Long) {
+    
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -60,9 +71,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'primerNombre -> firstName).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserSecondName(secondName: String, userId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -73,9 +88,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'segundoNombre -> secondName).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserFirstLastname(firstLastname: String, userId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -86,10 +105,14 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'primerApellido -> firstLastname).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 
   }
 
   override def updateUserSecondLastname(secondLastname: String, userId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -100,10 +123,14 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'segundoApellido -> secondLastname).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 
   }
 
   override def updateUserNickname(nickname: String, userId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -114,9 +141,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'username -> nickname).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserGoogle(google: String, userId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -127,9 +158,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'gmail -> google).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserFacebook(facebook: String, userId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -140,9 +175,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'facebook -> facebook).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserTwitter(twitter: String, userId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -153,9 +192,14 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'twitter -> twitter).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserLocation(fkLugar: Long, userId: Long) {
+    try
+    {
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -166,9 +210,14 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'fk_lugar -> fkLugar).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserLatitud(latitud: String, userId: Long) {
+    try{
+      
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -179,9 +228,14 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'latitud -> latitud).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def updateUserLongitud(longitud: String, userId: Long) {
+    
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -192,17 +246,25 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'id -> userId,
           'longitud -> longitud).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def findUserById(id: Long): Option[Usuario] = {
+    try{
     DB.withConnection { implicit connection =>
       SQL("select * from USUARIO where id = {id}").on('id -> id).as(this.parser.singleOpt)
+    }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 
   }
 
   override def findFriendsByUser(userId: Long): List[Usuario] = {
 
+    try{
     DB.withConnection { implicit connection =>
 
       val amigos = SQL(
@@ -223,10 +285,15 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       amigos
 
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 
   }
 
   override def insertUser(newUsuario: Usuario) {
+    
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -254,6 +321,9 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
       lastUserSequenceNumber = SQL("select currval('seq_usuario')").as(scalar[Long].single)
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def getNewUserLastIdFromSequence(): Long = {
@@ -262,6 +332,7 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
   }
 
   override def searchUsersByFullNamePattern(namePattern: String): List[Usuario] = {
+    try{
 
     DB.withConnection { implicit connection =>
 
@@ -279,10 +350,14 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       users
 
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def isThisUserAFriend(userId: Long, friendId: Long): Boolean = {
 
+    try{
     var response: Boolean = false
     DB.withConnection { implicit connection =>
 
@@ -301,9 +376,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
       response
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def getUserFriendshipStatus(userId: Long, friendId: Long): Option[Int] = {
+    try{
     DB.withConnection { implicit connection =>
 
       val friendshipStatus = SQL(
@@ -315,10 +394,14 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 
       friendshipStatus
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def insertAmistad(friend1Id: Long, friend2Id: Long) {
 
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -327,10 +410,13 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'friend1Id -> friend1Id,
           'friend2Id -> friend2Id).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   override def confimFriendship(friend1Id: Long, friend2Id: Long) {
-
+    try{
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -342,11 +428,15 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
           'friend1Id -> friend1Id,
           'friend2Id -> friend2Id).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 
   }
 
   override def getUsersByFullNamePart(namePart: String): List[Usuario] = {
 
+    try{
     DB.withConnection { implicit connection =>
 
       val users = SQL(
@@ -362,12 +452,16 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
       users
 
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 
   }
   
   
   override def deleteAmistadByUsersId(friend1Id: Long, friend2Id: Long) {
 
+    try{
 		DB.withConnection { implicit connection =>
 		SQL("""
             delete from amistad 
@@ -376,6 +470,9 @@ class UsuarioDAO_SQL() extends UsuarioDAO {
 		    """).on(
 				'friend1Id -> friend1Id, 'friend2Id -> friend2Id).executeUpdate()
 		}
-	}
+	}catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
+  }
 
 }

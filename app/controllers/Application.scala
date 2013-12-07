@@ -1142,10 +1142,12 @@ object Application extends Controller {
   
   def deleteUnlikeFromAlbum() = Action { implicit request =>
   
+      val albumId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+
+      try{
+      
       var user: Usuario = new Usuario();
       user = currentUserBuild(request,user)
-      
-      val albumId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
       
       var likeDao: LikeDAO = DAOFabrica.getLikeDAO
       
@@ -1153,30 +1155,54 @@ object Application extends Controller {
       
      
         Ok("true");
+      }
+      catch{
+      
+      case e: DAOException => 
+                  Logger.error("El like del album "+albumId+ "no pudo ser eliminado")
+                  throw BusinessException.create("El like no pudo ser eliminado",e)
+      case e: NullPointerException => 
+                  Logger.error("Usuario no ha iniciado sesion")
+                  throw new Exception("Se ha cerrado la sesion del usuario")
+    }
     }
   
   
    def deleteLikeFromComment() = Action { implicit request =>
   
+      val commentId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+
+    try
+    {
       var user: Usuario = new Usuario();
       user = currentUserBuild(request,user)
-      
-      val commentId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
-      
+           
       var likeDao: LikeDAO = DAOFabrica.getLikeDAO
       
       likeDao.deleteCommentLike(user.getId,commentId); 
       
      
         Ok("true");
+    }catch{
+      
+      case e: DAOException => 
+                  Logger.error("El like del comentario "+commentId+ "no pudo ser eliminado")
+                  throw BusinessException.create("El like no pudo ser eliminado",e)
+      case e: NullPointerException => 
+                  Logger.error("Usuario no ha iniciado sesion")
+                  throw new Exception("Se ha cerrado la sesion del usuario")
+    }
     }
   
   def deleteUnlikeFromComment() = Action { implicit request =>
   
+    val commentId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+    
+    try
+    {
       var user: Usuario = new Usuario();
       user = currentUserBuild(request,user)
       
-      val commentId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
       
       var likeDao: LikeDAO = DAOFabrica.getLikeDAO
       
@@ -1184,6 +1210,15 @@ object Application extends Controller {
       
      
         Ok("true");
+    }catch{
+      
+      case e: DAOException => 
+                  Logger.error("El unlike del comentario "+commentId+ "no pudo ser eliminado")
+                  throw BusinessException.create("El unlike no pudo ser eliminado",e)
+      case e: NullPointerException => 
+                  Logger.error("Usuario no ha iniciado sesion")
+                  throw new Exception("Se ha cerrado la sesion del usuario")
+    }
     }
   
   

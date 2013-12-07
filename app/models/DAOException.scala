@@ -8,3 +8,4 @@ object DAOException {
 
   def create(msg: String, cause: Throwable) = new DAOException(msg).initCause(cause)
 }
+

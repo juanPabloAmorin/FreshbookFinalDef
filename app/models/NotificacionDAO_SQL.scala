@@ -11,6 +11,9 @@ import anorm._
 import anorm.SqlParser._
 import models._
 
+import org.h2.jdbc.JdbcSQLException
+
+
 class NotificacionDAO_SQL extends NotificacionDAO {
 
   var lastNotificationSequenceNumber: Long = 0;
@@ -42,6 +45,8 @@ class NotificacionDAO_SQL extends NotificacionDAO {
 
     }
 
+    try
+    {
     DB.withConnection { implicit connection =>
       SQL(
         """
@@ -60,12 +65,16 @@ class NotificacionDAO_SQL extends NotificacionDAO {
 						""").on(
           'notificatedUserId -> notificatedUserId).executeUpdate()
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
   }
 
   
   
   override def getTypeNotificationNumberFormat(typeNotification: String): Int = {
 
+    try{
     DB.withConnection { implicit connection =>
       SQL("""
 				select tipo_notificacion.id 
@@ -74,6 +83,9 @@ class NotificacionDAO_SQL extends NotificacionDAO {
 
 				""").on('nombre -> typeNotification).as(scalar[Int].single)
     }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
+    }
 
   }
 
@@ -81,6 +93,7 @@ class NotificacionDAO_SQL extends NotificacionDAO {
   
   override def getNotificationsByUserAndType(userId: Long, typex: String): List[Notificacion] = {
 
+    try{
     DB.withConnection { implicit connection =>
 
       val notifications = SQL(
@@ -97,16 +110,19 @@ class NotificacionDAO_SQL extends NotificacionDAO {
       notifications
 
     }
+    }
 
   }
 
   
   
   override def deleteFriendshipRequestNotifications(userId: Long, notificationId: Long) {
+    try{
     DB.withConnection { implicit connection =>
       SQL("delete from notificacion_usuario where fk_usuario = {userId} and fk_notificacion = {notificationId}").on(
         'userId -> userId,
         'notificationId -> notificationId).executeUpdate()
+    }
     }
   }
 
@@ -114,6 +130,7 @@ class NotificacionDAO_SQL extends NotificacionDAO {
   
   override def insertNotificationMulticast(users: List[Usuario], notificationId: Long) {
 
+    try{
     DB.withConnection { implicit connection =>
 
       for (usuario <- users) {
@@ -122,6 +139,9 @@ class NotificacionDAO_SQL extends NotificacionDAO {
           "INSERT INTO NOTIFICACION_USUARIO VALUES(" + usuario.getId + ",{notificationId})").on(
             'notificationId -> notificationId).executeUpdate()
       }
+    }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 
   }
@@ -136,6 +156,7 @@ class NotificacionDAO_SQL extends NotificacionDAO {
   
   override def getNotificationsByUser(userId: Long): List[Notificacion] = {
 
+    try{
     DB.withConnection { implicit connection =>
 
       val notifications = SQL(
@@ -149,6 +170,9 @@ class NotificacionDAO_SQL extends NotificacionDAO {
 
       notifications
 
+    }
+    }catch {
+      case e: JdbcSQLException => throw DAOException.create(e.getMessage())
     }
 
   }
