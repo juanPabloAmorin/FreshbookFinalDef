@@ -956,8 +956,19 @@ function checkKeyAlbum(key,currentUserId,selectedUserId,currentUserFB,currentUse
 			$('#input-coment').val()+
 			
 	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
+	          
+		       '<span id="like-boton'+jqXHR+'">'+			             
+
 	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
+              '<input id="isLike'+jqXHR+'" type="hidden" value="0" />'+
+              
+              '</span>'+
+              
+              '<span id="unlike-boton'+jqXHR+'">'+
+              '<input id="isUnlike'+jqXHR+'" type="hidden" value="0" />'+
 	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
+	          '</span>'+
+	          
 	          '<abel class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
 	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
 	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
@@ -988,12 +999,21 @@ function checkKeyAlbum(key,currentUserId,selectedUserId,currentUserFB,currentUse
 function meGustaAlbum()
 {
 	var albumId = $("#albumId").val();
+	var isUnlike = $("#isUnlike").val();
+	
+	if(isUnlike == 1)
+	    podriaGustarmeAlbum();
 	
 	var jqxhr = $.post("/nuevoLike",{elementId: albumId, element: 'ALBUM'})
 
     .done(function(jqXHR) {
             
-    	   $("#likeCount").html(parseInt($("#likeCount").html())+1);
+    	var contenido = '<button class="btn btn-danger left like-button"'+
+                       'onclick="yaNoMeGustaAlbum()" style="width:90px">Ya no me gusta</button>'+		       
+                       '<input id="isLike" type="hidden" value="1" />';
+
+        $("#like-boton").html(contenido);
+    	$("#likeCount").html(parseInt($("#likeCount").html())+1);
    
     }).fail(function(jqXHR) {
 
@@ -1005,10 +1025,21 @@ function meGustaAlbum()
 function noMeGustaAlbum()
 {
 	var albumId = $("#albumId").val();
+    var isLike = $("#isLike").val();
+	
+    if(isLike == 1)
+	   yaNoMeGustaAlbum();
 	
 	var jqxhr = $.post("/nuevoUnlike",{elementId: albumId, element: 'ALBUM'})
 
     .done(function(jqXHR) {
+    	
+    	var contenido = '<button class="btn btn-primary left like-button"'+
+        'onclick="podriaGustarmeAlbum()" style="width:90px">Podria Gustarme</button>'+		       
+        '<input id="isUnlike" type="hidden" value="1" />';
+    	
+        $("#unlike-boton").html(contenido);
+
     	$("#unlikeCount").html(parseInt($("#unlikeCount").html())+1);
    
     }).fail(function(jqXHR) {
@@ -1036,7 +1067,7 @@ function commentReply(areaNumber)
 
 function checkKeyComment(key,userId,selectedUserId,textCommentId,currentUserFB,currentUserFirstName,currentUserLastname)
 {
- 
+	
     var unicode
     
     if(key.charCode)
@@ -1050,6 +1081,7 @@ function checkKeyComment(key,userId,selectedUserId,textCommentId,currentUserFB,c
  
     if (unicode == 13)
     {
+    
     	$('#'+textCommentId).slideUp(200);
         
     	
@@ -1071,8 +1103,21 @@ function checkKeyComment(key,userId,selectedUserId,textCommentId,currentUserFB,c
 			'</div>'+ $('#'+textCommentId).val()+
 			
 	          '<div id="interaction-options" style="height:50px;zoom:0.7">'+
+	          
+		      '<span id="like-boton'+jqXHR+'">'+			             
+
 	          '<button class="btn btn-info left like-button" onclick = "meGustaComment('+jqXHR+')">Me Gusta</button>'+
+	          '<input id="isLike'+jqXHR+'" type="hidden" value="0" />'+
+	          
+	          '</span>'+
+	          
+		      '<span id="unlike-boton'+jqXHR+'">'+			             
+
 	          '<button class="btn btn-info left no-like-button" onclick = "noMeGustaComment('+jqXHR+')">No Me Gusta</button>'+
+              '<input id="isUnlike'+jqXHR+'" type="hidden" value="0" />'+
+	          
+              '</span>'+
+              
 	          '<label class="label-coment" onclick="commentReply('+jqXHR+')">Responder</label>'+
 	          '<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount'+jqXHR+'">0</span></span>'+
 	          '<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount'+jqXHR+'">0</span></span>';
@@ -1095,7 +1140,7 @@ function checkKeyComment(key,userId,selectedUserId,textCommentId,currentUserFB,c
 			
 		}).fail(function(jqXHR) {
 
-			 alert("fail");
+			 //errores
 		})
     	
     }
@@ -1105,13 +1150,24 @@ function checkKeyComment(key,userId,selectedUserId,textCommentId,currentUserFB,c
 
 function meGustaComment(commentId)
 {
-	var albumId = $("#"+commentId).val();
+	
+    var isUnlike = $("#isUnlike"+commentId).val();
+	
+    if(isUnlike == 1)
+	   podriaGustarmeComment(commentId);
 	
 	var jqxhr = $.post("/nuevoLike",{elementId: commentId, element: 'COMENTARIO'})
 
     .done(function(jqXHR) {
             
+    	var contenido = '<button class="btn btn-danger left like-button"'+
+        'onclick="yaNoMeGustaComment('+commentId+')" style="width:90px">Ya no me gusta</button>'+		       
+        '<input id="isLike'+commentId+'" type="hidden" value="1" />';
+
+        $("#like-boton"+commentId).html(contenido);
+
         $("#likeCount"+commentId).html(parseInt($("#likeCount"+commentId).html())+1);
+     
    
     }).fail(function(jqXHR) {
 
@@ -1122,11 +1178,20 @@ function meGustaComment(commentId)
 
 function noMeGustaComment(commentId)
 {
-	var albumId = $("#"+commentId).val();
+    var isLike = $("#isLike"+commentId).val();
+	
+    if(isLike == 1)
+	   yaNoMeGustaComment(commentId);
 	
 	var jqxhr = $.post("/nuevoUnlike",{elementId: commentId, element: 'COMENTARIO'})
 
     .done(function(jqXHR) {
+    	
+    	var contenido = '<button class="btn btn-primary left like-button"'+
+        'onclick="podriaGustarmeComment('+commentId+')" style="width:90px">Podria Gustarme</button>'+		       
+        '<input id="isUnlike'+commentId+'" type="hidden" value="1" />';
+    	
+        $("#unlike-boton"+commentId).html(contenido);
    
     	$("#unlikeCount"+commentId).html(parseInt($("#unlikeCount"+commentId).html())+1);
    
@@ -1279,4 +1344,95 @@ function editAlbumDescription(id) {
 		}
 
 	}
+}
+
+function yaNoMeGustaAlbum()
+{
+    var albumId = $("#albumId").val();
+	
+	var jqxhr = $.post("/deleteLikeAlbum",{elementId: albumId})
+
+    .done(function(jqXHR) {
+            
+    	   var contenido = '<button class="btn btn-info left like-button"'+ 
+    		               'onclick="meGustaAlbum()">Me Gusta</button>'+
+	                       '<input id="isLike" type="hidden" value="0" />';
+    	   
+    	   $("#likeCount").html(parseInt($("#likeCount").html())-1);
+    	   $("#like-boton").html(contenido);
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
+	
+}
+
+function podriaGustarmeAlbum()
+{
+    var albumId = $("#albumId").val();
+	
+	var jqxhr = $.post("/deleteUnlikeAlbum",{elementId: albumId})
+
+    .done(function(jqXHR) {
+            
+    	   var contenido = '<button class="btn btn-info left no-like-button"'+
+    		               'onclick="noMeGustaAlbum()">No Me Gusta</button>'+
+	                       '<input id="isUnlike" type="hidden" value="0" />';
+    	   
+    	   $("#unlikeCount").html(parseInt($("#unlikeCount").html())-1);
+    	   $("#unlike-boton").html(contenido);
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
+}
+
+
+function yaNoMeGustaComment(commentId)
+{
+
+	var jqxhr = $.post("/deleteLikeComment",{elementId: commentId})
+
+    .done(function(jqXHR) {
+            
+    	var contenido = '<button class="btn btn-info left like-button"'+ 
+        'onclick="meGustaComment('+commentId+')">Me Gusta</button>'+
+        '<input id="isLike'+commentId+'" type="hidden" value="0" />';
+    	
+        $("#likeCount"+commentId).html(parseInt($("#likeCount"+commentId).html())-1);
+        
+ 	   $("#like-boton"+commentId).html(contenido);
+
+     
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
+	
+}
+
+function podriaGustarmeComment(commentId)
+{
+	
+	var jqxhr = $.post("/deleteUnlikeComment",{elementId: commentId})
+
+    .done(function(jqXHR) {
+   
+    	var contenido = '<button class="btn btn-info left no-like-button"'+
+        'onclick="noMeGustaComment('+commentId+')">No Me Gusta</button>'+
+        '<input id="isUnlike'+commentId+'" type="hidden" value="0" />';
+    	
+    	$("#unlikeCount"+commentId).html(parseInt($("#unlikeCount"+commentId).html())-1);
+    	
+  	   $("#unlike-boton"+commentId).html(contenido);
+
+   
+    }).fail(function(jqXHR) {
+
+        // programar manejo de errores 
+    })
+	
 }

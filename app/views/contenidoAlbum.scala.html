@@ -4,10 +4,38 @@
   
     @commentList.map{
      case (respuesta) => {
-        <div class="comment" id="@respuesta.getId">@respuesta.getContenido
+     	
+        <div class="comment" id="@respuesta.getId">
+        
+        <div style="height:55px">
+			<a class="imga left" href="perfil/@respuesta.getOwner.getId"> <img class="imgi" src=http://graph.facebook.com/@respuesta.getOwner.getFacebookId/picture />
+			</a>
+			<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/@respuesta.getOwner.getId">@(respuesta.getOwner.getPrimerNombre + " " + respuesta.getOwner.getPrimerApellido) dice: </a></div>
+			</div>
+        
+        @respuesta.getContenido
 		  <div id="interaction-options" style="height:50px;zoom:0.7">
-	        <button class="btn btn-info left like-button" onclick = "meGustaComment(@respuesta.getId)" >Me Gusta</button>
-	        <button class="btn btn-info left no-like-button" onclick = "noMeGustaComment(@respuesta.getId)">No Me Gusta</button>
+	        <span id="like-boton@respuesta.getId">			             
+			             @if(respuesta.getIsLiked == 0) {
+			               <button class="btn btn-info left like-button" onclick = "meGustaComment(@respuesta.getId)" >Me Gusta</button>
+			               <input id="isLike@respuesta.getId" type="hidden" value="0" />
+			               
+			             }else {
+			               <button class="btn btn-danger left like-button" onclick="yaNoMeGustaComment(@respuesta.getId)" style="width:90px">Ya no me gusta</button>		       
+			                <input id="isLike@respuesta.getId" type="hidden" value="1" />
+			             }
+			             </span>
+			             
+			             <span id="unlike-boton@respuesta.getId">
+			             @if(respuesta.getIsUnliked == 0) {
+			                 <button class="btn btn-info left no-like-button" onclick = "noMeGustaComment(@respuesta.getId)">No Me Gusta</button>
+			                 <input id="isUnlike@respuesta.getId" type="hidden" value="0" />
+			                 
+			             }else {
+			                 <button class="btn btn-primary left no-like-button" onclick="podriaGustarmeComment(@respuesta.getId)">Podria Gustarme</button>			        
+			                 <input id="isUnlike@respuesta.getId" type="hidden" value="1" />
+			             }
+			             </span>
 			<label class="label-coment" onclick="commentReply(@respuesta.getId)">Responder</label>
 			<span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount@respuesta.getId">@respuesta.getLikes</span></span>
 			<span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount@respuesta.getId">@respuesta.getUnlikes</span></span>
@@ -18,7 +46,7 @@
 			    
 			    @display(respuesta.getRespuestas)        
 		</div>
-	    <textarea id="text@respuesta.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id)"></textarea>
+	    <textarea id="text@respuesta.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id,'@respuesta.getOwner.getFacebookId','@respuesta.getOwner.getPrimerNombre','@respuesta.getOwner.getPrimerApellido')"></textarea>
 		
 			           	        
 	 }
@@ -170,8 +198,27 @@
 			  </div>
 			  
     		  <div id="interaction-options">
-			     <button class="btn btn-info left like-button" onclick="meGustaAlbum()">Me Gusta</button>
-			     <button class="btn btn-info left no-like-button" onclick="noMeGustaAlbum()">No Me Gusta</button>
+			     
+			     <span id="like-boton">
+			     @if(currentAlbum.getIsLiked == 0) {
+			       <button class="btn btn-info left like-button" onclick="meGustaAlbum()">Me Gusta</button>
+			       <input id="isLike" type="hidden" value="0" />
+			     } else {
+			       <button class="btn btn-danger left like-button" onclick="yaNoMeGustaAlbum()" style="width:90px">Ya no me gusta</button>		       
+			        <input id="isLike" type="hidden" value="1" />
+			     }
+			     </span>
+			     
+			     <span id="unlike-boton">
+			     @if(currentAlbum.getIsUnliked == 0) {
+			        <button class="btn btn-info left no-like-button" onclick="noMeGustaAlbum()">No Me Gusta</button>
+			        <input id="isUnlike" type="hidden" value="0" />
+			     } else {
+			         <button class="btn btn-primary left no-like-button" onclick="podriaGustarmeAlbum()">Podria Gustarme</button>			        
+			         <input id="isUnlike" type="hidden" value="1" />
+			     }
+			     </span>
+			     
 			     <label class="label-coment" onclick="mostrarAreaComent()">Comentar</label>
 			     <span style="margin: 20px 8px 0 300px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount">@currentAlbum.getLikes</span></span>
 			     <span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount">@currentAlbum.getUnlikes</span></span>
@@ -184,10 +231,39 @@
 			   @currentAlbum.getComentarios.map { 
                     case (comentario) => {
                     	
-			     <div class="comment" id="@comentario.getId">@comentario.getContenido
+			     <div class="comment" id="@comentario.getId">
+			     
+			     <div style="height:55px">
+			<a class="imga left" href="perfil/@comentario.getOwner.getId"> <img class="imgi" src=http://graph.facebook.com/@comentario.getOwner.getFacebookId/picture />
+			</a>
+			<div class="left" style="margin: 15px 0 0 10px"><a class="userName" href="perfil/@comentario.getOwner.getId">@(comentario.getOwner.getPrimerNombre + " " + comentario.getOwner.getPrimerApellido) dice: </a></div>
+			</div>
+			     
+			     @comentario.getContenido
 			           <div id="interaction-options" style="height:50px;zoom:0.7">
-			             <button class="btn btn-info left like-button" onclick = "meGustaComment(@comentario.getId)" >Me Gusta</button>
-			             <button class="btn btn-info left no-like-button" onclick = "noMeGustaComment(@comentario.getId)">No Me Gusta</button>
+			             
+			             <span id="like-boton@comentario.getId">			             
+			             @if(comentario.getIsLiked == 0) {
+			               <button class="btn btn-info left like-button" onclick = "meGustaComment(@comentario.getId)" >Me Gusta</button>
+			               <input id="isLike@comentario.getId" type="hidden" value="0" />
+			               
+			             }else {
+			               <button class="btn btn-danger left like-button" onclick="yaNoMeGustaComment(@comentario.getId)" style="width:90px">Ya no me gusta</button>		       
+			                <input id="isLike@comentario.getId" type="hidden" value="1" />
+			             }
+			             </span>
+			             
+			             <span id="unlike-boton@comentario.getId">
+			             @if(comentario.getIsUnliked == 0) {
+			                 <button class="btn btn-info left no-like-button" onclick = "noMeGustaComment(@comentario.getId)">No Me Gusta</button>
+			                 <input id="isUnlike@comentario.getId" type="hidden" value="0" />
+			                 
+			             }else {
+			                 <button class="btn btn-primary left no-like-button" onclick="podriaGustarmeComment(@comentario.getId)">Podria Gustarme</button>			        
+			                 <input id="isUnlike@comentario.getId" type="hidden" value="1" />
+			             }
+			             </span>
+			             
 			             <label class="label-coment" onclick="commentReply(@comentario.getId)">Responder</label>
 			              <span style="margin: 20px 8px 0 550px; color:green"><img src="assets/images/like.png" id="likes"><span id="likeCount@comentario.getId">@comentario.getLikes</span></span>
 			             <span style="color:red"><img src="assets/images/unlike.png" id="unlikes"><span id="unlikeCount@comentario.getId">@comentario.getUnlikes</span></span>
@@ -208,7 +284,7 @@
 			        
 			           
 			     </div>
-			     <textarea id="text@comentario.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id)"></textarea>
+			     <textarea id="text@comentario.getId" class="input-coment" maxlength="255" style="display:none" onkeypress="checkKeyComment(event,@currentUser.getId,@selectedUser.getId,this.id,'@comentario.getOwner.getFacebookId','@comentario.getOwner.getPrimerNombre','@comentario.getOwner.getPrimerApellido')"></textarea>
 			     
 			     }
 			   }

@@ -308,30 +308,47 @@ object Application extends Controller {
        implicit request =>
 
        request.session.get("albumId").map { albumId =>
-        
+         
+        var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+        var comentarioDao: ComentarioDAO = DAOFabrica.getComentarioDAO
+        var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+        var likeDao: LikeDAO = DAOFabrica.getLikeDAO
+     
         var user: Usuario = new Usuario();
         user = currentUserBuild(request,user)
         
-        var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
         var albumActual: Album = albumDao.findAlbumById(albumId.toLong).getOrElse { null }    
         albumActual.setContenidoMultimedia(albumDao.getContenidoByAlbum(albumActual.getId))
         
-        var comentarioDao: ComentarioDAO = DAOFabrica.getComentarioDAO
         var comments: List[Comentario] = comentarioDao.getCommentsForAlbum(albumActual.getId)
-        albumActual.setComentarios(getCommentsForComments(comments))
-        
-        var likeDao: LikeDAO = DAOFabrica.getLikeDAO
+        albumActual.setComentarios(getCommentsForComments(comments,user.getId))
+               
         var likes: Long = likeDao.getLikesForAlbum(albumActual.getId)
         var unlikes: Long = likeDao.getUnlikesForAlbum(albumActual.getId)
+        
         albumActual.setLikes(likes)
         albumActual.setUnlikes(unlikes)
+        albumActual.setIsLiked(likeDao.iLikeAlbum(albumActual.getId,user.getId))
+        albumActual.setIsUnliked(likeDao.iDontLikeAlbum(albumActual.getId,user.getId))
+        
+        var numeroComentario = 0
+        for(comment <- comments)
+        {
+             var usuario: Usuario = userDao.findUserById(comment.getFkUsuario).getOrElse(null)
+             comments(numeroComentario).setOwner(usuario)
+             comments(numeroComentario).setIsLiked(likeDao.iLikeComment(comment.getId,user.getId))
+             comments(numeroComentario).setIsUnLiked(likeDao.iDontLikeComment(comment.getId,user.getId))
+
+             numeroComentario = numeroComentario+1
+        }
+        
         
         var lastFriendVisitedId: Long = 0
         request.session.get("lastFriendVisitedId") match{
           case Some(value) =>
              lastFriendVisitedId = value.toLong;
         }
-        var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO;
+        
         var userSelected = userDao.findUserById(lastFriendVisitedId).getOrElse { null }
         
         
@@ -982,20 +999,28 @@ object Application extends Controller {
 
   }
   
-  def getCommentsForComments(commentList: List[Comentario]): List[Comentario] = {
+  def getCommentsForComments(commentList: List[Comentario], userId: Long): List[Comentario] = {
     
     var numeroComentarios = 0;
+    
+    
     for(comment <- commentList)
     {
         var commentDao: ComentarioDAO = DAOFabrica.getComentarioDAO
         var comments: List[Comentario] = commentDao.getResponsesForComment(comment.getId)
-        commentList(numeroComentarios).setRespuestas(getCommentsForComments(comments))
+        commentList(numeroComentarios).setRespuestas(getCommentsForComments(comments,userId))
         
         var likeDao: LikeDAO = DAOFabrica.getLikeDAO
         var likes: Long = likeDao.getLikesForComment(commentList(numeroComentarios).getId)
         var unlikes: Long = likeDao.getUnlikesForComment(commentList(numeroComentarios).getId)
         commentList(numeroComentarios).setLikes(likes)
         commentList(numeroComentarios).setUnlikes(unlikes)
+        commentList(numeroComentarios).setIsLiked(likeDao.iLikeComment(comment.getId,userId))
+        commentList(numeroComentarios).setIsUnLiked(likeDao.iDontLikeComment(comment.getId,userId))
+
+        
+        var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+        commentList(numeroComentarios).setOwner(userDao.findUserById(comment.getFkUsuario).getOrElse(null))
         
          
         numeroComentarios = numeroComentarios+1;
@@ -1099,6 +1124,68 @@ object Application extends Controller {
     Ok("true");
     
   }
+  
+  def deleteLikeFromAlbum() = Action { implicit request =>
+  
+      var user: Usuario = new Usuario();
+      user = currentUserBuild(request,user)
+      
+      val albumId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+      
+      var likeDao: LikeDAO = DAOFabrica.getLikeDAO
+      
+      likeDao.deleteAlbumLike(user.getId,albumId); 
+      
+     
+        Ok("true");
+    }
+  
+  def deleteUnlikeFromAlbum() = Action { implicit request =>
+  
+      var user: Usuario = new Usuario();
+      user = currentUserBuild(request,user)
+      
+      val albumId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+      
+      var likeDao: LikeDAO = DAOFabrica.getLikeDAO
+      
+      likeDao.deleteAlbumUnlike(user.getId,albumId); 
+      
+     
+        Ok("true");
+    }
+  
+  
+   def deleteLikeFromComment() = Action { implicit request =>
+  
+      var user: Usuario = new Usuario();
+      user = currentUserBuild(request,user)
+      
+      val commentId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+      
+      var likeDao: LikeDAO = DAOFabrica.getLikeDAO
+      
+      likeDao.deleteCommentLike(user.getId,commentId); 
+      
+     
+        Ok("true");
+    }
+  
+  def deleteUnlikeFromComment() = Action { implicit request =>
+  
+      var user: Usuario = new Usuario();
+      user = currentUserBuild(request,user)
+      
+      val commentId = request.body.asFormUrlEncoded.get("elementId").head.toLong;
+      
+      var likeDao: LikeDAO = DAOFabrica.getLikeDAO
+      
+      likeDao.deleteCommentUnlike(user.getId,commentId); 
+      
+     
+        Ok("true");
+    }
+  
   
 
 }

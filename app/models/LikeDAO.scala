@@ -40,5 +40,44 @@ trait LikeDAO
     
     def getUnlikesForComment(commentId: Long): Long
     
+     /*El metodo iLikeAlbum retorna 1 si al usuario le gusta el album y 0 si no ha seleccionado
+   * ninguna preferencia*/
+  
+    def iLikeAlbum(idAlbum: Long, idUsuario: Long): Long
+  
+  /*El metodo iDontLikeAlbum retorna 1 si al usuario no le gusta el album y 0 si no ha seleccionado
+   * ninguna preferencia*/
+  
+    def iDontLikeAlbum(idAlbum: Long, idUsuario: Long): Long
+    
+    /*el metodo deleteAlbumLike permite eleiminar un like de la base de datos dado el usuario que lo
+     * genero y el album al que fue asociado*/
+    
+    def deleteAlbumLike(idUsuario: Long,idAlbum: Long)
+    
+     /*el metodo deleteAlbumUnlike permite eleiminar un unlike de la base de datos dado el usuario que lo
+     * genero y el album al que fue asociado*/
+    
+    def deleteAlbumUnlike(idUsuario: Long,idAlbum: Long)
+    
+    /*el metodo deleteCommentLike permite eleiminar un like de la base de datos asociado a un comentario*/
+    
+    def deleteCommentLike(idUsuario: Long,idComment: Long)    
+    
+     /*el metodo deleteCommentUnlike permite eleiminar un unlike de la base de datos asociado a un comentario*/
+    
+    def deleteCommentUnlike(idUsuario: Long,idComment: Long) 
+    
+     /*El metodo iLikeComment retorna 1 si al usuario le gusta el comentario y 0 si no ha seleccionado
+   * ninguna preferencia*/
+  
+    def iLikeComment(idComment: Long, idUsuario: Long): Long
+  
+  /*El metodo iDontLikeComment retorna 1 si al usuario no le gusta el comentario y 0 si no ha seleccionado
+   * ninguna preferencia*/
+  
+    def iDontLikeComment(idComment: Long, idUsuario: Long): Long
+     
+   
  
 }

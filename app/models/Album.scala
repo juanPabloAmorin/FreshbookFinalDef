@@ -22,6 +22,8 @@ case class Album(private var id: Long,
     private var comentarios: List[Comentario] = null;
     private var likes: Long = 0;
     private var unlikes: Long = 0;
+    private var isLiked: Long = 0;
+    private var isUnLiked: Long = 0;
 
 	def this() = this(0, "", 0, "", null, null, 0)
 	def this(nombre: String, privacidad: Int, caratula: String, descripcion: Option[String], ownerId: Long) = this(0, nombre, privacidad, caratula, null, descripcion, ownerId)
@@ -37,6 +39,8 @@ case class Album(private var id: Long,
 	def getComentarios() = this comentarios
 	def getLikes() = this likes
 	def getUnlikes() = this unlikes
+	def getIsLiked() = this isLiked
+    def getIsUnliked() = this isUnLiked
 
 	def setId(id: Long) = this.id = id;
 	def setNombre(nombre: String) = this.nombre = nombre;
@@ -49,4 +53,6 @@ case class Album(private var id: Long,
     def setComentarios(comentarios: List[Comentario]) = {this.comentarios = comentarios}
     def setLikes(likes: Long) = {this.likes = likes}
     def setUnlikes(unlikes: Long) = {this.unlikes = unlikes}
+    def setIsLiked(isLiked: Long) = {this.isLiked = isLiked}
+    def setIsUnliked(isUnLiked: Long) = {this.isUnLiked = isUnLiked}
 }

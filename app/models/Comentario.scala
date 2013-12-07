@@ -18,9 +18,12 @@ case class Comentario(private var id: Long,
 		private var fkComentario: Option[Long],
 		private var fkUsuario: Long) {
   
+    private var owner :Usuario = null   
     private var respuestas: List[Comentario] = null;
     private var likes: Long = 0;
     private var unlikes: Long = 0;
+    private var isLiked: Long = 0;
+    private var isUnLiked: Long = 0;
 
 	def this() = this(0,"",null,Some(0),Some(0),Some(0),0)
 
@@ -34,6 +37,9 @@ case class Comentario(private var id: Long,
 	def getRespuestas() = this respuestas;
 	def getLikes() = this likes
 	def getUnlikes() = this unlikes
+	def getOwner() = this owner
+    def getIsLiked() = this isLiked
+    def getIsUnliked = this isUnLiked
 
 
 	def setId(id: Long) = this.id = id;
@@ -46,6 +52,12 @@ case class Comentario(private var id: Long,
 	def setRespuestas(respuestas: List[Comentario]) = {this.respuestas = respuestas}
 	def setLikes(likes: Long) = {this.likes = likes}
     def setUnlikes(unlikes: Long) = {this.unlikes = unlikes}
+    def setOwner(owner: Usuario) = {this.owner = owner}
+    def setIsLiked(isLiked: Long) = {this.isLiked = isLiked}
+    def setIsUnLiked(isUnLiked: Long) = {this.isUnLiked = isUnLiked}
+
+
+
 
 
 }

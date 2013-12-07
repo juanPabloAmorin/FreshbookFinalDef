@@ -125,3 +125,16 @@ GET  /albumDeleteContent     controllers.Application.albumDeleteContent()
 
 #eliminar contenido del album
 POST  /deleteContentInAlbum     controllers.Application.deleteContentInAlbum()
+
+#Eliminar un like de album
+POST   /deleteLikeAlbum                                                                  controllers.Application.deleteLikeFromAlbum()
+
+#eliminar un unlike de album
+POST   /deleteUnlikeAlbum                                                                  controllers.Application.deleteUnlikeFromAlbum()
+
+
+#Eliminar un like de comentario
+POST   /deleteLikeComment                                                                  controllers.Application.deleteLikeFromComment()
+
+#eliminar un unlike de comentario
+POST   /deleteUnlikeComment                                                                  controllers.Application.deleteUnlikeFromComment()

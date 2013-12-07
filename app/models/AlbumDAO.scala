@@ -44,10 +44,9 @@ trait AlbumDAO
   def getContenidoByAlbum(albumId: Long): List[ContenidoMultimedia];
   
   
-  /*El findAlbumById permite obtener un objeto de la clase Album dado su id*/
+  /*El metodo findAlbumById permite obtener un objeto de la clase Album dado su id*/
   
   def findAlbumById(id: Long): Option[Album];
-  
           
       
 }

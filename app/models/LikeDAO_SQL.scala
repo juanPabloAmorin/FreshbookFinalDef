@@ -138,6 +138,160 @@ class LikeDAO_SQL extends LikeDAO {
       }
    }
    
+   
+  override def iLikeAlbum(idAlbum: Long, idUsuario: Long): Long = {
+    
+       var like: Long = 0
+       
+       DB.withConnection { implicit connection =>
+
+	   like = SQL("""
+	                    select count(*) from tlike where tlike.fk_album = {idAlbum} 
+	                    and tlike.fk_usuario = {idUsuario} and tipo = 'L'
+                     """).on(
+							'idUsuario -> idUsuario, 'idAlbum->idAlbum).as(scalar[Long].single)
+
+		}
+       
+   
+       if(like == 0)
+       {
+         return 0
+       }
+         
+       return 1
+    
+  }
+  
+
+  override def iDontLikeAlbum(idAlbum: Long, idUsuario: Long): Long = {
+    
+       var unlike: Long = 0
+       
+       DB.withConnection { implicit connection =>
+
+	    unlike = SQL("""
+	                    select count(*) from tlike where tlike.fk_album = {idAlbum} 
+	                    and tlike.fk_usuario = {idUsuario} and tipo = 'U'
+                     """).on(
+							'idUsuario -> idUsuario, 'idAlbum->idAlbum).as(scalar[Long].single)
+
+		}
+       
+    
+       if( unlike == 0 )
+       {
+        
+         return 0
+       }
+         
+       return 1
+       
+    
+  }
+  
+  override def deleteAlbumLike(idUsuario: Long,idAlbum: Long) {
+    
+    DB.withConnection { implicit connection =>
+		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_album = {idAlbum} and tipo = 'L' "
+		    ).on('idUsuario -> idUsuario,
+				 'idAlbum -> idAlbum
+				    
+				).executeUpdate()
+
+		}
+    
+  }
+  
+  override def deleteAlbumUnlike(idUsuario: Long,idAlbum: Long) {
+    
+    DB.withConnection { implicit connection =>
+		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_album = {idAlbum} and tipo = 'U' "
+		    ).on('idUsuario -> idUsuario,
+				 'idAlbum -> idAlbum
+				    
+				).executeUpdate()
+
+		}
+    
+  }
+  
+  override def deleteCommentLike(idUsuario: Long,idComment: Long) {
+    
+    DB.withConnection { implicit connection =>
+		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_comentario = {idComment} and tipo = 'L' "
+		    ).on('idUsuario -> idUsuario,
+				 'idComment -> idComment
+				    
+				).executeUpdate()
+
+		}
+    
+  }
+  
+  override def deleteCommentUnlike(idUsuario: Long,idComment: Long) {
+    
+    DB.withConnection { implicit connection =>
+		SQL("delete from tlike where fk_usuario = {idUsuario} and fk_comentario = {idComment} and tipo = 'U' "
+		    ).on('idUsuario -> idUsuario,
+				 'idComment -> idComment
+				    
+				).executeUpdate()
+
+		}
+    
+  }
+   
+  override def iLikeComment(idComment: Long, idUsuario: Long): Long = {
+    
+       var like: Long = 0
+       
+       DB.withConnection { implicit connection =>
+
+	   like = SQL("""
+	                    select count(*) from tlike where tlike.fk_comentario = {idComment} 
+	                    and tlike.fk_usuario = {idUsuario} and tipo = 'L'
+                     """).on(
+							'idUsuario -> idUsuario, 'idComment->idComment).as(scalar[Long].single)
+
+		}
+       
+   
+       if(like == 0)
+       {
+         return 0
+       }
+         
+       return 1
+    
+  }
+  
+
+  override def iDontLikeComment(idComment: Long, idUsuario: Long): Long = {
+    
+       var unlike: Long = 0
+       
+       DB.withConnection { implicit connection =>
+
+	    unlike = SQL("""
+	                    select count(*) from tlike where tlike.fk_comentario = {idComment} 
+	                    and tlike.fk_usuario = {idUsuario} and tipo = 'U'
+                     """).on(
+							'idUsuario -> idUsuario, 'idComment->idComment).as(scalar[Long].single)
+
+		}
+       
+    
+       if( unlike == 0 )
+       {
+        
+         return 0
+       }
+         
+       return 1
+       
+    
+  }
   
 	
 }
