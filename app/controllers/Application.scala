@@ -514,10 +514,14 @@ object Application extends Controller {
     request.session.get("usuarioEmail").map { userEmail =>
 
       try {
+        
         var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+        val Some(album) = albumDao.findAlbumById(albumId)
         albumDao.deleteAlbumById(albumId)
 
         Logger.info("Se ha eliminado el album " + albumId)
+        
+        createDeletedAlbumNotification(request,album.getNombre)
 
         Redirect("/albumesPag")
 
@@ -541,21 +545,48 @@ object Application extends Controller {
     var albumImgRoute = ""
     var photos = Seq("")
     var tumbnails = Seq("")
+    var sounds = Seq("")
+    var soundTumbnails = Seq("")
+    var soundNames = Seq("")
+    var vids = Seq("")
+    var vidTumbnails = Seq("")
+    var vidNames = Seq("")
+
+    albumDescription = request.body.asFormUrlEncoded.get("description").head;
+    albumPrivacy = request.body.asFormUrlEncoded.get("privacy").head.toInt;
+    albumImgRoute = request.body.asFormUrlEncoded.get("imageRoute").head;
 
     try {
-      albumDescription = request.body.asFormUrlEncoded.get("description").head;
-      albumPrivacy = request.body.asFormUrlEncoded.get("privacy").head.toInt;
-      albumImgRoute = request.body.asFormUrlEncoded.get("imageRoute").head;
       photos = request.body.asFormUrlEncoded.get("photos[]");
       tumbnails = request.body.asFormUrlEncoded.get("tumbs[]");
     } catch {
       case e: NoSuchElementException =>
-        Logger.info("Se va a crear el album " + albumName + "vacio")
+        Logger.info("Se va a crear el album " + albumName + "sin fotos")
+    }
 
+    try {
+      sounds = request.body.asFormUrlEncoded.get("sounds[]");
+      soundTumbnails = request.body.asFormUrlEncoded.get("soundTumbs[]");
+      soundNames = request.body.asFormUrlEncoded.get("soundNames[]");
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.info("Se va a crear el album " + albumName + "sin sonidos")
+    }
+    try {
+      vids = request.body.asFormUrlEncoded.get("vids[]");
+      vidTumbnails = request.body.asFormUrlEncoded.get("vidTumbs[]");
+      vidNames = request.body.asFormUrlEncoded.get("vidNames[]");
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.info("Se va a crear el album " + albumName + "sin videos")
     }
 
     if (tumbnails(0) != "")
       albumImgRoute = tumbnails(0)
+    else if (soundTumbnails(0) != "")
+      albumImgRoute = soundTumbnails(0)
+    else if (vidTumbnails(0) != "")
+      albumImgRoute = vidTumbnails(0)
     else
       albumImgRoute = "assets/images/folder.jpg"
 
@@ -577,6 +608,8 @@ object Application extends Controller {
       var contenidoMultimedia: ContenidoMultimedia = new ContenidoMultimedia();
 
       var tumbnailPosition = 0;
+      var soundTumbnailPosition = 0;
+      var vidTumbnailPosition = 0;
 
       for (ruta <- photos) {
 
@@ -585,6 +618,7 @@ object Application extends Controller {
           contenidoMultimedia.setRedSocial("INSTAGRAM")
           contenidoMultimedia.setInAlbumId(idAlbum)
           contenidoMultimedia.setRutaTumbnail(tumbnails(tumbnailPosition))
+          contenidoMultimedia.setNombre("")
 
           contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
 
@@ -595,7 +629,43 @@ object Application extends Controller {
 
       }
 
-      createNewAlbumNotification(request)
+      for (sonido <- sounds) {
+
+        if (sonido != "") {
+          contenidoMultimedia.setRuta(sonido)
+          contenidoMultimedia.setRedSocial("SOUNDCLOUD")
+          contenidoMultimedia.setInAlbumId(idAlbum)
+          contenidoMultimedia.setRutaTumbnail(soundTumbnails(soundTumbnailPosition))
+          contenidoMultimedia.setNombre(soundNames(soundTumbnailPosition))
+
+          contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
+
+          Logger.info("Se agrego el sonido " + sonido + " al album " + albumName)
+        }
+
+        soundTumbnailPosition += 1
+
+      }
+
+      for (vid <- vids) {
+
+        if (vid != "") {
+          contenidoMultimedia.setRuta(vid)
+          contenidoMultimedia.setRedSocial("YOUTUBE")
+          contenidoMultimedia.setInAlbumId(idAlbum)
+          contenidoMultimedia.setRutaTumbnail(vidTumbnails(vidTumbnailPosition))
+          contenidoMultimedia.setNombre(vidNames(vidTumbnailPosition))
+
+          contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
+
+          Logger.info("Se agrego el video " + vid + " al album " + albumName)
+        }
+
+        vidTumbnailPosition += 1
+
+      }
+
+      createNewAlbumNotification(request,album.getNombre)
 
       Ok("true");
     } catch {
@@ -681,7 +751,7 @@ object Application extends Controller {
         var currentUser = userDao.findUserById(user.getId).getOrElse { null }
 
         Redirect("/perfilPag")
-        
+
       } catch {
 
         case e: DAOException =>
@@ -867,7 +937,7 @@ object Application extends Controller {
     Redirect("/searchForFriendsPage");
   }
 
-  def createNewAlbumNotification(request: Request[AnyContent]) {
+  def createNewAlbumNotification(request: Request[AnyContent], albumName: String) {
 
     var user: Usuario = new Usuario();
     user = currentUserBuild(request, user)
@@ -877,7 +947,7 @@ object Application extends Controller {
 
     var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
 
-    newNotification.setContenido(user.getPrimerNombre + " " + user.getPrimerApellido + " ha creado un nuevo Album")
+    newNotification.setContenido(user.getPrimerNombre + " " + user.getPrimerApellido + " ha creado el album "+albumName)
     newNotification.setTipo(notificacionDao.getTypeNotificationNumberFormat("ALBUM"))
     newNotification.setIdAmigo(null)
     newNotification.setIdUsuarioGenerador(user.getId)
@@ -889,6 +959,76 @@ object Application extends Controller {
     notificacionDao.insertNotificationMulticast(user.getAmistades, newNotificationId)
 
   }
+  
+  def createDeletedAlbumNotification(request: Request[AnyContent], albumName: String) {
+
+    var user: Usuario = new Usuario();
+    user = currentUserBuild(request, user)
+
+    var notificacionDao: NotificacionDAO = DAOFabrica.getNotificacionDAO
+    var newNotification: Notificacion = new Notificacion()
+
+    var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+
+    newNotification.setContenido(user.getPrimerNombre + " " + user.getPrimerApellido + " ha eliminado el album "+albumName)
+    newNotification.setTipo(notificacionDao.getTypeNotificationNumberFormat("ALBUM"))
+    newNotification.setIdAmigo(null)
+    newNotification.setIdUsuarioGenerador(user.getId)
+    notificacionDao.insertNotification(newNotification, user.getId)
+
+    user.setAmistades(userDao.findFriendsByUser(user.getId))
+
+    val newNotificationId = notificacionDao.getNewNotificationLastIdFromSequence
+    notificacionDao.insertNotificationMulticast(user.getAmistades, newNotificationId)
+
+  }
+  
+  def createAddContentAlbumNotification(request: Request[AnyContent], albumName: String,contenido: String) {
+
+    var user: Usuario = new Usuario();
+    user = currentUserBuild(request, user)
+
+    var notificacionDao: NotificacionDAO = DAOFabrica.getNotificacionDAO
+    var newNotification: Notificacion = new Notificacion()
+
+    var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+
+    newNotification.setContenido(user.getPrimerNombre + " " + user.getPrimerApellido + " ha agregado "+contenido+" al album "+albumName)
+    newNotification.setTipo(notificacionDao.getTypeNotificationNumberFormat("ALBUM"))
+    newNotification.setIdAmigo(null)
+    newNotification.setIdUsuarioGenerador(user.getId)
+    notificacionDao.insertNotification(newNotification, user.getId)
+
+    user.setAmistades(userDao.findFriendsByUser(user.getId))
+
+    val newNotificationId = notificacionDao.getNewNotificationLastIdFromSequence
+    notificacionDao.insertNotificationMulticast(user.getAmistades, newNotificationId)
+
+  }
+  
+  def createDeletedContentAlbumNotification(request: Request[AnyContent], albumName: String,contenido: String) {
+
+    var user: Usuario = new Usuario();
+    user = currentUserBuild(request, user)
+
+    var notificacionDao: NotificacionDAO = DAOFabrica.getNotificacionDAO
+    var newNotification: Notificacion = new Notificacion()
+
+    var userDao: UsuarioDAO = DAOFabrica.getUsuarioDAO
+
+    newNotification.setContenido(user.getPrimerNombre + " " + user.getPrimerApellido + " ha eliminado "+contenido+" al album "+albumName)
+    newNotification.setTipo(notificacionDao.getTypeNotificationNumberFormat("ALBUM"))
+    newNotification.setIdAmigo(null)
+    newNotification.setIdUsuarioGenerador(user.getId)
+    notificacionDao.insertNotification(newNotification, user.getId)
+
+    user.setAmistades(userDao.findFriendsByUser(user.getId))
+
+    val newNotificationId = notificacionDao.getNewNotificationLastIdFromSequence
+    notificacionDao.insertNotificationMulticast(user.getAmistades, newNotificationId)
+
+  }
+
 
   def deleteFriendship(userId: Long, friendId: Long) = Action { request =>
 
@@ -1140,16 +1280,56 @@ object Application extends Controller {
 
   def addContentToAlbum() = Action { implicit request =>
 
-    val photos = request.body.asFormUrlEncoded.get("photos[]");
-    val tumbnails = request.body.asFormUrlEncoded.get("tumbs[]");
+    var photos = Seq("")
+    var tumbnails = Seq("")
+    var sounds = Seq("")
+    var soundTumbnails = Seq("")
+    var soundNames = Seq("")
+    var vids = Seq("")
+    var vidTumbnails = Seq("")
+    var vidNames = Seq("")
+    
+    var albumId: Long = 0
+    request.session.get("albumId").map { id => albumId = id.toLong }
+    val albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+    val Some(album) = albumDao.findAlbumById(albumId)
+    
+    try {
+      photos = request.body.asFormUrlEncoded.get("photos[]");
+      tumbnails = request.body.asFormUrlEncoded.get("tumbs[]");
+      
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.debug("Las fotos del album no seran modificadas")
+    }
 
-    Logger.debug("Photos y Tumbnails recibidos via POST")
+    try {
+      sounds = request.body.asFormUrlEncoded.get("sounds[]");
+      soundTumbnails = request.body.asFormUrlEncoded.get("soundTumbs[]");
+      soundNames = request.body.asFormUrlEncoded.get("soundNames[]");
+
+      
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.debug("los sonidos del album no seran modificados")
+    }
+    try {
+      vids = request.body.asFormUrlEncoded.get("vids[]");
+      vidTumbnails = request.body.asFormUrlEncoded.get("vidTumbs[]");
+      vidNames = request.body.asFormUrlEncoded.get("vidNames[]");
+
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.debug("Los videos del album no seran modificados")
+    }
+
+    Logger.debug("fotos " + photos.length)
+    Logger.debug("sonidos " + sounds.length)
+    Logger.debug("videos " + vids.length)
+    Logger.debug("Datos para Update recibidos via POST")
 
     var user: Usuario = new Usuario();
     user = currentUserBuild(request, user)
-
-    var albumId: Long = 0
-    request.session.get("albumId").map { id => albumId = id.toLong }
 
     try {
       var albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
@@ -1160,25 +1340,91 @@ object Application extends Controller {
       var contenidoMultimedia: ContenidoMultimedia = new ContenidoMultimedia();
 
       var tumbnailPosition = 0;
+      var soundTumbnailPosition = 0;
+      var vidTumbnailPosition = 0;
 
+      var cuentaFotos = 0;
+      var cuentaSonidos = 0;
+      var cuentaVideos = 0;
+      
       for (ruta <- photos) {
 
+      if (ruta != "") {
         contenidoMultimedia.setRuta(ruta)
         contenidoMultimedia.setRedSocial("INSTAGRAM")
         contenidoMultimedia.setInAlbumId(idAlbum)
         contenidoMultimedia.setRutaTumbnail(tumbnails(tumbnailPosition))
+        contenidoMultimedia.setNombre("")
+
 
         try {
           contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
+          cuentaFotos += 1
         } catch {
           case e: DAOException =>
             Logger.error("La foto con ruta" + ruta + "no pudo ser agregada al album " + albumId)
             throw BusinessException.create("La foto " + ruta + " no pudo ser agregada al album", e)
         }
 
+      }
         tumbnailPosition += 1
 
       }
+      
+      for (sound <- sounds) {
+
+       if (sound != "") {
+        contenidoMultimedia.setRuta(sound)
+        contenidoMultimedia.setRedSocial("SOUNDCLOUD")
+        contenidoMultimedia.setInAlbumId(idAlbum)
+        contenidoMultimedia.setRutaTumbnail(soundTumbnails(soundTumbnailPosition))
+        contenidoMultimedia.setNombre(soundNames(soundTumbnailPosition))
+
+
+        try {
+          contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
+          cuentaSonidos += 1
+        } catch {
+          case e: DAOException =>
+            Logger.error("El sonido con ruta" + sound + "no pudo ser agregado al album " + albumId)
+            throw BusinessException.create("El sonido " + sound + " no pudo ser agregado al album", e)
+        }
+       }
+
+        soundTumbnailPosition += 1
+
+      }
+      
+      for (vid <- vids) {
+
+       if (vid != "") {
+        contenidoMultimedia.setRuta(vid)
+        contenidoMultimedia.setRedSocial("YOUTUBE")
+        contenidoMultimedia.setInAlbumId(idAlbum)
+        contenidoMultimedia.setRutaTumbnail(vidTumbnails(vidTumbnailPosition))
+        contenidoMultimedia.setNombre(vidNames(vidTumbnailPosition))
+
+
+        try {
+          contenidoDao.insertContenidoMultimedia(contenidoMultimedia)
+          cuentaVideos += 1
+        } catch {
+          case e: DAOException =>
+            Logger.error("El video con ruta" + vid + "no pudo ser agregado al album " + albumId)
+            throw BusinessException.create("El video " + vid + " no pudo ser agregado al album", e)
+        }
+       }
+
+        vidTumbnailPosition += 1
+
+      }
+      
+      if(cuentaFotos > 0)
+         createAddContentAlbumNotification(request,album.getNombre,cuentaFotos + " nuevas fotos")
+      if(cuentaSonidos > 0)
+         createAddContentAlbumNotification(request,album.getNombre,cuentaSonidos + " nuevos tracks")
+      if(cuentaVideos > 0)
+         createAddContentAlbumNotification(request,album.getNombre,cuentaVideos + " nuevos videos")
 
       Ok("true");
     } catch {
@@ -1191,25 +1437,59 @@ object Application extends Controller {
 
   def deleteContentInAlbum() = Action { implicit request =>
 
-    val photos = request.body.asFormUrlEncoded.get("photos[]");
+    var photos = Seq("")
+    var sounds = Seq("")
+    var vids = Seq("")
+    
+    var albumId: Long = 0
+    request.session.get("albumId").map { id => albumId = id.toLong }
+    val albumDao: AlbumDAO = DAOFabrica.getAlbumDAO
+    val Some(album) = albumDao.findAlbumById(albumId)
+ 
+    try {
+      photos = request.body.asFormUrlEncoded.get("photos[]");
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.debug("Las fotos del album no seran eliminadas")
+    }
 
+    try {
+      sounds = request.body.asFormUrlEncoded.get("sounds[]");
+  
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.debug("los sonidos del album no seran eliminados")
+    }
+    try {
+      vids = request.body.asFormUrlEncoded.get("vids[]");
+
+    } catch {
+      case e: NoSuchElementException =>
+        Logger.debug("Los videos del album no seran eliminados")
+    }
+    
     Logger.debug("Id's de fotos recibidos via POST")
 
     var user: Usuario = new Usuario();
     user = currentUserBuild(request, user)
 
-    var albumId: Long = 0
-    request.session.get("albumId").map { id => albumId = id.toLong }
-
     var contenidoDao: ContenidoMultimediaDAO = DAOFabrica.getContenidoMultimediaDAO
 
     var tumbnailPosition = 0;
+    var soundTumbnailPosition = 0;
+    var vidTumbnailPosition = 0;
+    
+    var cuentaFotos = 0;
+    var cuentaSonidos = 0;
+    var cuentaVideos = 0;
 
     for (photo <- photos) {
+      
+      if (photo != "") {
 
       try {
         contenidoDao.deleteContenidoMultimedia(photo.toLong)
-
+        cuentaFotos += 1
         tumbnailPosition += 1
 
         Logger.info("Se ha eliminado la foto " + photo + " del album " + albumId + " de " + user.getPrimerNombre + " " + user.getPrimerApellido)
@@ -1217,10 +1497,57 @@ object Application extends Controller {
 
         case e: DAOException =>
           Logger.error("La foto " + photo + "del album" + albumId + "no pudo ser eliminada")
-          throw BusinessException.create("El like no pudo ser eliminado", e)
+          throw BusinessException.create("La foto no pudo ser eliminada", e)
 
       }
+      }
     }
+    
+    for (sound <- sounds) {
+
+       if (sound != "") {
+      try {
+        contenidoDao.deleteContenidoMultimedia(sound.toLong)
+        cuentaSonidos += 1
+        soundTumbnailPosition += 1
+
+        Logger.info("Se ha eliminado el sonido " + sound + " del album " + albumId + " de " + user.getPrimerNombre + " " + user.getPrimerApellido)
+      } catch {
+
+        case e: DAOException =>
+          Logger.error("El sonido " + sound + "del album" + albumId + "no pudo ser eliminado")
+          throw BusinessException.create("El sonido no pudo ser eliminado", e)
+
+      }
+       }
+    }
+    
+    for (video <- vids) {
+
+       if (video != "") {
+      try {
+        contenidoDao.deleteContenidoMultimedia(video.toLong)
+        cuentaVideos += 1
+        vidTumbnailPosition += 1
+
+        Logger.info("Se ha eliminado el video " + video + " del album " + albumId + " de " + user.getPrimerNombre + " " + user.getPrimerApellido)
+      } catch {
+
+        case e: DAOException =>
+          Logger.error("El video " + video + "del album" + albumId + "no pudo ser eliminado")
+          throw BusinessException.create("El video no pudo ser eliminado", e)
+
+      }
+       }
+    }
+    
+      if(cuentaFotos > 0)
+         createDeletedContentAlbumNotification(request,album.getNombre,cuentaFotos + " fotos")
+      if(cuentaSonidos > 0)
+         createDeletedContentAlbumNotification(request,album.getNombre,cuentaSonidos + " tracks")
+      if(cuentaVideos > 0)
+         createDeletedContentAlbumNotification(request,album.getNombre,cuentaVideos + " videos")
+
 
     Ok("true");
 

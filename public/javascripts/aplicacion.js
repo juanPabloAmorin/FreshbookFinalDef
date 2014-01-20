@@ -416,7 +416,13 @@ function createAlbum() {
 
 	var photos = [];
 	var tumbs = [];
-
+	var sounds = [];
+	var soundTumbs = [];
+	var soundNames = [];
+	var vids = [];
+	var vidTumbs = [];
+	var vidNames = [];
+	
 	$("input[name=checkB]:checked").each(function() {
 		photos.push(this.id);
 	});
@@ -424,7 +430,33 @@ function createAlbum() {
 	$("input[name=checkB]:checked").each(function() {
 		tumbs.push(this.title);
 	});
+	
+	$("input[name=checkS]:checked").each(function() {
+		sounds.push(this.id);
+	});
+	
+	$("input[name=checkS]:checked").each(function() {
+		soundTumbs.push(this.title);
+	});
+	
+	$("input[name=checkS]:checked").each(function() {
+		soundNames.push(this.getAttribute("data-name"));
+	});
+	
+	$("input[name=checkV]:checked").each(function() {
+		vids.push(this.id);
+	
+	});
+	
+	$("input[name=checkV]:checked").each(function() {
+		vidTumbs.push(this.title);
+	});
+	
+	$("input[name=checkV]:checked").each(function() {
+		vidNames.push(this.getAttribute("data-name"));
+	});
 
+	
 	if (name != "") {
 
 		var jqxhr = $.post("/insertAlbum", {
@@ -433,7 +465,13 @@ function createAlbum() {
 			privacy : privacy,
 			imageRoute : imageRoute,
 			'photos[]' : photos,
-			'tumbs[]' : tumbs
+			'tumbs[]' : tumbs,
+			'sounds[]' : sounds,
+			'soundTumbs[]' : soundTumbs,
+			'soundNames[]' : soundNames,
+			'vids[]' : vids,
+			'vidTumbs[]' : vidTumbs,
+			'vidNames[]' : vidNames
 		})
 
 		.done(function(jqXHR) {
@@ -900,7 +938,7 @@ function getInstagramPhotos() {
 			+ '/media/recent?callback=?&count=' + count;
 	var photoId = 0;
 
-	$('#instagram-div').html('');
+	$('#instagram-div').html('<div align="center" style="margin-top:20px;font-size:18px"><img src="assets/images/Logos/InstagramLogo.png" class="logo"/></div>');
 
 	var jqxhr = $
 			.getJSON(instagramUrl, access_parameters)
@@ -1357,6 +1395,12 @@ function addContentToAlbum() {
 
 	var photos = [];
 	var tumbs = [];
+	var sounds = [];
+	var soundTumbs = [];
+	var soundNames = [];
+	var vids = [];
+	var vidTumbs = [];
+	var vidNames = [];
 
 	$("input[name=checkB]:checked").each(function() {
 		photos.push(this.id);
@@ -1365,11 +1409,44 @@ function addContentToAlbum() {
 	$("input[name=checkB]:checked").each(function() {
 		tumbs.push(this.title);
 	});
+	
+	$("input[name=checkS]:checked").each(function() {
+		sounds.push(this.id);
+	});
+	
+	$("input[name=checkS]:checked").each(function() {
+		soundTumbs.push(this.title);
+	});
+	
+	$("input[name=checkS]:checked").each(function() {
+		soundNames.push(this.getAttribute("data-name"));
+	});
+	
+	$("input[name=checkV]:checked").each(function() {
+		vids.push(this.id);
+	
+	});
+	
+	$("input[name=checkV]:checked").each(function() {
+		vidTumbs.push(this.title);
+	});
+	
+	$("input[name=checkV]:checked").each(function() {
+		vidNames.push(this.getAttribute("data-name"));
+	});
 
-	if (photos.length > 0) {
+	
+	if (photos.length > 0 || sounds.length > 0 || vids.length > 0) {
+		
 		var jqxhr = $.post("/addContentToAlbum", {
 			'photos[]' : photos,
-			'tumbs[]' : tumbs
+			'tumbs[]' : tumbs,
+			'sounds[]' : sounds,
+			'soundTumbs[]' : soundTumbs,
+			'soundNames[]' : soundNames,
+			'vids[]' : vids,
+			'vidTumbs[]' : vidTumbs,
+			'vidNames[]' : vidNames
 		})
 
 		.done(function(jqXHR) {
@@ -1389,15 +1466,30 @@ function addContentToAlbum() {
 }
 
 function deleteContentInAlbum() {
+	
 	var photos = [];
+	var sounds = [];
+	var vids = [];
 
 	$("input[name=checkB]:checked").each(function() {
 		photos.push(this.id);
 	});
+	
+	$("input[name=checkS]:checked").each(function() {
+		sounds.push(this.id);
+	});
+	
+	$("input[name=checkV]:checked").each(function() {
+		vids.push(this.id);
+	});
 
-	if (photos.length > 0) {
+	
+	if (photos.length > 0 || sounds.length > 0 || vids.length > 0) {
+		
 		var jqxhr = $.post("/deleteContentInAlbum", {
-			'photos[]' : photos
+			'photos[]' : photos,
+			'sounds[]' : sounds,
+			'vids[]' : vids
 		})
 
 		.done(function(jqXHR) {
@@ -1614,4 +1706,10 @@ function updateAlbumCaratula(albumId, numeroFotos) {
 
 	location.href = "/albumesPag";
 
+}
+
+
+function gotoPage(ruta)
+{
+	location.href = ruta;
 }

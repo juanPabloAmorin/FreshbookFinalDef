@@ -1,4 +1,5 @@
 @(currentUser: Usuario)
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,6 +21,7 @@
 </head>
 
 <body>
+
 	<div class="header cfix">
 		<div class="cfix log_bar">
 			<div class="left">
@@ -27,7 +29,7 @@
 			</div>
 			
 			
-			<div id="friendship-div" class="divFriendship cfix left" >
+			<div id="friendship-div" class="divFriendship cfix left" > 
 			<img class="imgis left" src="assets/images/friendship.png" onclick="mostrarSolicitudesAmistad(@currentUser.getId)"/>
 			     <div id="div-friendship-sol" style="overflow:auto;width:332px;background-color:#FFF;z-index:2;position:absolute;margin-top:35px;margin-left:-145px">
 			        
@@ -141,8 +143,10 @@
 			  <div id="multimedia-div" class="divBuscador cfix" style="overflow:scroll">
 			   
 			     <input id="multi-input-search" type="text" placeholder="Busca contenido multimedia" class="form-control left" style="border-radius:0px;width:89%"/>
-			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:11%" onclick="getInstagramPhotos()">Buscar</button>
-			     <div id="instagram-div"></div>
+			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:11%" onclick="getInstagramPhotos();getSoundsOfSoundcloud();getYoutubeVideos()">Buscar</button>
+			     <div id="instagram-div"></div></br>
+			     <div id="soundcloud-div"></div></br>
+			     <div id="youtube-div"></div>
 			  
 			  </div>
 			  
@@ -166,5 +170,8 @@
 	<script src="assets/javascripts/application.js"></script>
 	<script src="assets/javascripts/aplicacion.js"></script>
 	<script src="assets/javascripts/FacebookLogout.js"></script>
+	<script src="http://connect.soundcloud.com/sdk.js"></script>
+	<script src="assets/javascripts/soundcloudFunctions.js"></script>
+	<script src="assets/javascripts/youtubeFunctions.js"></script>
 	
 </body>

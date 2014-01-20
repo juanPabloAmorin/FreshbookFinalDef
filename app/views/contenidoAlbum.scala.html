@@ -184,15 +184,55 @@
 			 
 			 
 			  <div id="instagram-div" class="cfix" style="overflow:scroll">
-			  
+			  <div align="center" style="margin-top:20px;font-size:18px"><img src="assets/images/Logos/InstagramLogo.png" class="logo"/></div>
 			  
 			  
 			   @currentAlbum.getContenidoMultimedia.map { 
                     case (contenido) => {
                     	
+                   @if(contenido.getRedSocial == "INSTAGRAM"){
                      <div class="left firstImgCel">
 			            <a href="/carrusel"><img src="@contenido.getRutaTumbnail" /></a>
 	                 </div>	
+	                 }
+                    	
+                    } 
+                }
+			 		   
+			  </div>
+			  
+			  <div id="soundcloud-div" class="cfix" style="overflow:scroll; margin-top:20px">
+			  <div align="center" style="margin-top:20px;font-size:18px"><img src="assets/images/Logos/SoundcloudLogo.png" class="logo"/></div>
+			  
+			  
+			   @currentAlbum.getContenidoMultimedia.map { 
+                    case (contenido) => {
+                    	
+               @if(contenido.getRedSocial == "SOUNDCLOUD"){
+                     <div class=" firstSoundCel">
+			            <a href="/carrusel"><img src="@contenido.getRutaTumbnail" /></a>
+	                 </div>	
+	                 <span>@contenido.getNombre</span>
+	                 
+	                 }
+                    	
+                    } 
+                }
+			 		   
+			  </div>
+			  
+			  <div id="youtube-div" class="cfix" style="overflow:scroll;margin-top:20px">
+			  <div align="center" style="margin-top:20px;font-size:18px"><img src="assets/images/Logos/YoutubeLogo.png" class="logo"/></div>
+			  
+			  
+			   @currentAlbum.getContenidoMultimedia.map { 
+                    case (contenido) => {
+                    	
+                   @if(contenido.getRedSocial == "YOUTUBE"){
+                     <div class="left firstVideoCel">
+			            <a href="/carrusel"><img src="@contenido.getRutaTumbnail" width="130" height="97" /></a>
+	                 </div>	
+	                 }
                     	
                     } 
                 }

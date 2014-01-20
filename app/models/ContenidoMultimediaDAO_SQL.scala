@@ -21,9 +21,10 @@ class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
       get[Date]("contenido_multimedia.fecha_subida") ~
       get[String]("contenido_multimedia.red_social") ~
       get[String]("contenido_multimedia.ruta_tumbnail") ~
+      get[String]("contenido_multimedia.nombre") ~
       get[Long]("contenido_multimedia.fk_album") map {
-        case id ~ ruta ~ fechaSubida ~ redSocial ~ rutaTumbnail ~ inAlbumId =>
-          ContenidoMultimedia(id, ruta, fechaSubida, redSocial, rutaTumbnail, inAlbumId)
+        case id ~ ruta ~ fechaSubida ~ redSocial ~ rutaTumbnail ~ nombre ~ inAlbumId =>
+          ContenidoMultimedia(id, ruta, fechaSubida, redSocial, rutaTumbnail, nombre, inAlbumId)
       }
   }
 
@@ -34,11 +35,12 @@ class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
         SQL(
           """
 				INSERT INTO CONTENIDO_MULTIMEDIA VALUES( nextval('seq_contenido'),{ruta},NOW(),
-				{redSocial},{rutaTumbnail},{inAlbumId})
+				{redSocial},{rutaTumbnail},{nombre},{inAlbumId})
 				""").on(
             'ruta -> newContenidoMultimedia.getRuta,
             'redSocial -> newContenidoMultimedia.getRedSocial,
             'rutaTumbnail -> newContenidoMultimedia.getRutaTumbnail,
+            'nombre -> newContenidoMultimedia.getNombre,
             'inAlbumId -> newContenidoMultimedia.getInAlbumId).executeUpdate()
 
       }

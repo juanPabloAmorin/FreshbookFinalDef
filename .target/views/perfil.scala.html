@@ -1,0 +1,284 @@
+@(selectedUser: Usuario,currentUser: Usuario,isFriend: Boolean,friendshipStatus: Int)
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Freshbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Loading Bootstrap -->
+<link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="assets/bootstrap/css/prettify.css" rel="stylesheet">
+
+<!-- Loading Flat UI -->
+<link href="assets/stylesheets/flat-ui.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="assets/images/favicon.png">
+<link href="assets/stylesheets/pages.css" rel="stylesheet">
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+</head>
+<body onload="initialize()">
+
+	<div class="header cfix">
+		<div class="cfix log_bar">
+			<div class="left">
+				<img src="assets/images/head_log.png" width="120" height="43" />
+			</div>
+			
+			
+			<div id="friendship-div" class="divFriendship cfix left" >
+			<img class="imgis left" src="assets/images/friendship.png" onclick="mostrarSolicitudesAmistad(@currentUser.getId)"/>
+			     <div id="div-friendship-sol" style="overflow:auto;width:332px;background-color:#FFF;z-index:2;position:absolute;margin-top:35px;margin-left:-145px">
+			        
+			
+			     </div>
+			</div>
+			
+			<div class="divBuscadorHeader cfix left" style="margin-left:-125px;">
+			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
+			     
+			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
+			        
+			
+			     </div>
+			</div>
+			<div class="cfix headBox left" style="margin-left:120px;">
+				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
+					src="http://graph.facebook.com/@currentUser.getFacebookId/picture" />
+				</a>
+				<div class="middleBox">
+					<div class="innerBox" style="height: 40px"></div>
+					<div class="innerBox">
+						<a class="userName" style="color:#FFF" href="perfil/@currentUser.getId">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""})) </a>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/logout.png" style="margin-left:20px" /></a>
+			     
+			
+			
+		</div>
+	</div>
+	<!-- Header -->
+
+	<div class="contenedorGlobal cfix">
+		<div class="clearfix">
+			<div class="left">
+				<div class="panel3">
+					<div class="pvm divTitle">
+						<div>
+							<span style="font-size: 22px">@(selectedUser.getPrimerNombre + " " + (selectedUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + selectedUser.getPrimerApellido + " " + (selectedUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
+						</div>
+					</div>
+					<div id="div-photo-panel" class="photoPanel" style="width:225px;height:250px;display:block;margin-top: 15px; margin-bottom:15px;margin-left:4px">
+				         <img src="http://graph.facebook.com/@selectedUser.getFacebookId/picture?type=large" style="width: 99%; height: 100%;"/>
+				      </div>
+					<a class="cfix" href="/principal">
+						<div class="pvm topBorder divButton">
+							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
+						</div>
+					</a> 
+					@if(selectedUser.getPrivacidad == 0 || (selectedUser.getPrivacidad == 1 && isFriend && friendshipStatus == 1) || currentUser.getId == selectedUser.getId){
+					<a class="cfix" href="perfil/@selectedUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>PERFIL</b></span>
+						</div>
+					</a> 
+					<a class="cfix" href="amigos/@selectedUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>AMIGOS</b></span>
+						</div>
+					</a> 
+					<a class="cfix" href="albumes/@selectedUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>ALBUMES</b></span>
+						</div>
+					</a>
+					}
+				</div>
+				<!-- Panel izquierdo -->
+			</div>
+           
+			<div class="panel4 right">
+				<div class="cajitaPerfil">
+				  @if(selectedUser.getPrivacidad == 0 || (selectedUser.getPrivacidad == 1 && isFriend && friendshipStatus == 1) || currentUser.getId == selectedUser.getId){
+					<div class="divTitle pvm">Información de Perfil
+					 @if(selectedUser.getId != currentUser.getId){
+					 	@if(!isFriend){
+					        <button id="friendship-button" class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px" onclick="createFriendshipNotification()" >Solicitar Amistad</button>
+					    }
+					    @if(isFriend && friendshipStatus == 0){
+					          <button class="btn btn-info right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Esperando Repuesta</button>
+					    }
+					    @if(isFriend && friendshipStatus == 1){
+					    	
+					    	  <button class="btn btn-info right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Es Amigo</button>
+					    }
+					 }
+					</div>
+					<div class="divComWhite pvm">
+						<b class="left">Primer Nombre</b>
+						<div class="left fontN" id="first-name-div" name="first-name-div" style="margin-left: 93px">@selectedUser.getPrimerNombre</div>
+						@if(selectedUser.getId == currentUser.getId){
+							<div class="right cfix editButton" id="first-name-edit-button" name="first-name-edit-button" title="editar" onclick="editFirstName(@selectedUser.getId)"></div>
+						}
+					</div>
+					
+					<div class="divComWhite pvm">
+						<b class="left">Segundo Nombre</b>
+						<div class="left fontN" id="second-name-div" name="second-name-div" style="margin-left: 82px">@selectedUser.getSegundoNombre</div>
+						@if(selectedUser.getId == currentUser.getId){
+							<div class="right cfix editButton" id="second-name-edit-button" name="second-name-edit-button" title="editar" onclick="editSecondName(@selectedUser.getId)"></div>
+						}
+					</div>
+					
+					<div class="divComWhite pvm">
+						<b class="left">Primer Apellido</b>
+						<div class="left fontN" id="first-lastname-div" name="first-lastname-div" style="margin-left: 95px">@selectedUser.getPrimerApellido</div>
+						@if(selectedUser.getId == currentUser.getId){
+						<div class="right cfix editButton" id="first-lastname-edit-button" name="first-lastname-edit-button" title="editar" onclick="editFirstLastname(@selectedUser.getId)"></div>
+					    }
+					</div>
+					
+					<div class="divComWhite pvm">
+						<b class="left">Segundo Apellido</b>
+						<div class="left fontN" id="second-lastname-div" name="second-lastname-div" style="margin-left: 82px">@selectedUser.getSegundoApellido</div>
+						@if(selectedUser.getId == currentUser.getId){
+						<div class="right cfix editButton" id="second-lastname-edit-button" name="second-lastname-edit-button" title="editar" onclick="editSecondLastname(@selectedUser.getId)"></div>
+					    }
+					</div>
+
+					<div class="divComWhite pvm">
+						<b class="left">NickName</b>
+						<div class="left fontN" id="nickname-div" name="nickname-div" style="margin-left: 132px">@selectedUser.getUsername</div>
+						@if(selectedUser.getId == currentUser.getId){
+						<div class="right cfix editButton" id="nickname-edit-button" name="nickname-edit-button" title="editar" onclick="editNickname(@selectedUser.getId)"></div>
+					    }
+					</div>
+
+					<div class="divComWhite pvm">
+						<b class="left">Correo Electrónico</b>
+						<div class="left fontN" id="email-div" name="email-div" style="margin-left: 70px">@selectedUser.getEmail</div>
+						
+					</div>
+
+					<div class="divComWhite pvm">
+						<b class="left">Fecha de Nacimiento</b>
+						<div class="left fontN" style="margin-left: 60px">@selectedUser.getFechaNacimientoFormated</div>
+						
+					</div>
+					<div class="divComWhiteBorder" style="border-bottom: solid"></div>
+					
+					<div class="divComWhite" style="height:310px">
+					<div class="pvs">
+						<b>Ubicación</b>
+					</div>	
+					<div class="pvs">
+						<div id="map-canvas" class="left" style="width:300px;height:260px; margin-left:0px;margin-top:10px;"></div>
+					    <div id="ubicacion" align="center" style="margin-top:20px"></div>
+					    <br>
+					    @if(selectedUser.getId == currentUser.getId){
+					    <div id="modificar-lugar-button" align="center" style="margin-top:40px">
+					       <a href="/locationModify"><button class="btn btn-primary" style="border-radius:0px">Modificar</button></a>
+					    </div>
+					    }
+					</div>
+					</div>
+					
+					<div class="divComWhiteBorder pvm"></div>
+					<div class="divComWhite pvm">
+						<b>Mis Redes Sociales</b>
+					</div>
+					<div class="divComWhite2 pvm relative">
+						<span class="imgW2"> 
+						   <img class="img" src="assets/images/google_icon.png" width="25" height="25" />
+						</span>
+						<div style="margin-left: 28px">
+							<b class="left">Google +</b>
+							
+							<div class="left fontN" id="google-div" name="google-div" style="margin-left: 90px"><a id="google-link" href="@selectedUser.getGmail">@selectedUser.getGmail</a></div>
+						@if(selectedUser.getId == currentUser.getId){
+							<div class="right cfix editButton" id="google-edit-button" name="google-edit-button" title="editar" onclick="editGoogle(@selectedUser.getId)"></div>
+						}
+						</div>
+					</div>
+
+					<div class="divComWhite2 pvm relative">
+						<span class="imgW2"> 
+						  <img class="img" src="assets/images/facebook_icon.png" width="25" height="25">
+						</span>
+						<div style="margin-left: 28px">
+							<b class="left">Facebook</b>
+							
+							<div class="left fontN" id="facebook-div" name="facebook-div" style="margin-left: 82px"><a id="facebook-link" href="@selectedUser.getFacebook">@selectedUser.getFacebook</div></a>
+						
+						</div>
+					</div>
+
+					<div class="divComWhite2 pvm relative">
+						<span class="imgW2"> 
+						  <img class="img" src="assets/images/twitter_icon.png" width="25" height="25">
+						</span>
+						<div style="margin-left: 28px">
+							<b class="left">Twitter</b>
+							
+							<div class="left fontN" id="twitter-div" name="twitter-div" style="margin-left: 95px"><a id="twitter-link" href="@selectedUser.getTwitter">@selectedUser.getTwitter</a></div>
+						@if(selectedUser.getId == currentUser.getId){
+							<div class="right cfix editButton" id="twitter-edit-button" name="twitter-edit-button" title="editar" onclick="editTwitter(@selectedUser.getId)"></div>
+						}
+						</div>
+						
+		
+						
+					</div>
+					}
+					@if((selectedUser.getPrivacidad == 1 && !isFriend && currentUser.getId != selectedUser.getId) || (selectedUser.getPrivacidad == 1 && isFriend && friendshipStatus == 0)){
+					 <div class="divTitle pvm">Este perfil es privado
+					 @if(selectedUser.getId != currentUser.getId){
+					 	@if(!isFriend){
+					        <button id="friendship-button" class="btn btn-primary right" style="margin-top:-5px;margin-right:5px;border-radius:0px" onclick="createFriendshipNotification()" >Solicitar Admistad</button>
+					    }
+					    @if(isFriend && friendshipStatus == 0){
+					          <button class="btn btn-info right" style="margin-top:-5px;margin-right:5px;border-radius:0px">Esperando Repuesta</button>
+					    }
+					   
+					 }
+					}
+				</div>
+			</div>
+			<!-- Panel derecho -->
+		</div>
+	</div> 
+	
+	<div class=footer>
+		<div align="center" style="padding-top:20px">
+			<span>Sweet Development 2013</span>
+		</div>
+	</div> <!-- .footer -->
+	
+	<input type="hidden" id="modify" name="modify" value="0" />
+	<input type="hidden" id="latitud-input"  value="@selectedUser.getLatitud" />
+	<input type="hidden" id="longitud-input"  value="@selectedUser.getLongitud" />
+	
+	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
+	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="assets/javascripts/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/javascripts/bootstrap.min.js"></script>
+	<script src="assets/javascripts/bootstrap-select.js"></script>
+	<script src="assets/javascripts/bootstrap-switch.js"></script>
+	<script src="assets/javascripts/flatui-checkbox.js"></script>
+	<script src="assets/javascripts/flatui-radio.js"></script>
+	<script src="assets/javascripts/jquery.tagsinput.js"></script>
+	<script src="assets/javascripts/jquery.placeholder.js"></script>
+	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
+	<script src="assets/javascripts/application.js"></script>
+	<script src="assets/javascripts/aplicacion.js"></script>
+	<script src="assets/javascripts/googleMapsPerfil.js"></script>
+	<script src="assets/javascripts/FacebookLogout.js"></script>
+</body>
+</html>

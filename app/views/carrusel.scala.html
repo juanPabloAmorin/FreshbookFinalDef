@@ -1,4 +1,5 @@
 @(currentUser: Usuario, currentAlbum: Album,posicion: Int)
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,11 +7,10 @@
 <title>Freshbook</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Loading Bootstrap -->
+
 <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
 <link href="assets/bootstrap/css/prettify.css" rel="stylesheet">
 
-<!-- Loading Flat UI -->
 <link href="assets/stylesheets/flat-ui.css" rel="stylesheet">
 
 <link rel="shortcut icon" href="assets/images/favicon.png">
@@ -63,7 +63,6 @@
 			
 		</div>
 	</div>
-	<!-- Header -->
 
 	<div class="contenedorGlobal cfix">
 		<div class="clearfix">
@@ -98,7 +97,7 @@
 						</div>
 					</a>
 				</div>
-				<!-- Panel izquierdo -->
+				
 			</div>
 
 			<div class="panel4 right">
@@ -109,7 +108,6 @@
 						
 						
 						
-						<!-- Indicators -->
 						<ol class="carousel-indicators" >
 						@currentAlbum.getContenidoMultimedia.indices.map { 
                           case (position) => {
@@ -120,26 +118,83 @@
                             }
                          }
                        }
+						
 						</ol>
 						<div class="carousel-inner" >
 														
-							 <div class="item active" id="@currentAlbum.getContenidoMultimedia.head.getId">
+							 <div class="item active" id="@currentAlbum.getContenidoMultimedia.head.getId" style="height: 450px">
+							 
+							    @if(currentAlbum.getContenidoMultimedia.head.getRedSocial == "INSTAGRAM"){
 							      <img src="@currentAlbum.getContenidoMultimedia.head.getRuta"
 									   style="height: 450px; width: 100%; display: block;">
+							    }
+							    @if(currentAlbum.getContenidoMultimedia.head.getRedSocial == "SOUNDCLOUD"){
+							      <object height="81" width="70%" id="yourPlayerId" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" style="margin-top:20%;margin-left:8%" >
+  <param name="movie" value="http://player.soundcloud.com/player.swf?url=@currentAlbum.getContenidoMultimedia.head.getRuta&enable_api=true&object_id=yourPlayerId"></param>
+  <param name="allowscriptaccess" value="always"></param>
+  <embed allowscriptaccess="always" height="81" src="http://player.soundcloud.com/player.swf?url=@currentAlbum.getContenidoMultimedia.head.getRuta&enable_api=true&object_id=yourPlayerId" type="application/x-shockwave-flash" width="70%" name="yourPlayerId" style="margin-top:20%;margin-left:8%"></embed>
+</object> 
+							    }
+							    @if(currentAlbum.getContenidoMultimedia.head.getRedSocial == "YOUTUBE"){
+							     <div id="playerContainer" style="width: 20em; height: 180px;">
+                                             <object type="application/x-shockwave-flash" data="@currentAlbum.getContenidoMultimedia.head.getRuta" width="500" height="450" id="player" style="margin-left:85px; visibility: visible;">
+                                               <param name="allowfullscreen" value="true">
+                                             </object>
+                                          </div>
+							    }
 							 </div>
+							
+							
+							
 							 @currentAlbum.getContenidoMultimedia.tail.map { 
                                case (content) => {
-                               	     <div class="item" id="@content.getId">
+                               	   @if(content.getRedSocial == "INSTAGRAM"){
+                               	     <div class="item" id="@content.getId" title=@content.getRedSocial>
 							            <img src="@content.getRuta"
 									     style="height: 450px; width: 100%; display: block;">
 							        </div>
+							       } else {
+							            
+							            @if(content.getRedSocial == "SOUNDCLOUD"){
+							            
+							            
+							            
+							            
+ <div class="item" style="height: 450px" id="@content.getId" title="@content.getRedSocial">
+							            
+							            
+<object height="81" width="70%" id="yourPlayerId" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" style="margin-top:20%;margin-left:8%" >
+  <param name="movie" value="http://player.soundcloud.com/player.swf?url=@content.getRuta&enable_api=true&object_id=yourPlayerId"></param>
+  <param name="allowscriptaccess" value="always"></param>
+  <embed allowscriptaccess="always" height="81" src="http://player.soundcloud.com/player.swf?url=@content.getRuta&enable_api=true&object_id=yourPlayerId" type="application/x-shockwave-flash" width="70%" name="yourPlayerId" style="margin-top:20%;margin-left:8%"></embed>
+</object> 
+							      </div>						            
+							            
+							          } else {
+							          
+							              <div class="item" style="height: 450px" id="@content.getId" title="@content.getRedSocial">
+							             
+							              <div id="playerContainer" style="width: 20em; height: 180px;">
+                                             <object type="application/x-shockwave-flash" data="@content.getRuta" width="500" height="450" id="player" style="margin-left:85px; visibility: visible;">
+                                               <param name="allowfullscreen" value="true">
+                                             </object>
+                                          </div>
+                                          
+                                          </div>
+                                          
+                                          
+							          }  
+							            
+							            
+							       }
                                	}
                              }
 						</div>
 					
-						<a class="left carousel-control" href="#myCarousel" data-slide="prev" >
+					 	<a class="left carousel-control" href="#myCarousel" data-slide="prev" >
 						  <span class="glyphicon glyphicon-chevron-left"></span>
 						</a> 
+						
 						<a class="right carousel-control" href="#myCarousel" data-slide="next" >
 						  <span class="glyphicon glyphicon-chevron-right"></span>
 						</a>
@@ -150,7 +205,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- Panel derecho -->
+		
 	</div>
 
 	
@@ -168,6 +223,13 @@
 	<script src="assets/javascripts/application.js"></script>
 	<script src="assets/javascripts/aplicacion.js"></script>
 	<script src="assets/javascripts/FacebookLogout.js"></script>
+	<script src="http://connect.soundcloud.com/sdk.js"></script>
+	<script src="assets/javascripts/soundWidget.js"></script>
+	<script type="text/javascript" src="http://swfobject.googlecode.com/svn/trunk/swfobject/swfobject.js"></script>
+	
 
 </body>
 </html>
+
+
+-->

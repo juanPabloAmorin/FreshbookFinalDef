@@ -1,0 +1,214 @@
+@(currentUser: Usuario, currentAlbum: Album,posicion: Int)
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Freshbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="assets/bootstrap/css/prettify.css" rel="stylesheet">
+
+<link href="assets/stylesheets/flat-ui.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="assets/images/favicon.png">
+<link href="assets/stylesheets/pages.css" rel="stylesheet">
+
+
+</head>
+<body onload="commentLoad()">
+
+	<div class="header cfix">
+		<div class="cfix log_bar">
+			<div class="left">
+				<img src="assets/images/head_log.png" width="120" height="43" />
+			</div>
+			
+			
+			<div id="friendship-div" class="divFriendship cfix left" >
+			<img class="imgis left" src="assets/images/friendship.png" onclick="mostrarSolicitudesAmistad(@currentUser.getId)"/>
+			     <div id="div-friendship-sol" style="overflow:auto;width:332px;background-color:#FFF;z-index:2;position:absolute;margin-top:35px;margin-left:-145px">
+			        
+			
+			     </div>
+			</div>
+			
+			<div class="divBuscadorHeader cfix left" style="margin-left:-125px;">
+			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
+			     
+			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
+			        
+			
+			     </div>
+			</div>
+			<div class="cfix headBox left" style="margin-left:120px;">
+				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
+					src="http://graph.facebook.com/@currentUser.getFacebookId/picture" />
+				</a>
+				<div class="middleBox">
+					<div class="innerBox" style="height: 40px"></div>
+					<div class="innerBox">
+						<a class="userName" style="color:#FFF" href="perfil/@currentUser.getId">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""})) </a>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/logout.png" style="margin-left:20px" /></a>
+			     
+			
+			
+		</div>
+	</div>
+
+	<div class="contenedorGlobal cfix">
+		<div class="clearfix">
+			<div class="left">
+				<div class="panel3">
+					<div class="pvm divTitle">
+						<div>
+							<span style="font-size: 22px">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
+						</div>
+					</div>
+					<div id="div-photo-panel" class="photoPanel" style="width:225px;height:250px;display:block;margin-top: 15px; margin-bottom:15px;margin-left:4px">
+				         <img src="http://graph.facebook.com/@currentUser.getFacebookId/picture?type=large" style="width: 99%; height: 100%;"/>
+				      </div>
+					<a class="cfix" href="/principal">
+						<div class="pvm topBorder divButton">
+							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
+						</div>
+					</a> 
+					<a class="cfix" href="/perfil/@currentUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>PERFIL</b></span>
+						</div>
+					</a> 
+					<a class="cfix" href="/amigos/@currentUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>AMIGOS</b></span>
+						</div>
+					</a> 
+					<a class="cfix" href="/albumes/@currentUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>ALBUMES</b></span>
+						</div>
+					</a>
+				</div>
+				
+			</div>
+
+			<div class="panel4 right">
+				<div class="cajitaPerfil">
+					<div class="divTitle pvm">Album: Nombre del album</div>
+					<div id="myCarousel" class="carousel slide" data-interval="false" >
+						
+						
+						
+						
+						<ol class="carousel-indicators" >
+						@currentAlbum.getContenidoMultimedia.indices.map { 
+                          case (position) => {
+                          	@if(position == 0){
+							  <li data-target="#myCarousel" data-slide-to="@position" class="active"></li>                 
+                            } else{
+                              <li data-target="#myCarousel" data-slide-to="@position"></li>                                              
+                            }
+                         }
+                       }
+						</ol>
+						<div class="carousel-inner" >
+														
+							 <div class="item active" id="@currentAlbum.getContenidoMultimedia.head.getId">
+							      <img src="@currentAlbum.getContenidoMultimedia.head.getRuta"
+									   style="height: 450px; width: 100%; display: block;">
+							 </div>
+							 @currentAlbum.getContenidoMultimedia.tail.map { 
+                               case (content) => {
+                               	   @if(content.getRedSocial == "INSTAGRAM"){
+                               	     <div class="item" id="@content.getId" title=@content.getRedSocial>
+							            <img src="@content.getRuta"
+									     style="height: 450px; width: 100%; display: block;">
+							        </div>
+							       } else {
+							            
+							            @if(content.getRedSocial == "SOUNDCLOUD"){
+							            
+							            
+							            
+							            
+ <div class="item" style="height: 450px" id="@content.getId" title="@content.getRedSocial">
+							            
+							            
+<object height="81" width="70%" id="yourPlayerId" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" style="margin-top:20%;margin-left:8%" >
+  <param name="movie" value="http://player.soundcloud.com/player.swf?url=@content.getRuta&enable_api=true&object_id=yourPlayerId"></param>
+  <param name="allowscriptaccess" value="always"></param>
+  <embed allowscriptaccess="always" height="81" src="http://player.soundcloud.com/player.swf?url=@content.getRuta&enable_api=true&object_id=yourPlayerId" type="application/x-shockwave-flash" width="70%" name="yourPlayerId" style="margin-top:20%;margin-left:8%"></embed>
+</object> 
+							      </div>						            
+							            
+							          } else {
+							          
+							              <div class="item" style="height: 450px" id="@content.getId" title="@content.getRedSocial">
+							             
+							              <div id="playerContainer" style="width: 20em; height: 180px;">
+                                             <object type="application/x-shockwave-flash" data="@content.getRuta" width="500" height="450" id="player" style="margin-left:85px; visibility: visible;">
+                                               <param name="allowfullscreen" value="true">
+                                             </object>
+                                          </div>
+                                          
+                                          </div>
+                                          
+                                          
+							          }  
+							            
+							            
+							       }
+                               	}
+                             }
+						</div>
+					
+					 	<a class="left carousel-control" href="#myCarousel" data-slide="prev" >
+						  <span class="glyphicon glyphicon-chevron-left"></span>
+						</a> 
+						
+						<a class="right carousel-control" href="#myCarousel" data-slide="next" >
+						  <span class="glyphicon glyphicon-chevron-right"></span>
+						</a>
+									
+					
+					</div>
+				       			
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	
+	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
+	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="assets/javascripts/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/javascripts/bootstrap.min.js"></script>
+	<script src="assets/javascripts/bootstrap-select.js"></script>
+	<script src="assets/javascripts/bootstrap-switch.js"></script>
+	<script src="assets/javascripts/flatui-checkbox.js"></script>
+	<script src="assets/javascripts/flatui-radio.js"></script>
+	<script src="assets/javascripts/jquery.tagsinput.js"></script>
+	<script src="assets/javascripts/jquery.placeholder.js"></script>
+	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
+	<script src="assets/javascripts/application.js"></script>
+	<script src="assets/javascripts/aplicacion.js"></script>
+	<script src="assets/javascripts/FacebookLogout.js"></script>
+	<script src="http://connect.soundcloud.com/sdk.js"></script>
+	<script src="assets/javascripts/soundWidget.js"></script>
+	<script type="text/javascript" src="http://swfobject.googlecode.com/svn/trunk/swfobject/swfobject.js"></script>
+	
+
+</body>
+</html>
+
+
+-->

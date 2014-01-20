@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bienvenido a Freshbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Loading Bootstrap -->
+<link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="assets/bootstrap/css/prettify.css" rel="stylesheet">
+
+<!-- Loading Flat UI -->
+<link href="assets/stylesheets/flat-ui.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="assets/images/favicon.png">
+<link href="assets/stylesheets/pages.css" rel="stylesheet">
+
+</head>
+
+<body onclick="fadeError()">
+
+
+     <!-- Place this asynchronous JavaScript just before your </body> tag -->
+  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  
+	<div class="log_container">
+		<div class="cfix log_bar">
+			<div class="left">
+				<img src="assets/images/head_log.png" />
+			</div>
+			<div class="left" id="logError" name="logError"
+				style="width: 200px; height: 50px; margin-left: 110px; margin-top: 5px; display: none">
+				<div class="tooltip fade left in">
+					<div class="tooltip-arrow"></div>
+					<div class="tooltip-inner">Usuario o contraseña inválidos.</div>
+				</div>
+			</div>
+			<div class="menu_log right">
+			    
+			   <div id="facebook-div" class="right">
+			    <div id="messageLogin">
+				<span  style="color:white">Ingresa a Freshbook con:</span>
+				</div>
+				<div class="facebookButtonLogo left" onclick="login()"></div>
+				<div class="facebookButton left" onclick="login()">
+				 Ingresa con Facebook
+                </div>
+              </div>
+              
+			</div>
+		</div>
+	</div>
+	<!-- Log container -->
+
+	<div class="contenedorGlobal cfix">
+		<div class="clearfix">
+			
+				<div class="panel1">
+				<div class="left" style="width:90%">
+				  <div align="center" style="margin-top:50px;margin-bottom:50px;font-size:22px">Conecta al instante tus redes sociales favoritas en una sola aplicacion.</div>
+		  	 	  <div align="center" style="margin-top:20px;font-size:18px"><img src="@routes.Assets.at("images/Logos/InstagramLogo.png")" class="logo"/></div>		  	 
+				  <div align="center" style="margin-top:20px;font-size:18px">- Explora las fotos mas interesantes de Instagram</div>
+				  <div align="center" style="margin-top:20px;font-size:18px"><img src="@routes.Assets.at("images/Logos/YoutubeLogo.png")" class="logo"/></div>	  	 
+				  <div align="center" style="margin-top:20px;font-size:18px">- Explora los videos compartidos por tus amistades</div>
+				  <div align="center" style="margin-top:20px;font-size:18px"><img src="@routes.Assets.at("images/Logos/SoundcloudLogo.png")" class="logo"/></div>		  	 
+				   <div align="center" style="margin-top:20px;font-size:18px">- Disfruta la musica que comparten en la red</div>
+				  
+			
+					<!-- Panel izquierdo -->
+				</div>
+			</div>
+			<div class="panel2 right">
+			     <div class="pvl" style="margin-top:35px">
+					<span style="font-size: 36px">Descubre quién esta en Freshbook </span>
+				</div>
+				
+				<div class="divBuscadorPrincipal cfix" style="width:85%; margin-left:35px">
+			     <input id="input-search-input" type="text" placeholder="Busca amigos en Freshbook" class="form-control left" style="border-radius:0px;width:85%" onkeyup="searchForFriends3()" />
+			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:15%" onclick="busquedaDeAmigosPublic()">Buscar</button>
+			     <div id="div-search-results-div" style="overflow:auto;width:85%;background-color:#FFF;border: solid 1px black">
+			        
+			
+			     </div>
+			  </div>
+			  
+			  <div id="search-container">
+			
+			  </div>
+			
+			</div>
+		</div>
+	</div>
+	<!-- Contenedor Global -->
+
+	<div class=footer>
+		<div align="center">
+			<span>Sweet Development 2013</span>
+		</div>
+	</div>
+	<!-- Footer -->
+
+	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
+	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="assets/javascripts/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/javascripts/bootstrap.min.js"></script>
+	<script src="assets/javascripts/bootstrap-select.js"></script>
+	<script src="assets/javascripts/bootstrap-switch.js"></script>
+	<script src="assets/javascripts/flatui-checkbox.js"></script>
+	<script src="assets/javascripts/flatui-radio.js"></script>
+	<script src="assets/javascripts/jquery.tagsinput.js"></script>
+	<script src="assets/javascripts/jquery.placeholder.js"></script>
+	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
+	<script src="assets/javascripts/application.js"></script>
+	<script src="assets/javascripts/aplicacion.js"></script>
+	<script src="assets/javascripts/facebookFunctions.js"></script>
+
+
+</body>
+
+</html>

@@ -409,7 +409,21 @@
 .firstImgCel {
 	width: 25%;
 	padding-top: 10px;
+	padding-bottom: 15px;
 }
+
+.firstSoundCel {
+	width: 20%;
+	padding-top: 10px;
+	margin-top: 15px;
+}
+
+.firstVideoCel {
+	width: 25%;
+	padding-top: 10px;
+	margin-top: 15px;
+}
+
 
 .discardButton {
 	width: 25px;
@@ -465,13 +479,13 @@
 	padding-bottom: 15px;
 }
 
-#instagram-div {
+#instagram-div, #soundcloud-div, #youtube-div {
 	margin-top: 50px;
 	width: 100%;
 	background-color: white;
-	display: block;
 	padding: 10px;
 }
+
 
 .divBuscadorPrincipal {
 	margin-top: 20px;
@@ -668,6 +682,21 @@ span.buttonText {
 .firstImgCel .checkMultimedia {
 	position: absolute;
 	margin: 5px 0 0 -145px;
+}
+
+.firstSoundCel .checkMultimedia {
+	position: absolute;
+	margin: 5px 0 0 -98px;
+}
+
+.firstVideoCel .checkMultimedia {
+	position: absolute;
+	margin: 5px 0 0 3px;
+}
+
+.checkMultimedia2 {
+	position: absolute;
+	margin: 5px 0 0 -128px;
 }
 
 .firstImgCel .btnImage {

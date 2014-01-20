@@ -1,0 +1,170 @@
+@(currentUser: Usuario)
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bienvenido a Freshbook</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Loading Bootstrap -->
+<link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+<link href="assets/bootstrap/css/prettify.css" rel="stylesheet">
+
+<!-- Loading Flat UI -->
+<link href="assets/stylesheets/flat-ui.css" rel="stylesheet">
+
+<link rel="shortcut icon" href="assets/images/favicon.png">
+<link href="assets/stylesheets/pages.css" rel="stylesheet">
+
+
+
+</head>
+
+<body onclick="fadeError()" onload="initialize()">
+
+	<div class="header cfix">
+		<div class="cfix log_bar">
+			<div class="left">
+				<img src="assets/images/head_log.png" width="120" height="43" />
+			</div>
+			
+			
+			<div id="friendship-div" class="divFriendship cfix left" >
+			<img class="imgis left" src="assets/images/friendship.png" onclick="mostrarSolicitudesAmistad(@currentUser.getId)"/>
+			     <div id="div-friendship-sol" style="overflow:auto;width:332px;background-color:#FFF;z-index:2;position:absolute;margin-top:35px;margin-left:-145px">
+			        
+			
+			     </div>
+			</div>
+			
+			<div class="divBuscadorHeader cfix left" style="margin-left:-125px;">
+			     <input id="input-search" type="text" placeholder="Busca amigos en Freshbook" class="form-control input-sm flat left" style="border-radius:0px;width:85%" onkeyup="searchForFriends()" />
+			     
+			     <div id="div-search-results" style="overflow:auto;width:332px;background-color:#FFF;border: solid 1px black;z-index:2;position:absolute;margin-top:25px">
+			        
+			
+			     </div>
+			</div>
+			<div class="cfix headBox left" style="margin-left:120px;">
+				<a class="imga left"  href="perfil/@currentUser.getId"> <img class="imgis"
+					src="http://graph.facebook.com/@currentUser.getFacebookId/picture" />
+				</a>
+				<div class="middleBox">
+					<div class="innerBox" style="height: 40px"></div>
+					<div class="innerBox">
+						<a class="userName" style="color:#FFF" href="perfil/@currentUser.getId">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""})) </a>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			<a href="#" onclick="index()"><img class="imgis left" src="assets/images/logout.png" style="margin-left:20px" /></a>
+			     
+			
+			
+		</div>
+	</div>
+	<!-- Header -->
+	
+	<!-- Log container -->
+	<div class="contenedorGlobal cfix">
+		<div class="left cfix">
+				<div class="panel5">
+					<div class="pvm divTitle">
+						<div>
+							<span style="font-size: 22px">@(currentUser.getPrimerNombre + " " + (currentUser.getSegundoNombre match {case Some(value) => value case _ => ""}) + " " + currentUser.getPrimerApellido + " " + (currentUser.getSegundoApellido match {case Some(value) => value case _ => ""}))</span>
+						</div>
+					</div>
+					<div id="div-photo-panel" class="photoPanel" style="width:225px;height:250px;display:block;margin-top: 15px; margin-bottom:15px;margin-left:4px">
+				         <img src="http://graph.facebook.com/@currentUser.getFacebookId/picture?type=large" style="width: 99%; height: 100%;"/>
+				      </div>
+					<a class="cfix" href="/principal">
+						<div class="pvm topBorder divButton">
+							<span style="font-size: 18px"><b>PRINCIPAL</b></span>
+						</div>
+					</a> <a class="cfix" href="perfil/@currentUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>PERFIL</b></span>
+						</div>
+					</a> <a class="cfix" href="amigos/@currentUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>AMIGOS</b></span>
+						</div>
+					</a> <a class="cfix" href="albumes/@currentUser.getId">
+						<div class="pvm divButton">
+							<span style="font-size: 18px"><b>ALBUMES</b></span>
+						</div>
+					</a>
+				</div>
+				<!-- Panel izquierdo -->
+			</div>
+		
+		<div id="div-searchContent" class="divCentral" style="width:60%;border-right:#ccc 1px solid;overflow:auto">	
+				<div class="pvl" style="margin-left:35px">
+					<span id="title" style="font-size: 36px">Busca a tus amigos en Freshbook</span>
+				</div>
+			<!--	<div class="cfix marginTM">
+							<a href="#"><button type="submit" class="btn btn-hg btn-primary marginTM"
+								name="continuar-button" id="continuar-button" style="border-radius:0">Continuar</button></a>
+				</div>
+			-->
+			<div class="divBuscadorPrincipal cfix" style="width:85%; margin-left:35px">
+			     <input id="input-search-input" type="text" placeholder="Busca amigos en Freshbook" class="form-control left" style="border-radius:0px;width:85%" onkeyup="searchForFriends2()" />
+			     <button class="btn btn-primary right" style="border-radius:0px;margin-left:0px;width:15%" onclick="busquedaDeAmigos()">Buscar</button>
+			     <div id="div-search-results-div" style="overflow:auto;width:85%;background-color:#FFF;border: solid 1px black">
+			        
+			
+			     </div>
+			  </div>
+			  
+			  <div id="search-container">
+			 
+			  	
+			  	 <!--  
+			  <div class= "div-userFriend marginTM marginBM cfix">
+			      <a href="#"><img src="assets/images/user_images/userImage.jpg" /></a>
+			      <div id="div-user-fullname" align="center"><a href="#"><span>Nombre del Usuario</span></a></div>
+			      <div id="div-username" align="center" style="margin-top:18px"><span>Username</span></div>
+			      <button class="btn btn-primary" style="border-radius:0px;height: 30%;font-size:11px; margin-top:12px; margin-left: 17px">Solicitar Amistad</button>
+			  </div>
+			  -->
+			  
+			  
+			  </div>
+			  
+	   </div> <!-- .divCentral -->
+	   
+	   <div class="bloqueRight" style="width:10%">
+			
+		</div> <!-- .bloqueRight -->
+		
+	</div> <!-- .Contenedor Global -->
+
+	<div class="footer pvl">
+		<div align="center">
+			<span>Sweet Development 2013</span>
+		</div>
+	</div>
+	<!-- Footer -->
+
+	<script src="assets/javascripts/jquery-1.8.3.min.js"></script>
+	<script src="assets/javascripts/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="assets/javascripts/jquery.ui.touch-punch.min.js"></script>
+	<script src="assets/javascripts/bootstrap.min.js"></script>
+	<script src="assets/javascripts/bootstrap-select.js"></script>
+	<script src="assets/javascripts/bootstrap-switch.js"></script>
+	<script src="assets/javascripts/flatui-checkbox.jImages"></script>
+	<script src="assets/javascripts/flatui-radio.js"></script>
+	<script src="assets/javascripts/jquery.tagsinput.js"></script>
+	<script src="assets/javascripts/jquery.placeholder.js"></script>
+	<script src="assets/bootstrap/js/google-code-prettify/prettify.js"></script>
+	<script src="assets/javascripts/application.js"></script>
+	<script src="assets/javascripts/aplicacion.js"></script>
+	<script src="assets/javascripts/FacebookLogout.js"></script>
+
+
+</body>
+
+</html>

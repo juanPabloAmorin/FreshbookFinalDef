@@ -95,7 +95,7 @@ class NotificacionDAO_SQL extends NotificacionDAO {
 				where notificacion.fk_tipo = tipo_notificacion.id 
 				and NOTIFICACION_USUARIO.fk_notificacion = NOTIFICACION.id
 				and NOTIFICACION_USUARIO.fk_usuario = {userId}
-				and tipo_notificacion.nombre = {typex}
+				and tipo_notificacion.nombre = {typex} order by NOTIFICACION.fecha_creacion
 
 				""").on(
             'userId -> userId, 'typex -> typex).as(this.parser *)
