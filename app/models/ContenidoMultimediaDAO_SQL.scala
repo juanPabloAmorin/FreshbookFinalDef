@@ -35,7 +35,7 @@ class ContenidoMultimediaDAO_SQL extends ContenidoMultimediaDAO {
         SQL(
           """
 				INSERT INTO CONTENIDO_MULTIMEDIA VALUES( nextval('seq_contenido'),{ruta},NOW(),
-				{redSocial},{rutaTumbnail},{nombre},{inAlbumId})
+				{redSocial},{rutaTumbnail},{inAlbumId},{nombre})
 				""").on(
             'ruta -> newContenidoMultimedia.getRuta,
             'redSocial -> newContenidoMultimedia.getRedSocial,
